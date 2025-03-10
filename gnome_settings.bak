@@ -83,7 +83,7 @@ show-battery-percentage=true
 automount=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher']
+application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher', 'org-gnome-nautilus']
 
 [org/gnome/desktop/notifications/application/firefox-esr]
 application-id='firefox-esr.desktop'
@@ -93,6 +93,9 @@ application-id='gnome-power-panel.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-extensions]
 application-id='org.gnome.Extensions.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-nautilus]
+application-id='org.gnome.Nautilus.desktop'
 
 [org/gnome/desktop/notifications/application/ulauncher]
 application-id='ulauncher.desktop'

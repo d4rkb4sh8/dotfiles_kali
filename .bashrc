@@ -83,15 +83,13 @@ source ~/.local/share/blesh/ble.sh
 # greet me
 echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 
-# Atuin
-. "$HOME/.atuin/bin/env"
-
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash)"
+
+# Atuin
+ eval "$(atuin init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"
 
 # rust/cargo
 . "$HOME/.cargo/env"
-
