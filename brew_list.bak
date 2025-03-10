@@ -10,6 +10,7 @@ ca-certificates
 cairo
 certifi
 cjson
+curl
 dav1d
 dbus
 dust
@@ -22,6 +23,7 @@ freetype
 frei0r
 fribidi
 fzf
+game-music-emu
 gcc
 gettext
 giflib
@@ -36,8 +38,10 @@ hwloc
 icu4c@76
 imath
 isl
+jack
 jpeg-turbo
 jpeg-xl
+krb5
 ladspa-sdk
 lame
 lazygit
@@ -49,6 +53,7 @@ libbluray
 libcap
 libdeflate
 libedit
+libev
 libevent
 libffi
 libice
@@ -57,6 +62,7 @@ libmicrohttpd
 libmpc
 libnghttp2
 libogg
+libopenmpt
 libpng
 librist
 libsamplerate
@@ -64,6 +70,7 @@ libsndfile
 libsodium
 libsoxr
 libssh
+libssh2
 libtasn1
 libtiff
 libtool
@@ -103,6 +110,7 @@ mpdecimal
 mpfr
 mpg123
 msgpack
+musikcube
 ncurses
 neovim
 nettle
@@ -110,6 +118,7 @@ open-mpi
 opencore-amr
 openexr
 openjpeg
+openldap
 openssl@3
 opus
 orc
@@ -118,10 +127,12 @@ pango
 pcre2
 pixman
 pmix
+portaudio
 pulseaudio
 python@3.13
 rav1e
 readline
+rtmpdump
 rubberband
 sdl2
 snappy
@@ -130,6 +141,8 @@ speexdsp
 sqlite
 srt
 svt-av1
+systemd
+taglib
 tesseract
 theora
 tree-sitter
