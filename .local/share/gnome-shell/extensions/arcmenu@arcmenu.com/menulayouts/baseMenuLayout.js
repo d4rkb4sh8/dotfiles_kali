@@ -1,34 +1,31 @@
-/* exported getMenuLayoutEnum, BaseMenuLayout */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GMenu from 'gi://GMenu';
+import GObject from 'gi://GObject';
+import Shell from 'gi://Shell';
+import St from 'gi://St';
 
-const {Clutter, GLib, Gio, GMenu, GObject, Shell, St} = imports.gi;
-const AppFavorites = imports.ui.appFavorites;
-const Config = imports.misc.config;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const MW = Me.imports.menuWidgets;
-const PlaceDisplay = Me.imports.placeDisplay;
-const {RecentFilesManager} = Me.imports.recentFilesManager;
-const Utils =  Me.imports.utils;
-const _ = Gettext.gettext;
+import * as AppFavorites from 'resource:///org/gnome/shell/ui/appFavorites.js';
 
-const Search = Config.PACKAGE_VERSION < '43' ? Me.imports.search : Me.imports.gnome43.search;
+import {ArcMenuManager} from '../arcmenuManager.js';
+import * as Constants from '../constants.js';
+import * as MW from '../menuWidgets.js';
+import * as PlaceDisplay from '../placeDisplay.js';
+import {RecentFilesManager} from '../recentFilesManager.js';
+import {SearchResults} from '../search.js';
+import * as Utils from '../utils.js';
+
+import {IconGrid} from '../iconGrid.js';
+
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+
 const MAX_RECENT_FILES = 25;
-
-/**
- * @returns Returns the current Constants.MenuLayout Enum
- */
-function getMenuLayoutEnum() {
-    return null;
-}
 
 // This class handles the core functionality of all the menu layouts.
 // Each menu layout extends this class.
-var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
+export class BaseMenuLayout extends St.BoxLayout {
     static [GObject.properties] = {
-        'has-search': GObject.ParamSpec.boolean(
-            'has-search', 'has-search', 'has-search',
-            GObject.ParamFlags.READWRITE, true),
         'display-type': GObject.ParamSpec.uint(
             'display-type', 'display-type', 'display-type',
             GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
@@ -44,6 +41,10 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         'row-spacing': GObject.ParamSpec.uint(
             'row-spacing', 'row-spacing', 'row-spacing',
             GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
+        'search-results-spacing': GObject.ParamSpec.uint(
+            'search-results-spacing', 'search-results-spacing',
+            'search-results-spacing',  GObject.ParamFlags.READWRITE,
+            0, GLib.MAXINT32, 0),
         'is_dual_panel': GObject.ParamSpec.boolean(
             'is_dual_panel', 'is_dual_panel', 'is_dual_panel',
             GObject.ParamFlags.READWRITE, false),
@@ -62,7 +63,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
         'icon-grid-size': GObject.ParamSpec.uint(
             'icon-grid-size', 'icon-grid-size', 'icon-grid-size',
-            GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
+            GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 5),
         'category-icon-size': GObject.ParamSpec.uint(
             'category-icon-size', 'category-icon-size', 'category-icon-size',
             GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
@@ -94,21 +95,50 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             y_align: Clutter.ActorAlign.FILL,
         });
         this._delegate = this;
-        this.menuButton = menuButton;
 
+        this._menuButton = menuButton;
         this.contextMenuManager = menuButton.contextMenuManager;
         this.subMenuManager = menuButton.subMenuManager;
         this.arcMenu = menuButton.arcMenu;
-        this._focusChild = null;
+
+        if (this.arcMenu === null)
+            throw new Error('ArcMenu null');
+
         this.hasPinnedApps = false;
         this.activeCategoryType = -1;
-        this._disableFadeEffect = Me.settings.get_boolean('disable-scrollview-fade-effect');
+        this._disableFadeEffect = ArcMenuManager.settings.get_boolean('disable-scrollview-fade-effect');
+        this.iconTheme = new St.IconTheme();
+        this.appSys = Shell.AppSystem.get_default();
+        this._tree = new GMenu.Tree({menu_basename: 'applications.menu'});
+
+        this.searchResults = new SearchResults(this);
+        this.searchEntry = new MW.SearchEntry(this);
+
+        this.applicationsGrid = new IconGrid({
+            halign: this.display_type === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL
+                : Clutter.ActorAlign.CENTER,
+            column_spacing: this.column_spacing,
+            row_spacing: this.row_spacing,
+        });
+
+        this._pinnedAppsGrid = new IconGrid({
+            columns: 4,
+            halign: this.display_type === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL
+                : Clutter.ActorAlign.CENTER,
+            column_spacing: this.column_spacing,
+            row_spacing: this.row_spacing,
+            accept_drop: true,
+        });
 
         this.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
+        this.connect('destroy', () => this._onDestroy());
+        this.searchEntry.connectObject('search-changed', this._onSearchEntryChanged.bind(this), this);
+        this.searchEntry.connectObject('entry-key-press', this._onSearchEntryKeyPress.bind(this), this);
+    }
 
-        this._tree = new GMenu.Tree({menu_basename: 'applications.menu'});
+    _connectAppChangedEvents() {
         this._tree.connectObject('changed', () => this.reloadApplications(), this);
-
+        ArcMenuManager.settings.connectObject('changed::recently-installed-apps', () => this.reloadApplications(), this);
         AppFavorites.getAppFavorites().connectObject('changed', () => {
             if (this.categoryDirectories) {
                 const categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.FAVORITES);
@@ -116,48 +146,34 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
                     this._loadGnomeFavorites(categoryMenuItem);
             }
         }, this);
+    }
 
-        if (this.has_search) {
-            this.searchResults = new Search.SearchResults(this);
-            this.searchBox = new MW.SearchBox(this);
-            this.searchBox.connectObject('search-changed', this._onSearchBoxChanged.bind(this), this);
-            this.searchBox.connectObject('entry-key-press', this._onSearchBoxKeyPress.bind(this), this);
-        }
-
-        const layout = new Clutter.GridLayout({
-            orientation: Clutter.Orientation.VERTICAL,
-            column_spacing: this.column_spacing,
-            row_spacing: this.row_spacing,
-        });
-        this.applicationsGrid = new St.Widget({
-            x_expand: true,
-            x_align: this.display_type === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL
-                : Clutter.ActorAlign.CENTER,
-            layout_manager: layout,
-        });
-        layout.hookup_style(this.applicationsGrid);
-
-        this.connect('destroy', () => this._onDestroy());
+    get menuButton() {
+        return this._menuButton;
     }
 
     setDefaultMenuView() {
-        if (this.has_search) {
-            this.searchBox.clearWithoutSearchChangeEvent();
-            this.searchResults.setTerms([]);
-        }
+        this.searchEntry.clearWithoutSearchChangeEvent();
+        this.searchResults.setTerms([]);
+        // Search results have been cleared, set category box active if needed.
+        this._setCategoriesBoxInactive(false);
 
         this._clearActorsFromBox();
         this.resetScrollBarPosition();
     }
 
+    _addChildToParent(parent, child) {
+        Utils.addChildToParent(parent, child);
+    }
+
     updateWidth(setDefaultMenuView, leftPanelWidthOffset = 0, rightPanelWidthOffset = 0) {
         if (this.is_dual_panel) {
-            const leftPanelWidth = Me.settings.get_int('left-panel-width') + leftPanelWidthOffset;
-            const rightPanelWidth = Me.settings.get_int('right-panel-width') + rightPanelWidthOffset;
+            const leftPanelWidth = ArcMenuManager.settings.get_int('left-panel-width') + leftPanelWidthOffset;
+            const rightPanelWidth = ArcMenuManager.settings.get_int('right-panel-width') + rightPanelWidthOffset;
             this.leftBox.style = `width: ${leftPanelWidth}px;`;
             this.rightBox.style = `width: ${rightPanelWidth}px;`;
         } else {
-            const widthAdjustment = Me.settings.get_int('menu-width-adjustment');
+            const widthAdjustment = ArcMenuManager.settings.get_int('menu-width-adjustment');
             let menuWidth = this.default_menu_width + widthAdjustment;
             // Set a 300px minimum limit for the menu width
             menuWidth = Math.max(300, menuWidth);
@@ -179,17 +195,30 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
 
     getIconWidthFromSetting() {
         const gridIconPadding = 10;
-        const iconSizeEnum = Me.settings.get_enum('menu-item-grid-icon-size');
+        const iconSizeEnum = ArcMenuManager.settings.get_enum('menu-item-grid-icon-size');
 
         const {width, height_, iconSize_} = Utils.getGridIconSize(iconSizeEnum, this.icon_grid_size);
         return width + gridIconPadding;
     }
 
+    _setGridColumns(grid) {
+        let columns = 1;
+        if (grid.layout_manager.forceColumns) {
+            columns = grid.layout_manager.forceColumns;
+        } else if (this.display_type === Constants.DisplayType.GRID) {
+            const iconWidth = this.getIconWidthFromSetting();
+            columns = this.getBestFitColumnsForGrid(iconWidth, grid);
+        }
+        grid.setColumns(columns);
+    }
+
     resetScrollBarPosition() {
-        this.applicationsScrollBox?.vscroll.adjustment.set_value(0);
-        this.categoriesScrollBox?.vscroll.adjustment.set_value(0);
-        this.shortcutsScrollBox?.vscroll.adjustment.set_value(0);
-        this.actionsScrollBox?.vscroll.adjustment.set_value(0);
+        const scrollViews = [this.applicationsScrollBox, this.categoriesScrollBox, this.shortcutsScrollBox, this.actionsScrollBox];
+
+        scrollViews.forEach(scrollView => {
+            if (scrollView)
+                Utils.getScrollViewAdjustments(scrollView).vadjustment.set_value(0);
+        });
     }
 
     _disconnectReloadApps() {
@@ -199,9 +228,9 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         }
     }
 
-    reloadApplications(forceReload = false) {
+    reloadApplications() {
         // Only reload applications if the menu is closed.
-        if (!forceReload && this.arcMenu.isOpen) {
+        if (this.arcMenu.isOpen) {
             this.reloadQueued = true;
             if (!this._reloadAppsOnMenuClosedID) {
                 this._reloadAppsOnMenuClosedID = this.arcMenu.connect('menu-closed', () => {
@@ -215,19 +244,8 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
 
         this.searchResults?.setTerms([]);
 
-        if (this.applicationsMap) {
-            this.applicationsMap.forEach((value, _key, _map) => {
-                value.destroy();
-            });
-            this.applicationsMap = null;
-        }
+        this._destroyMenuItems();
 
-        if (this.categoryDirectories) {
-            this.categoryDirectories.forEach((value, _key, _map) => {
-                value.destroy();
-            });
-            this.categoryDirectories = null;
-        }
         this.activeCategoryItem = null;
         this.activeMenuItem = null;
 
@@ -238,7 +256,22 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         if (this._createExtraShortcuts)
             this._createExtraShortcuts();
 
+        this.loadPinnedApps();
+
         this.setDefaultMenuView();
+    }
+
+    _createSortedAppsList() {
+        const appList = [];
+        this.applicationsMap.forEach((value, key, _map) => {
+            appList.push(key);
+        });
+        appList.sort((a, b) => {
+            const nameA = a.get_name();
+            const nameB = b.get_name();
+            return nameA.localeCompare(nameB);
+        });
+        return appList;
     }
 
     loadCategories(displayType = Constants.DisplayType.LIST) {
@@ -248,30 +281,30 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         const iter = root.iter();
         let nextType;
         while ((nextType = iter.next()) !== GMenu.TreeItemType.INVALID) {
-            if (nextType === GMenu.TreeItemType.DIRECTORY) {
-                const dir = iter.get_directory();
-                if (!dir.get_is_nodisplay()) {
-                    const categoryId = dir.get_menu_id();
-                    const categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
-                    this.categoryDirectories.set(categoryId, categoryMenuItem);
-                    this._loadCategory(categoryMenuItem, dir);
-                }
-            }
+            if (nextType !== GMenu.TreeItemType.DIRECTORY)
+                continue;
+
+            const dir = iter.get_directory();
+            if (dir.get_is_nodisplay())
+                continue;
+
+            const categoryId = dir.get_menu_id();
+            const categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
+            this.categoryDirectories.set(categoryId, categoryMenuItem);
+            this._loadCategory(categoryMenuItem, dir);
         }
+
+        this._sortedAppsList = this._createSortedAppsList();
 
         let categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.ALL_PROGRAMS);
         if (categoryMenuItem) {
-            const appList = [];
-            this.applicationsMap.forEach((value, key, _map) => {
-                appList.push(key);
+            this.applicationsMap.forEach((value, _key, _map) => {
                 // Show Recently Installed Indicator on All Programs category
                 if (value.isRecentlyInstalled && !categoryMenuItem.isRecentlyInstalled)
                     categoryMenuItem.setNewAppIndicator(true);
             });
-            appList.sort((a, b) => {
-                return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-            });
-            categoryMenuItem.appList = appList;
+
+            categoryMenuItem.appList = this._sortedAppsList;
         }
 
         categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.FAVORITES);
@@ -299,7 +332,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
     }
 
     _loadCategory(categoryMenuItem, dir) {
-        const showNewAppsIndicator = !Me.settings.get_boolean('disable-recently-installed-apps');
+        const showNewAppsIndicator = !ArcMenuManager.settings.get_boolean('disable-recently-installed-apps');
         const iter = dir.iter();
         let nextType;
         while ((nextType = iter.next()) !== GMenu.TreeItemType.INVALID) {
@@ -311,31 +344,66 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
                 } catch (e) {
                     continue;
                 }
-                let app = Shell.AppSystem.get_default().lookup_app(id);
+
+                let app = this.appSys.lookup_app(id);
                 if (!app)
                     app = new Shell.App({app_info: entry.get_app_info()});
-                if (app.get_app_info().should_show()) {
-                    let item = this.applicationsMap.get(app);
-                    if (!item) {
-                        const isContainedInCategory = true;
-                        item = new MW.ApplicationMenuItem(this, app, this.display_type, null, isContainedInCategory);
-                    }
+
+                const appInfo = app.get_app_info();
+                if (!appInfo.should_show())
+                    continue;
+
+                let item = this.applicationsMap.get(app);
+
+                if (categoryMenuItem instanceof MW.SubCategoryMenuItem) {
+                    const subMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, null, true);
+                    categoryMenuItem.appList.push(subMenuItem);
+                    continue;
+                } else if (!item) {
+                    const isContainedInCategory = true;
+                    item = new MW.ApplicationMenuItem(this, app, this.display_type, null, isContainedInCategory);
                     categoryMenuItem.appList.push(app);
                     this.applicationsMap.set(app, item);
-
-                    if (showNewAppsIndicator && item.isRecentlyInstalled)
-                        categoryMenuItem.setNewAppIndicator(true);
                 }
+
+                if (showNewAppsIndicator && item.isRecentlyInstalled)
+                    categoryMenuItem.setNewAppIndicator(true);
             } else if (nextType === GMenu.TreeItemType.DIRECTORY) {
                 const subdir = iter.get_directory();
-                if (!subdir.get_is_nodisplay())
+                if (subdir.get_is_nodisplay())
+                    continue;
+
+                const showSubMenus = ArcMenuManager.settings.get_boolean('show-category-sub-menus');
+                if (showSubMenus) {
+                    // Only go one layer deep for sub menus
+                    if (categoryMenuItem instanceof MW.SubCategoryMenuItem) {
+                        this._loadCategory(categoryMenuItem, subdir);
+                    } else {
+                        const subCategoryMenuItem = new MW.SubCategoryMenuItem(this, dir, subdir, this.display_type);
+                        categoryMenuItem.appList.push(subdir);
+                        this.applicationsMap.set(subdir, subCategoryMenuItem);
+
+                        this._loadCategory(subCategoryMenuItem, subdir);
+                        subCategoryMenuItem._updateIcon();
+                    }
+                } else {
                     this._loadCategory(categoryMenuItem, subdir);
+                }
             }
+        }
+        if (categoryMenuItem instanceof MW.SubCategoryMenuItem) {
+            categoryMenuItem.populateMenu();
+        } else {
+            categoryMenuItem.appList.sort((a, b) => {
+                const nameA = a.get_name();
+                const nameB = b.get_name();
+                return nameA.localeCompare(nameB);
+            });
         }
     }
 
     setNewAppIndicator() {
-        const disabled = Me.settings.get_boolean('disable-recently-installed-apps');
+        const disabled = ArcMenuManager.settings.get_boolean('disable-recently-installed-apps');
         if (!disabled && this.categoryDirectories) {
             for (const categoryMenuItem of this.categoryDirectories.values()) {
                 categoryMenuItem.setNewAppIndicator(false);
@@ -371,7 +439,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             if (!hasExtraCategory) {
                 hasExtraCategory = isExtraCategory;
             } else if (!isExtraCategory && !separatorAdded) {
-                categoriesBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM,
+                categoriesBox.add_child(new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MEDIUM,
                     Constants.SeparatorAlignment.HORIZONTAL));
                 separatorAdded = true;
             }
@@ -422,26 +490,27 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             box.add_child(showMoreItem);
         }
 
-        for (const file of recentFiles) {
-            this.recentFilesManager.queryInfoAsync(file).then(result => {
+        for (const fileUri of recentFiles) {
+            this.recentFilesManager.queryInfoAsync(fileUri).then(result => {
                 const {recentFile} = result;
                 const {error} = result;
 
                 if (error)
                     return;
 
-                const gioFile = Gio.File.new_for_uri(recentFile.get_uri());
-                const filePath = gioFile.get_path();
-                const name = recentFile.get_display_name();
-                const icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
+                const filePath = recentFile.get_path();
+                const name = recentFile.get_basename();
+                const mimeType = this.recentFilesManager.getMimeType(fileUri);
+                const icon = Gio.content_type_get_symbolic_icon(mimeType)?.to_string();
                 const isContainedInCategory = true;
 
-                const placeMenuItem = this.createMenuItem([name, icon, filePath],
+                const placeMenuItem = this.createMenuItem({name, icon, 'id': filePath},
                     Constants.DisplayType.LIST, isContainedInCategory);
+                if (!(placeMenuItem instanceof MW.PlaceMenuItem))
+                    return;
                 placeMenuItem.setAsRecentFile(recentFile, () => {
                     try {
-                        const {recentManager} = this.recentFilesManager;
-                        recentManager.remove_item(placeMenuItem.fileUri);
+                        this.recentFilesManager.removeItem(placeMenuItem.fileUri);
                     } catch (err) {
                         log(err);
                     }
@@ -462,33 +531,51 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
     }
 
     _displayPlaces() {
-        const directoryShortcuts = Me.settings.get_value('directory-shortcuts-list').deep_unpack();
+        const directoryShortcuts = ArcMenuManager.settings.get_value('directory-shortcuts').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
-            const directory = directoryShortcuts[i];
+            const directoryData = directoryShortcuts[i];
             const isContainedInCategory = false;
-            const placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
+            const placeMenuItem = this.createMenuItem(directoryData, Constants.DisplayType.LIST, isContainedInCategory);
             if (placeMenuItem)
                 this.shortcutsBox.add_child(placeMenuItem);
         }
     }
 
-    createMenuItem(menuItemArray, displayType, isContainedInCategory) {
-        let [shortcutName, shortcutIcon, shortcutCommand] = menuItemArray;
-        let app = Shell.AppSystem.get_default().lookup_app(shortcutCommand);
+    createMenuItem(itemData, displayType, isContainedInCategory) {
+        let {id} = itemData;
+        const {name, icon} = itemData;
+        let app;
+
+        // Guard against undefined 'id' in itemData
+        if (id)
+            app = this.appSys.lookup_app(id);
 
         // Ubunutu 22.04 uses old version of GNOME settings
-        if (shortcutCommand === 'org.gnome.Settings.desktop' && !app) {
-            shortcutCommand = 'gnome-control-center.desktop';
-            app = Shell.AppSystem.get_default().lookup_app(shortcutCommand);
+        if (id === 'org.gnome.Settings.desktop' && !app) {
+            id = 'gnome-control-center.desktop';
+            app = this.appSys.lookup_app(id);
         }
-
         if (app)
-            return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
+            return new MW.ShortcutMenuItem(this, itemData, displayType, isContainedInCategory);
 
-        switch (shortcutCommand) {
+        switch (id) {
+        case Constants.ShortcutCommands.SEPARATOR: {
+            const item = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.SHORT,
+                Constants.SeparatorAlignment.HORIZONTAL);
+            item.shouldShow = displayType === Constants.DisplayType.LIST;
+
+            return item;
+        }
+        case Constants.ShortcutCommands.SPACER: {
+            const item = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.EMPTY,
+                Constants.SeparatorAlignment.HORIZONTAL);
+            item.shouldShow = displayType === Constants.DisplayType.LIST;
+
+            return item;
+        }
         case Constants.ShortcutCommands.SOFTWARE: {
-            const software = Utils.findSoftwareManager();
-            return new MW.ShortcutMenuItem(this, [shortcutName, shortcutIcon, software],
+            const softwareId = Utils.findSoftwareManager();
+            return new MW.ShortcutMenuItem(this, {id: softwareId, name, icon},
                 displayType, isContainedInCategory);
         }
         case Constants.ShortcutCommands.SUSPEND:
@@ -499,22 +586,23 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         case Constants.ShortcutCommands.HYBRID_SLEEP:
         case Constants.ShortcutCommands.HIBERNATE:
         case Constants.ShortcutCommands.SWITCH_USER: {
-            const item = new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
-            item.powerType = Utils.getPowerTypeFromShortcutCommand(shortcutCommand);
-            MW.bindPowerItemVisibility(item);
+            const item = new MW.ShortcutMenuItem(this, itemData, displayType, isContainedInCategory);
+            item.powerType = Utils.getPowerTypeFromShortcutCommand(id);
+            const binding = MW.bindPowerItemVisibility(item);
+            item.connect('destroy', () => binding?.unbind());
             return item;
         }
         case Constants.ShortcutCommands.ARCMENU_SETTINGS:
         case Constants.ShortcutCommands.OVERVIEW:
         case Constants.ShortcutCommands.SHOW_APPS:
         case Constants.ShortcutCommands.RUN_COMMAND:
-            return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
+            return new MW.ShortcutMenuItem(this, itemData, displayType, isContainedInCategory);
         default: {
-            const placeInfo = this._getPlaceInfo(shortcutCommand, shortcutName);
+            const placeInfo = this._getPlaceInfo(id, name);
             if (placeInfo)
                 return new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
             else
-                return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
+                return new MW.ShortcutMenuItem(this, itemData, displayType, isContainedInCategory);
         }
         }
     }
@@ -563,42 +651,142 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         return new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
     }
 
-    loadPinnedApps() {
-        const pinnedApps = Me.settings.get_strv('pinned-app-list');
+    getSettings(schema, path) {
+        const schemaDir = ArcMenuManager.extension.dir.get_child('schemas');
+        let schemaSource;
+        if (schemaDir.query_exists(null)) {
+            schemaSource = Gio.SettingsSchemaSource.new_from_directory(
+                schemaDir.get_path(),
+                Gio.SettingsSchemaSource.get_default(),
+                false
+            );
+        } else {
+            schemaSource = Gio.SettingsSchemaSource.get_default();
+        }
 
-        this.pinnedAppsArray = null;
-        this.pinnedAppsArray = [];
+        const schemaObj = schemaSource.lookup(schema, true);
+        if (!schemaObj) {
+            log(
+                `Schema ${schema} could not be found for extension ${
+                    ArcMenuManager.extension.metadata.uuid}. Please check your installation.`
+            );
+            return null;
+        }
 
+        const args = {settings_schema: schemaObj};
+        if (path)
+            args.path = path;
+
+        return new Gio.Settings(args);
+    }
+
+    _createPinnedAppItem(pinnedAppData) {
         const categoryMenuItem = this.categoryDirectories
             ? this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS) : null;
         const isContainedInCategory = !!categoryMenuItem;
 
-        for (let i = 0; i < pinnedApps.length; i += 3) {
-            const pinnedAppData = [pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2]];
-            const pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedAppData,
+        let pinnedAppsMenuItem;
+        if (pinnedAppData.isFolder) {
+            const folderSchema = `${ArcMenuManager.settings.schema_id}.pinned-apps-folders`;
+            const folderPath = `${ArcMenuManager.settings.path}pinned-apps-folders/${pinnedAppData.id}/`;
+            try {
+                const folderSettings = this.getSettings(folderSchema, folderPath);
+
+                const folderAppList = folderSettings.get_value('pinned-apps').deepUnpack();
+                pinnedAppsMenuItem = new MW.PinnedAppsFolderMenuItem(this, pinnedAppData, folderSettings, folderAppList,
+                    this.display_type, isContainedInCategory);
+            } catch (e) {
+                console.log(`Error creating new pinned apps folder: ${e}`);
+                return null;
+            }
+        } else {
+            pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedAppData,
                 this.display_type, isContainedInCategory);
-            pinnedAppsMenuItem.connectObject('saveSettings', () => {
-                const array = [];
-                for (let j = 0; j < this.pinnedAppsArray.length; j++) {
-                    array.push(this.pinnedAppsArray[j]._name);
-                    array.push(this.pinnedAppsArray[j]._icon);
-                    array.push(this.pinnedAppsArray[j]._command);
-                }
-                Me.settings.set_strv('pinned-app-list', array);
-            }, this);
-            this.pinnedAppsArray.push(pinnedAppsMenuItem);
         }
 
-        if (categoryMenuItem) {
-            categoryMenuItem.appList = null;
-            categoryMenuItem.appList = [];
-            categoryMenuItem.appList = categoryMenuItem.appList.concat(this.pinnedAppsArray);
+        pinnedAppsMenuItem.connectObject('pinned-apps-changed', (_self, newPinnedAppsList) => {
+            this.pinnedAppsArray = newPinnedAppsList;
+            const array = [];
+            for (let j = 0; j < newPinnedAppsList.length; j++)
+                array.push(newPinnedAppsList[j].pinnedAppData);
+
+            ArcMenuManager.settings.set_value('pinned-apps', new GLib.Variant('aa{ss}', array));
+        }, this);
+
+        pinnedAppsMenuItem.connect('destroy', () => pinnedAppsMenuItem.disconnectObject(this));
+
+        return pinnedAppsMenuItem;
+    }
+
+    _loadPinnedApps() {
+        this.pinnedAppsArray = [];
+
+        const pinnedAppsList = ArcMenuManager.settings.get_value('pinned-apps').deepUnpack();
+
+        pinnedAppsList.forEach(pinnedAppData => {
+            const id = pinnedAppData.id;
+
+            let item = this.pinnedAppsMap.get(id);
+            if (item) {
+                item.updateData(pinnedAppData);
+            } else {
+                item = this._createPinnedAppItem(pinnedAppData);
+                if (item.shouldShow)
+                    this.pinnedAppsMap.set(id, item);
+            }
+            if (item.shouldShow && !this.pinnedAppsArray.includes(item))
+                this.pinnedAppsArray.push(item);
+        });
+        return this.pinnedAppsArray;
+    }
+
+    _removePinnedApp(item) {
+        this.pinnedAppsMap.delete(item.pinnedAppData.id);
+        this._pinnedAppsGrid.removeItem(item);
+    }
+
+    loadPinnedApps() {
+        if (!this.pinnedAppsMap) {
+            this.pinnedAppsMap = new Map();
+            this.pinnedAppsArray = [];
+            this.activeCategoryType = Constants.CategoryType.PINNED_APPS;
         }
+
+        const oldPinnedApps = this.pinnedAppsArray;
+        const oldPinnedAppIds = this.pinnedAppsArray.map(item => item.pinnedAppData.id);
+
+        const newPinnedApps = this._loadPinnedApps();
+        const newPinnedAppIds = newPinnedApps.map(item => item.pinnedAppData.id);
+
+        const addedPinnedApps = newPinnedApps.filter(item => !oldPinnedAppIds.includes(item.pinnedAppData.id));
+        const removedPinnedApps = oldPinnedApps.filter(item => !newPinnedAppIds.includes(item.pinnedAppData.id));
+
+        // Remove old app icons
+        removedPinnedApps.forEach(item => {
+            this._removePinnedApp(item);
+            item.disconnectObject(this);
+            item.destroy();
+        });
+
+        // Add new app icons, or move existing ones
+        newPinnedApps.forEach(item => {
+            const index = this.pinnedAppsArray.indexOf(item);
+            const position = this._pinnedAppsGrid.getItemPosition(item);
+            if (addedPinnedApps.includes(item))
+                this._pinnedAppsGrid.addItem(item, index);
+            else if (position !== index)
+                this._pinnedAppsGrid.moveItem(item, index);
+        });
     }
 
     displayPinnedApps() {
-        this._clearActorsFromBox();
-        this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
+        this.activeCategoryType = Constants.CategoryType.PINNED_APPS;
+        this._clearActorsFromBox(this.applicationsBox);
+
+        this.applicationsBox.add_child(this._pinnedAppsGrid);
+        this._setGridColumns(this._pinnedAppsGrid);
+        const firstItem = this._pinnedAppsGrid.getItemAt(0);
+        this.activeMenuItem = firstItem;
     }
 
     _redisplayPlaces(id) {
@@ -609,18 +797,19 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
     _createPlaces(id) {
         const places = this.placesManager.get(id);
 
-        const haveApplicationShortcuts = Me.settings.get_value('application-shortcuts-list').deep_unpack().length > 0;
+        const applicationShortcuts = ArcMenuManager.settings.get_value('application-shortcuts').deep_unpack();
+        const haveApplicationShortcuts = applicationShortcuts.length > 0;
         const haveNetworkDevices = this.placesManager.get('network').length > 0;
         const haveExternalDevices = this.placesManager.get('devices').length > 0;
         const haveBookmarks = this.placesManager.get('bookmarks').length > 0;
 
-        if (Me.settings.get_boolean('show-bookmarks')) {
+        if (ArcMenuManager.settings.get_boolean('show-bookmarks')) {
             if (id === 'bookmarks' && haveBookmarks) {
                 const needsSeparator = haveApplicationShortcuts;
                 this._addPlacesToMenu(id, places, needsSeparator);
             }
         }
-        if (Me.settings.get_boolean('show-external-devices')) {
+        if (ArcMenuManager.settings.get_boolean('show-external-devices')) {
             if (id === 'devices' && haveExternalDevices) {
                 const needsSeparator = !haveNetworkDevices && (haveBookmarks || haveApplicationShortcuts);
                 this._addPlacesToMenu(id, places, needsSeparator);
@@ -639,7 +828,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         }
 
         if (needsSeparator) {
-            const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT,
+            const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.SHORT,
                 Constants.SeparatorAlignment.HORIZONTAL);
             this._placesSections[id].add_child(separator);
         }
@@ -678,7 +867,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         }
         const parent = box.get_parent();
         if (parent && parent instanceof St.ScrollView)
-            parent.vscroll.adjustment.set_value(0);
+            Utils.getScrollViewAdjustments(parent).vadjustment.set_value(0);
         const actors = box.get_children();
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
@@ -693,34 +882,31 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
 
     _displayAppList(apps, category, grid) {
         this.activeCategoryType = category;
-        grid.remove_all_children();
-        let count = 0;
-        let top = -1;
-        let left = 0;
+        if (grid.removeAllItems)
+            grid.removeAllItems();
+        else
+            grid.remove_all_children();
+
         this._futureActiveItem = false;
         let currentCharacter;
-        const alphabetizeAllPrograms = Me.settings.get_boolean('alphabetize-all-programs') &&
-            this.display_type === Constants.DisplayType.LIST;
-        const rtl = this.get_text_direction() === Clutter.TextDirection.RTL;
 
-        let columns = 1;
-        if (grid.layout_manager.forceGridColumns) {
-            columns = grid.layout_manager.forceGridColumns;
-        } else if (this.display_type === Constants.DisplayType.GRID) {
-            const iconWidth = this.getIconWidthFromSetting();
-            columns = this.getBestFitColumnsForGrid(iconWidth, grid);
-        }
-        grid.layout_manager.gridColumns = columns;
+        const groupAllAppsListView = ArcMenuManager.settings.get_boolean('group-apps-alphabetically-list-layouts');
+        const groupAllAppsGridView = ArcMenuManager.settings.get_boolean('group-apps-alphabetically-grid-layouts');
+        const isGrid = this.display_type === Constants.DisplayType.GRID;
+        const isList = this.display_type === Constants.DisplayType.LIST;
+
+        const groupAllAppsAlphabetically = (groupAllAppsListView && isList) || (groupAllAppsGridView && isGrid);
+
+        this._setGridColumns(grid);
 
         for (let i = 0; i < apps.length; i++) {
             const app = apps[i];
             let item;
-            let shouldShow = true;
 
             if (category === Constants.CategoryType.PINNED_APPS || category === Constants.CategoryType.HOME_SCREEN) {
                 item = app;
                 if (!item.shouldShow)
-                    shouldShow = false;
+                    continue;
             } else {
                 item = this.applicationsMap.get(app);
                 if (!item) {
@@ -733,55 +919,31 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             if (parent)
                 parent.remove_child(item);
 
-            if (shouldShow) {
-                if (!rtl && (count % columns === 0)) {
-                    top++;
-                    left = 0;
-                } else if (rtl && (left === 0)) {
-                    top++;
-                    left = columns;
+            if (groupAllAppsAlphabetically && category === Constants.CategoryType.ALL_PROGRAMS) {
+                const appNameFirstChar = app.get_name().charAt(0).toLowerCase();
+                if (currentCharacter !== appNameFirstChar) {
+                    currentCharacter = appNameFirstChar;
+
+                    const label = this._createLabelWithSeparator(currentCharacter.toUpperCase());
+                    grid.appendItem(label);
                 }
-
-                if (alphabetizeAllPrograms && category === Constants.CategoryType.ALL_PROGRAMS) {
-                    const appNameFirstChar = app.get_name().charAt(0).toLowerCase();
-                    if (currentCharacter !== appNameFirstChar) {
-                        currentCharacter = appNameFirstChar;
-
-                        const label = this._createLabelWithSeparator(currentCharacter.toUpperCase());
-                        grid.layout_manager.attach(label, left, top, 1, 1);
-                        top++;
-                    }
-                }
-
-                grid.layout_manager.attach(item, left, top, 1, 1);
-                item.gridLocation = [left, top];
-
-                if (!rtl)
-                    left++;
-                else if (rtl)
-                    left--;
-                count++;
-
-                if (!this._futureActiveItem && grid === this.applicationsGrid)
-                    this._futureActiveItem = item;
             }
+
+            grid.appendItem(item);
+
+            if (!this._futureActiveItem && grid === this.applicationsGrid)
+                this._futureActiveItem = item;
         }
-        if (this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
+
+        if (this.applicationsBox && grid === this.applicationsGrid && !this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add_child(this.applicationsGrid);
         if (this._futureActiveItem)
             this.activeMenuItem = this._futureActiveItem;
     }
 
     displayAllApps() {
-        const appList = [];
-        this.applicationsMap.forEach((value, key, _map) => {
-            appList.push(key);
-        });
-        appList.sort((a, b) => {
-            return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-        });
         this._clearActorsFromBox();
-        this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
+        this._displayAppList(this._sortedAppsList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
     }
 
     get activeMenuItem() {
@@ -795,8 +957,8 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             this._activeMenuItem = item;
     }
 
-    _onSearchBoxChanged(searchBox, searchString) {
-        if (searchBox.isEmpty()) {
+    _onSearchEntryChanged(searchEntry, searchString) {
+        if (searchEntry.isEmpty()) {
             if (this.applicationsBox.contains(this.searchResults))
                 this.applicationsBox.remove_child(this.searchResults);
 
@@ -805,7 +967,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             if (this.activeCategoryItem)
                 this.setActiveCategory(null, false);
 
-            this.applicationsScrollBox.vscroll.adjustment.set_value(0);
+            Utils.getScrollViewAdjustments(this.applicationsScrollBox).vadjustment.set_value(0);
 
             if (!this.applicationsBox.contains(this.searchResults)) {
                 this._clearActorsFromBox();
@@ -823,12 +985,15 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
                 // if users mouse is over a differnt menu item.
                 this.blockHoverState = true;
 
+                // Prevent Category Mouse Hover activation while search results are active.
+                this._setCategoriesBoxInactive(true);
+
                 this.searchResults.setTerms(searchString.split(/\s+/));
             }
         }
     }
 
-    _onSearchBoxKeyPress(searchBox, event) {
+    _onSearchEntryKeyPress(searchEntry, event) {
         const symbol = event.get_key_symbol();
         switch (symbol) {
         case Clutter.KEY_Up:
@@ -843,7 +1008,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             if (symbol === Clutter.KEY_Left)
                 direction = St.DirectionType.LEFT;
 
-            let cursorPosition = this.searchBox.clutter_text.get_cursor_position();
+            let cursorPosition = this.searchEntry.clutter_text.get_cursor_position();
 
             if (cursorPosition === Constants.CaretPosition.END && symbol === Clutter.KEY_Right)
                 cursorPosition = Constants.CaretPosition.END;
@@ -879,26 +1044,29 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         // Prevent a mouse hover event from setting a new active menu item, until next mouse move event.
         this.blockHoverState = true;
 
+        // Prevent Category Mouse Hover activation while search results are active.
+        this._setCategoriesBoxInactive(true);
+
         const symbol = event.get_key_symbol();
         const unicode = Clutter.keysym_to_unicode(symbol);
 
         /*
-        * Pass ctrl key event to searchbox.
+        * Pass ctrl key event to searchEntry.
         * Useful for paste event (ctrl+v),
-        * if searchbox entry doesn't have key focus
+        * if searchEntry entry doesn't have key focus
         */
-        if (this.searchBox && (symbol === Clutter.KEY_Control_L || symbol === Clutter.KEY_Control_R)) {
-            global.stage.set_key_focus(this.searchBox.clutter_text);
-            this.searchBox.clutter_text.event(event, false);
+        if (this.searchEntry && (symbol === Clutter.KEY_Control_L || symbol === Clutter.KEY_Control_R)) {
+            global.stage.set_key_focus(this.searchEntry.clutter_text);
+            this.searchEntry.clutter_text.event(event, false);
             return Clutter.EVENT_PROPAGATE;
         }
 
         switch (symbol) {
         case Clutter.KEY_BackSpace:
-            if (this.searchBox && !this.searchBox.hasKeyFocus() && !this.searchBox.isEmpty()) {
-                this.searchBox.grab_key_focus();
-                const newText = this.searchBox.getText().slice(0, -1);
-                this.searchBox.setText(newText);
+            if (this.searchEntry && !this.searchEntry.hasKeyFocus() && !this.searchEntry.isEmpty()) {
+                this.searchEntry.grab_key_focus();
+                const newText = this.searchEntry.getText().slice(0, -1);
+                this.searchEntry.setText(newText);
             }
             return Clutter.EVENT_PROPAGATE;
         case Clutter.KEY_Tab:
@@ -921,7 +1089,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             else if (symbol === Clutter.KEY_ISO_Left_Tab)
                 direction = St.DirectionType.TAB_BACKWARD;
 
-            if (this.has_search && this.searchBox.hasKeyFocus() &&
+            if (this.searchEntry.hasKeyFocus() &&
                 this.searchResults.hasActiveResult() && this.searchResults.get_parent()) {
                 const topSearchResult = this.searchResults.getTopResult();
                 if (topSearchResult.has_style_pseudo_class('active')) {
@@ -944,16 +1112,19 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         case Clutter.KEY_Escape:
             return Clutter.EVENT_PROPAGATE;
         default:
-            if (unicode !== 0 && this.searchBox) {
-                global.stage.set_key_focus(this.searchBox.clutter_text);
-                this.searchBox.clutter_text.event(event, false);
+            if (unicode !== 0 && this.searchEntry) {
+                global.stage.set_key_focus(this.searchEntry.clutter_text);
+                this.searchEntry.clutter_text.event(event, false);
             }
         }
         return Clutter.EVENT_PROPAGATE;
     }
 
     _onDestroy() {
+        ArcMenuManager.settings.disconnectObject(this);
         this._disconnectReloadApps();
+
+        AppFavorites.getAppFavorites().disconnectObject(this);
 
         if (this.recentFilesManager) {
             this.recentFilesManager.destroy();
@@ -961,7 +1132,7 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         }
 
         this._tree.disconnectObject(this);
-        this._tree = null;
+        delete this._tree;
 
         if (this.applicationsBox) {
             if (this.applicationsBox.contains(this.applicationsGrid))
@@ -971,25 +1142,35 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         if (this.network) {
             this.network.destroy();
             this.networkMenuItem.destroy();
+            this.network = null;
+            this.networkMenuItem = null;
         }
 
         if (this.computer) {
             this.computer.destroy();
             this.computerMenuItem.destroy();
+            this.computer = null;
+            this.computerMenuItem = null;
         }
 
         if (this.placesManager) {
             for (const id in this._placesSections) {
-                this._placesSections[id].get_children().forEach(child => {
-                    child.destroy();
-                });
+                if (Object.hasOwn(this._placesSections, id)) {
+                    const children = this._placesSections[id].get_children();
+                    children.forEach(child => {
+                        child.destroy();
+                        child = null;
+                    });
+                }
             }
             this.placesManager.destroy();
             this.placesManager = null;
         }
 
-        if (this.searchBox)
-            this.searchBox.destroy();
+        if (this.searchEntry) {
+            this.searchEntry.destroy();
+            this.searchEntry = null;
+        }
 
         if (this.searchResults) {
             this.searchResults.setTerms([]);
@@ -997,26 +1178,57 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             this.searchResults = null;
         }
 
-        if (this.pinnedAppsArray) {
-            for (let i = 0; i < this.pinnedAppsArray.length; i++)
-                this.pinnedAppsArray[i].destroy();
+        this._destroyMenuItems();
 
-            this.pinnedAppsArray = null;
+        this._pinnedAppsGrid.destroy();
+        this._pinnedAppsGrid = null;
+        this.applicationsGrid.destroy();
+        this.applicationsGrid = null;
+
+        this._sortedAppsList = null;
+        this._delegate = null;
+        this._menuButton = null;
+        this.contextMenuManager = null;
+        this.subMenuManager = null;
+        this.arcMenu = null;
+        this.iconTheme = null;
+        this.appSys = null;
+        this.activeCategoryItem = null;
+        this.activeMenuItem = null;
+        this._futureActiveItem = null;
+    }
+
+    _destroyMenuItems() {
+        if (this.pinnedAppsMap) {
+            this.pinnedAppsMap.forEach(menuItem => menuItem.destroy());
+            this.pinnedAppsMap = null;
         }
+        this.pinnedAppsArray = null;
 
         if (this.applicationsMap) {
-            this.applicationsMap.forEach((value, _key, _map) => {
-                value.destroy();
-            });
+            this.applicationsMap.forEach(menuItem => menuItem.destroy());
             this.applicationsMap = null;
         }
 
         if (this.categoryDirectories) {
-            this.categoryDirectories.forEach((value, _key, _map) => {
-                value.destroy();
-            });
+            this.categoryDirectories.forEach(menuItem => menuItem.destroy());
             this.categoryDirectories = null;
         }
+    }
+
+    _setCategoriesBoxInactive(inactive) {
+        const activateOnHover = ArcMenuManager.settings.get_boolean('activate-on-hover');
+        if (!activateOnHover || !this.categoriesBox || !this.supports_category_hover_activation)
+            return;
+
+        this.blockCategoryHoverActivation = inactive;
+        const ANIMATION_TIME = 200;
+
+        this.categoriesBox.ease({
+            mode: Clutter.AnimationMode.LINEAR,
+            duration: ANIMATION_TIME,
+            opacity: inactive ? 96 : 255,
+        });
     }
 
     _createScrollBox(params) {
@@ -1027,37 +1239,47 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
             vscrollbar_policy: St.PolicyType.AUTOMATIC,
             overlay_scrollbars: true,
         });
-        const panAction = new Clutter.PanAction({interpolate: false});
-        panAction.connectObject('pan', action => {
-            // blocks activate event while panning scroll view
-            this.blockActivateEvent = true;
-            if (this.menuButton.tooltipShowingID) {
-                GLib.source_remove(this.menuButton.tooltipShowingID);
-                this.menuButton.tooltipShowingID = null;
-            }
-            if (this.menuButton.tooltip.visible)
-                this.menuButton.tooltip.hide(true);
-            this.onPan(action, scrollBox);
-        }, this);
-        panAction.connectObject('gesture-cancel', action => this.onPanEnd(action, scrollBox), this);
-        panAction.connectObject('gesture-end', action => this.onPanEnd(action, scrollBox), this);
-        scrollBox.add_action(panAction);
+
+        // With overlay_scrollbars = true, the scrollbar appears behind the menu items
+        // Maybe a bug in GNOME? Fix it with this.
+        scrollBox.get_children().forEach(child => {
+            if (child instanceof St.ScrollBar)
+                child.z_position = 1;
+        });
+
+        const panAction = new Clutter.PanAction({interpolate: true});
+        panAction.connect('pan', action => this._onPan(action, scrollBox));
+        this.add_action(panAction);
 
         return scrollBox;
     }
 
+    _onPan(action, scrollBox) {
+        if (this._menuButton.tooltipShowingID) {
+            GLib.source_remove(this._menuButton.tooltipShowingID);
+            this._menuButton.tooltipShowingID = null;
+        }
+        if (this._menuButton.tooltip.visible)
+            this._menuButton.tooltip.hide(true);
+
+        const [dist_, dx_, dy] = action.get_motion_delta(0);
+        const {vadjustment} = Utils.getScrollViewAdjustments(scrollBox);
+        vadjustment.value -=  dy;
+        return false;
+    }
+
     _createLabelWithSeparator(headerLabel) {
-        const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.HEADER_LABEL,
+        const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.HEADER_LABEL,
             Constants.SeparatorAlignment.HORIZONTAL, headerLabel);
         return separator;
     }
 
     createLabelRow(title) {
         const labelRow = new St.BoxLayout({
-            style: 'padding: 9px 12px;',
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
-            style_class: 'popup-menu-item',
+            style: 'padding-top: 9px; padding-bottom: 9px;',
+            style_class: 'popup-menu-item arcmenu-menu-item',
             reactive: true,
             track_hover: false,
             can_focus: false,
@@ -1087,25 +1309,4 @@ var BaseMenuLayout = class ArcMenuBaseMenuLayout extends St.BoxLayout {
         navButton.add_child(button);
         return navButton;
     }
-
-    _keyFocusIn(actor) {
-        if (this._focusChild === actor)
-            return;
-        this._focusChild = actor;
-        Utils.ensureActorVisibleInScrollView(actor);
-    }
-
-    onPan(action, scrollbox) {
-        const [dist_, dx_, dy] = action.get_motion_delta(0);
-        const {adjustment} = scrollbox.vscroll;
-        adjustment.value -=  dy;
-        return false;
-    }
-
-    onPanEnd(action, scrollbox) {
-        const velocity = -action.get_velocity(0)[2];
-        const {adjustment} = scrollbox.vscroll;
-        const endPanValue = adjustment.value + velocity * 2;
-        adjustment.value = endPanValue;
-    }
-};
+}

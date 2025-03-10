@@ -1,11 +1,14 @@
-/* exported DialogWindow, DragRow, EditEntriesBox,
-   IconGrid, MenuButtonIconTile, MenuLayoutTile */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
+import GdkPixbuf from 'gi://GdkPixbuf';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-var DialogWindow = GObject.registerClass({
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+export const DialogWindow = GObject.registerClass({
     Signals: {
         'response': {param_types: [GObject.TYPE_INT]},
     },
@@ -25,7 +28,27 @@ var DialogWindow = GObject.registerClass({
     }
 });
 
-var DragRow = GObject.registerClass({
+export const SettingRow = GObject.registerClass(
+class ArcMenuSettingRow extends Adw.ActionRow {
+    _init(params) {
+        super._init({
+            activatable: true,
+            ...params,
+        });
+
+        const goNextImage = new Gtk.Image({
+            gicon: Gio.icon_new_for_string('go-next-symbolic'),
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
+        });
+
+        this.add_suffix(goNextImage);
+    }
+});
+
+export const DragRow = GObject.registerClass({
     Properties: {
         'shortcut-name': GObject.ParamSpec.string(
             'shortcut-name', 'shortcut-name', 'shortcut-name',
@@ -43,8 +66,8 @@ var DragRow = GObject.registerClass({
             'gicon', 'gicon', 'gicon',
             GObject.ParamFlags.READWRITE,
             Gio.Icon.$gtype),
-        'xpm-pixbuf': GObject.ParamSpec.object(
-            'xpm-pixbuf', 'xpm-pixbuf', 'xpm-pixbuf',
+        'pixbuf': GObject.ParamSpec.object(
+            'pixbuf', 'pixbuf', 'pixbuf',
             GObject.ParamFlags.READWRITE,
             GdkPixbuf.Pixbuf.$gtype),
         'icon-pixel-size': GObject.ParamSpec.int(
@@ -77,8 +100,8 @@ var DragRow = GObject.registerClass({
         });
         this.add_prefix(this.icon);
 
-        if (this.xpm_pixbuf)
-            this.icon.set_from_pixbuf(this.xpm_pixbuf);
+        if (this.pixbuf)
+            this.icon.set_from_pixbuf(this.pixbuf);
 
         this.connect('notify::gicon', () => (this.icon.gicon = this.gicon));
 
@@ -186,8 +209,8 @@ var DragRow = GObject.registerClass({
         dragRow.css_classes = this.css_classes;
         dragRow.icon.gicon = this.gicon;
 
-        if (this.xpm_pixbuf)
-            dragRow.icon.set_from_pixbuf(this.xpm_pixbuf);
+        if (this.pixbuf)
+            dragRow.icon.set_from_pixbuf(this.pixbuf);
 
         const editButton = new Gtk.Button({
             icon_name: 'view-more-symbolic',
@@ -205,7 +228,7 @@ const ModifyEntryType = {
     REMOVE: 2,
 };
 
-var EditEntriesBox = GObject.registerClass({
+export const EditEntriesBox = GObject.registerClass({
     Properties: {
         'allow-modify': GObject.ParamSpec.boolean(
             'allow-modify', 'allow-modify', 'allow-modify',
@@ -324,7 +347,7 @@ var EditEntriesBox = GObject.registerClass({
     }
 });
 
-var IconGrid = GObject.registerClass(class ArcMenuIconGrid extends Gtk.FlowBox {
+export const IconGrid = GObject.registerClass(class ArcMenuIconGrid extends Gtk.FlowBox {
     _init(spacing = 4) {
         super._init({
             max_children_per_line: 15,
@@ -370,7 +393,7 @@ var IconGrid = GObject.registerClass(class ArcMenuIconGrid extends Gtk.FlowBox {
     }
 });
 
-var MenuButtonIconTile = GObject.registerClass(class ArcMenuMenuButtonIconTile extends Gtk.FlowBoxChild {
+export const MenuButtonIconTile = GObject.registerClass(class ArcMenuMenuButtonIconTile extends Gtk.FlowBoxChild {
     _init(icon, name) {
         super._init({
             css_classes: ['card', 'activatable'],
@@ -418,7 +441,7 @@ var MenuButtonIconTile = GObject.registerClass(class ArcMenuMenuButtonIconTile e
     }
 });
 
-var MenuLayoutTile = GObject.registerClass(class ArcMenuMenuLayoutTile extends Gtk.FlowBoxChild {
+export const MenuLayoutTile = GObject.registerClass(class ArcMenuMenuLayoutTile extends Gtk.FlowBoxChild {
     _init(styleInfo) {
         super._init({
             css_classes: ['card', 'activatable'],

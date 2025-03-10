@@ -1,44 +1,52 @@
-/* exported SearchResults */
 /*
  * Credits: This file leverages the work from GNOME Shell search.js file
  * (https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/search.js)
  */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const {Clutter, Gio, GLib, GObject, Shell, St} = imports.gi;
-const AppDisplay = imports.ui.appDisplay;
-const appSys = Shell.AppSystem.get_default();
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const {Highlighter} = imports.misc.util;
-const MW = Me.imports.menuWidgets;
-const {RecentFilesManager} = Me.imports.recentFilesManager;
-const RemoteSearch = imports.ui.remoteSearch;
-const _ = Gettext.gettext;
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Shell from 'gi://Shell';
+import St from 'gi://St';
 
-const {OpenWindowSearchProvider} = Me.imports.searchProviders.openWindows;
-const {RecentFilesSearchProvider} = Me.imports.searchProviders.recentFiles;
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+import {Highlighter} from 'resource:///org/gnome/shell/misc/util.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as RemoteSearch from 'resource:///org/gnome/shell/ui/remoteSearch.js';
+
+import {ApplicationMenuItem, BaseMenuItem} from './menuWidgets.js';
+import {ArcMenuManager} from './arcmenuManager.js';
+import * as Constants from './constants.js';
+import {RecentFilesManager} from './recentFilesManager.js';
+import {OpenWindowSearchProvider} from './searchProviders/openWindows.js';
+import {RecentFilesSearchProvider} from './searchProviders/recentFiles.js';
+import {getOrientationProp} from './utils.js';
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 const FILE_PROVIDERS = ['org.gnome.Nautilus.desktop', 'arcmenu.recent-files', 'nemo.desktop'];
 
-var ListSearchResult = GObject.registerClass(
-class ArcMenuListSearchResult extends MW.ApplicationMenuItem {
-    _init(provider, metaInfo, resultsView) {
+class ListSearchResult extends ApplicationMenuItem {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, metaInfo, resultsView) {
         const menuLayout = resultsView._menuLayout;
         metaInfo['provider-id'] = provider.id;
 
-        super._init(menuLayout, null, Constants.DisplayType.LIST, metaInfo);
+        super(menuLayout, null, Constants.DisplayType.LIST, metaInfo);
 
         this.searchType = this._menuLayout.search_display_type;
         this.metaInfo = metaInfo;
         this.provider = provider;
         this.resultsView = resultsView;
-        this.layout = Me.settings.get_enum('menu-layout');
+        this.layout = ArcMenuManager.settings.get_enum('menu-layout');
 
         if (FILE_PROVIDERS.includes(this.provider.id))
             this.folderPath = this.metaInfo['description'];
 
-        const highlightSearchResultTerms = Me.settings.get_boolean('highlight-search-result-terms');
+        const highlightSearchResultTerms = ArcMenuManager.settings.get_boolean('highlight-search-result-terms');
         if (highlightSearchResultTerms) {
             this.resultsView.connectObject('terms-changed', this._highlightTerms.bind(this), this);
             this._highlightTerms();
@@ -49,7 +57,7 @@ class ArcMenuListSearchResult extends MW.ApplicationMenuItem {
     }
 
     _highlightTerms() {
-        const showSearchResultDescriptions = Me.settings.get_boolean('show-search-result-details');
+        const showSearchResultDescriptions = ArcMenuManager.settings.get_boolean('show-search-result-details');
         if (this.descriptionLabel && showSearchResultDescriptions) {
             const descriptionMarkup = this.resultsView.highlightTerms(this.metaInfo['description'].split('\n')[0]);
             this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
@@ -57,15 +65,21 @@ class ArcMenuListSearchResult extends MW.ApplicationMenuItem {
         const labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
         this.label.clutter_text.set_markup(labelMarkup);
     }
-});
+}
 
-var AppSearchResult = GObject.registerClass(
-class ArcMenuAppSearchResult extends MW.ApplicationMenuItem {
-    _init(provider, metaInfo, resultsView) {
+class AppSearchResult extends ApplicationMenuItem {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, metaInfo, resultsView) {
         const menuLayout = resultsView._menuLayout;
-        const app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
+        const appSystem = Shell.AppSystem.get_default();
+        const app = appSystem.lookup_app(metaInfo['id']) || appSystem.lookup_app(provider.id);
         const displayType = menuLayout.search_display_type;
-        super._init(menuLayout, app, displayType, metaInfo);
+
+        super(menuLayout, app, displayType, metaInfo);
+
         this.app = app;
         this.provider = provider;
         this.metaInfo = metaInfo;
@@ -74,7 +88,7 @@ class ArcMenuAppSearchResult extends MW.ApplicationMenuItem {
         if (!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
 
-        const highlightSearchResultTerms = Me.settings.get_boolean('highlight-search-result-terms');
+        const highlightSearchResultTerms = ArcMenuManager.settings.get_boolean('highlight-search-result-terms');
         if (highlightSearchResultTerms) {
             this.resultsView.connectObject('terms-changed', this._highlightTerms.bind(this), this);
             this._highlightTerms();
@@ -82,7 +96,7 @@ class ArcMenuAppSearchResult extends MW.ApplicationMenuItem {
     }
 
     _highlightTerms() {
-        const showSearchResultDescriptions = Me.settings.get_boolean('show-search-result-details');
+        const showSearchResultDescriptions = ArcMenuManager.settings.get_boolean('show-search-result-details');
         if (this.descriptionLabel && showSearchResultDescriptions) {
             const descriptionMarkup = this.resultsView.highlightTerms(this.descriptionLabel.text.split('\n')[0]);
             this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
@@ -91,18 +105,20 @@ class ArcMenuAppSearchResult extends MW.ApplicationMenuItem {
         const labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
         this.label.clutter_text.set_markup(labelMarkup);
     }
-});
+}
 
-var SearchResultsBase = GObject.registerClass({
-    Signals: {
+class SearchResultsBase extends St.BoxLayout {
+    static [GObject.signals] = {
         'terms-changed': {},
         'no-results': {},
-    },
-}, class ArcMenuSearchResultsBase extends St.BoxLayout {
-    _init(provider, resultsView) {
-        super._init({
-            vertical: true,
-        });
+    };
+
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, resultsView) {
+        super({...getOrientationProp(true)});
         this.provider = provider;
         this.resultsView = resultsView;
         this._menuLayout = resultsView._menuLayout;
@@ -119,11 +135,23 @@ var SearchResultsBase = GObject.registerClass({
         this._clipboard = St.Clipboard.get_default();
 
         this._cancellable = new Gio.Cancellable();
-        this.connect('destroy', this._onDestroy.bind(this));
+        this.connect('destroy', () => this._onDestroy());
     }
 
     _onDestroy() {
+        this._cancellable.cancel();
+        this._cancellable = null;
+
+        for (const resultId in this._resultDisplays) {
+            if (Object.hasOwn(this._resultDisplays, resultId)) {
+                this._resultDisplays[resultId].destroy();
+                delete this._resultDisplays[resultId];
+            }
+        }
+        this._resultDisplays = null;
+
         this._terms = [];
+        this._menuLayout = null;
     }
 
     _createResultDisplay(_meta) {
@@ -131,8 +159,12 @@ var SearchResultsBase = GObject.registerClass({
 
     clear() {
         this._cancellable.cancel();
-        for (const resultId in this._resultDisplays)
-            this._resultDisplays[resultId].destroy();
+        for (const resultId in this._resultDisplays) {
+            if (Object.hasOwn(this._resultDisplays, resultId)) {
+                this._resultDisplays[resultId].destroy();
+                delete this._resultDisplays[resultId];
+            }
+        }
         this._resultDisplays = {};
         this._clearResultDisplay();
         this.hide();
@@ -141,47 +173,39 @@ var SearchResultsBase = GObject.registerClass({
     _setMoreCount(_count) {
     }
 
-    _ensureResultActors(results, callback) {
+    async _ensureResultActors(results) {
         const metasNeeded = results.filter(
             resultId => this._resultDisplays[resultId] === undefined
         );
 
-        if (metasNeeded.length === 0) {
-            callback(true);
-        } else {
-            this._cancellable.cancel();
-            this._cancellable.reset();
+        if (metasNeeded.length === 0)
+            return;
 
-            this.provider.getResultMetas(metasNeeded, metas => {
-                if (this._cancellable.is_cancelled()) {
-                    if (metas.length > 0)
-                        log(`Search provider ${this.provider.id} returned results after the request was canceled`);
-                    callback(false);
-                    return;
-                }
-                if (metas.length !== metasNeeded.length) {
-                    log(`Wrong number of result metas returned by search provider ${this.provider.id
-                    }: expected ${metasNeeded.length} but got ${metas.length}`);
-                    callback(false);
-                    return;
-                }
-                if (metas.some(meta => !meta.name || !meta.id)) {
-                    log(`Invalid result meta returned from search provider ${this.provider.id}`);
-                    callback(false);
-                    return;
-                }
+        this._cancellable.cancel();
+        this._cancellable.reset();
 
-                metasNeeded.forEach((resultId, i) => {
-                    const meta = metas[i];
-                    const display = this._createResultDisplay(meta);
-                    this._resultDisplays[resultId] = display;
-                });
-                callback(true);
-            }, this._cancellable);
+        const metas = await this.provider.getResultMetas(metasNeeded, this._cancellable);
+
+        if (this._cancellable.is_cancelled()) {
+            if (metas.length > 0)
+                throw new Error(`Search provider ${this.provider.id} returned results after the request was canceled`);
         }
+
+        if (metas.length !== metasNeeded.length)
+            throw new Error(`Wrong number of result metas returned by search provider ${this.provider.id}: expected ${metasNeeded.length} but got ${metas.length}`);
+
+
+        if (metas.some(meta => !meta.name || !meta.id))
+            throw new Error(`Invalid result meta returned from search provider ${this.provider.id}`);
+
+        metasNeeded.forEach((resultId, i) => {
+            const meta = metas[i];
+            const display = this._createResultDisplay(meta);
+            this._resultDisplays[resultId] = display;
+        });
     }
 
-    updateSearch(providerResults, terms, callback) {
+    async updateSearch(providerResults, terms, callback) {
         this._terms = terms;
         if (providerResults.length === 0) {
             this._clearResultDisplay();
@@ -195,45 +219,48 @@ var SearchResultsBase = GObject.registerClass({
 
             const moreCount = Math.max(providerResults.length - results.length, 0);
 
-            this._ensureResultActors(results, successful => {
-                if (!successful) {
-                    this._clearResultDisplay();
-                    callback();
-                    return;
-                }
+            try {
+                await this._ensureResultActors(results);
 
                 // To avoid CSS transitions causing flickering when
                 // the first search result stays the same, we hide the
                 // content while filling in the results.
                 this.hide();
                 this._clearResultDisplay();
-                results.forEach(resultId => {
-                    this._addItem(this._resultDisplays[resultId]);
-                });
-
+                results.forEach(
+                    resultId => this._addItem(this._resultDisplays[resultId]));
                 this._setMoreCount(this.provider.canLaunchSearch ? moreCount : 0);
                 this.show();
                 callback();
-            });
+            } catch (e) {
+                this._clearResultDisplay();
+                callback();
+            }
         }
     }
-});
+}
 
-var ListSearchResults = GObject.registerClass(
-class ArcMenuListSearchResults extends SearchResultsBase {
-    _init(provider, resultsView) {
-        super._init(provider, resultsView);
+class ListSearchResults extends SearchResultsBase {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, resultsView) {
+        super(provider, resultsView);
         this._menuLayout = resultsView._menuLayout;
         this.searchType = this._menuLayout.search_display_type;
-        this.layout = Me.settings.get_enum('menu-layout');
+
+        this.layout = ArcMenuManager.settings.get_enum('menu-layout');
+
+        const spacing = this._menuLayout.search_results_spacing;
 
         this._container = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             x_expand: true,
             y_expand: true,
-            style: 'margin-top: 8px;',
+            style: `margin-top: ${Math.max(spacing, 8)}px; spacing: ${Math.max(spacing, 2)}px;`,
         });
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
@@ -243,14 +270,14 @@ class ArcMenuListSearchResults extends SearchResultsBase {
                 this._menuLayout.arcMenu.toggle();
             }
         });
-
         this._container.add_child(this.providerInfo);
 
         this._content = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
+            style: `spacing: ${spacing}px;`,
         });
 
         this._container.add_child(this._content);
@@ -262,7 +289,7 @@ class ArcMenuListSearchResults extends SearchResultsBase {
     }
 
     _getMaxDisplayedResults() {
-        return Me.settings.get_int('max-search-results');
+        return ArcMenuManager.settings.get_int('max-search-results');
     }
 
     _clearResultDisplay() {
@@ -285,16 +312,20 @@ class ArcMenuListSearchResults extends SearchResultsBase {
         else
             return null;
     }
-});
+}
 
-var AppSearchResults = GObject.registerClass(
-class ArcMenuAppSearchResults extends SearchResultsBase {
-    _init(provider, resultsView) {
-        super._init(provider, resultsView);
+class AppSearchResults extends SearchResultsBase {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, resultsView) {
+        super(provider, resultsView);
         this._parentContainer = resultsView;
         this._menuLayout = resultsView._menuLayout;
         this.searchType = this._menuLayout.search_display_type;
-        this.layout = Me.settings.get_enum('menu-layout');
+
+        this.layout = ArcMenuManager.settings.get_enum('menu-layout');
 
         this.itemCount = 0;
         this.gridTop = -1;
@@ -304,8 +335,8 @@ class ArcMenuAppSearchResults extends SearchResultsBase {
 
         const layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            column_spacing: this.searchType === Constants.DisplayType.GRID ? this._menuLayout.column_spacing : 0,
-            row_spacing: this.searchType === Constants.DisplayType.GRID ? this._menuLayout.row_spacing : 0,
+            column_spacing: this.searchType === Constants.DisplayType.GRID ? this._menuLayout.column_spacing : this._menuLayout.search_results_spacing,
+            row_spacing: this.searchType === Constants.DisplayType.GRID ? this._menuLayout.row_spacing : this._menuLayout.search_results_spacing,
         });
         this._grid = new St.Widget({
             x_expand: true,
@@ -331,7 +362,7 @@ class ArcMenuAppSearchResults extends SearchResultsBase {
             const iconWidth = this._menuLayout.getIconWidthFromSetting();
             maxDisplayedResults = this._menuLayout.getBestFitColumnsForGrid(iconWidth, this._grid);
         } else {
-            maxDisplayedResults = Me.settings.get_int('max-search-results');
+            maxDisplayedResults = ArcMenuManager.settings.get_int('max-search-results');
         }
         return maxDisplayedResults;
     }
@@ -356,16 +387,14 @@ class ArcMenuAppSearchResults extends SearchResultsBase {
             colums = this._menuLayout.getBestFitColumnsForGrid(iconWidth, this._grid);
         }
 
-        const GridColumns = colums;
-        if (!this.rtl && (this.itemCount % GridColumns === 0)) {
+        if (!this.rtl && (this.itemCount % colums === 0)) {
             this.gridTop++;
             this.gridLeft = 0;
         } else if (this.rtl && (this.gridLeft === 0)) {
             this.gridTop++;
-            this.gridLeft = GridColumns;
+            this.gridLeft = colums;
         }
         this._grid.layout_manager.attach(display, this.gridLeft, this.gridTop, 1, 1);
-        display.gridLocation = [this.gridLeft, this.gridTop];
 
         if (!this.rtl)
             this.gridLeft++;
@@ -380,28 +409,36 @@ class ArcMenuAppSearchResults extends SearchResultsBase {
         else
             return null;
     }
-});
+}
 
-var SearchResults = GObject.registerClass({
-    Signals: {
+export class SearchResults extends St.BoxLayout {
+    static [GObject.signals] = {
         'terms-changed': {},
         'have-results': {},
         'no-results': {},
-    },
-}, class ArcMenuSearchResults extends St.BoxLayout {
-    _init(menuLayout) {
-        super._init({
-            vertical: true,
+    };
+
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(menuLayout) {
+        super({
+            ...getOrientationProp(true),
             y_expand: true,
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
         });
         this._menuLayout = menuLayout;
+
+        const {searchProviderDisplayId} = menuLayout.menuButton;
+        this._displayId = `display_${searchProviderDisplayId}`;
+
         this.searchType = this._menuLayout.search_display_type;
-        this.layout = Me.settings.get_enum('menu-layout');
+        this.layout = ArcMenuManager.settings.get_enum('menu-layout');
 
         this._content = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_align: Clutter.ActorAlign.FILL,
         });
 
@@ -437,13 +474,18 @@ var SearchResults = GObject.registerClass({
         this._searchSettings.connectObject('changed::disable-external', this._reloadRemoteProviders.bind(this), this);
         this._searchSettings.connectObject('changed::sort-order', this._reloadRemoteProviders.bind(this), this);
 
+        ArcMenuManager.extension.searchProviderEmitter.connectObject('search-provider-added',
+            (_s, provider) => this._registerProvider(provider), this);
+        ArcMenuManager.extension.searchProviderEmitter.connectObject('search-provider-removed',
+            (_s, provider) => this._unregisterProvider(provider), this);
+
         this._searchTimeoutId = null;
         this._cancellable = new Gio.Cancellable();
 
-        this._registerProvider(new AppDisplay.AppSearchProvider());
+        const appSystem = Shell.AppSystem.get_default();
+        appSystem.connectObject('installed-changed', this._reloadRemoteProviders.bind(this), this);
 
-        appSys.connectObject('installed-changed', this._reloadRemoteProviders.bind(this), this);
-
+        this._registerGnomeShellProviders();
         this._reloadRemoteProviders();
 
         this.connect('destroy', this._onDestroy.bind(this));
@@ -459,6 +501,13 @@ var SearchResults = GObject.registerClass({
     }
 
     _onDestroy() {
+        this._cancellable.cancel();
+        this._cancellable = null;
+
+        ArcMenuManager.extension.searchProviderEmitter.disconnectObject(this);
+        this._searchSettings.disconnectObject(this);
+        Shell.AppSystem.get_default().disconnectObject(this);
+
         this._clearSearchTimeout();
 
         this._terms = [];
@@ -468,12 +517,30 @@ var SearchResults = GObject.registerClass({
         this._startingSearch = false;
 
         this._providers.forEach(provider => {
-            if (provider.display)
-                provider.display.destroy();
+            if (provider[this._displayId]) {
+                provider[this._displayId].destroy();
+                delete provider[this._displayId];
+            }
         });
+        this._providers = null;
 
         this.recentFilesManager.destroy();
         this.recentFilesManager = null;
+
+        this._highlighter = null;
+        this._searchSettings = null;
+        this._menuLayout = null;
+    }
+
+    _registerGnomeShellProviders() {
+        const searchResults = Main.overview.searchController._searchResults;
+        const providers = searchResults._providers.filter(p => !p.isRemoteProvider);
+        providers.forEach(this._registerProvider.bind(this));
+
+        if (ArcMenuManager.settings.get_boolean('search-provider-open-windows'))
+            this._registerProvider(new OpenWindowSearchProvider());
+        if (ArcMenuManager.settings.get_boolean('search-provider-recent-files'))
+            this._registerProvider(new RecentFilesSearchProvider(this.recentFilesManager));
     }
 
     _reloadRemoteProviders() {
@@ -482,21 +549,13 @@ var SearchResults = GObject.registerClass({
         if (this._terms.length !== 0)
             this._reset();
 
-        this._oldProviders = null;
         const remoteProviders = this._providers.filter(p => p.isRemoteProvider);
-
         remoteProviders.forEach(provider => {
             this._unregisterProvider(provider);
         });
 
-        if (Me.settings.get_boolean('search-provider-open-windows'))
-            this._registerProvider(new OpenWindowSearchProvider());
-        if (Me.settings.get_boolean('search-provider-recent-files'))
-            this._registerProvider(new RecentFilesSearchProvider(this.recentFilesManager));
-
-        RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
-            providers.forEach(this._registerProvider.bind(this));
-        });
+        const providers = RemoteSearch.loadRemoteSearchProviders(this._searchSettings);
+        providers.forEach(this._registerProvider.bind(this));
 
         // restart any active search
         if (currentTerms.length > 0)
@@ -513,13 +572,10 @@ var SearchResults = GObject.registerClass({
         const index = this._providers.indexOf(provider);
         this._providers.splice(index, 1);
 
-        if (provider.display)
-            provider.display.destroy();
-    }
-
-    _gotResults(results, provider) {
-        this._results[provider.id] = results;
-        this._updateResults(provider, results);
+        if (provider[this._displayId]) {
+            provider[this._displayId].destroy();
+            delete provider[this._displayId];
+        }
     }
 
     _clearSearchTimeout() {
@@ -527,6 +583,25 @@ var SearchResults = GObject.registerClass({
             GLib.source_remove(this._searchTimeoutId);
             this._searchTimeoutId = null;
         }
+    }
+
+    async _doProviderSearch(provider, previousResults) {
+        provider.searchInProgress = true;
+
+        let results;
+        if (this._isSubSearch && previousResults) {
+            results = await provider.getSubsearchResultSet(
+                previousResults,
+                this._terms,
+                this._cancellable);
+        } else {
+            results = await provider.getInitialResultSet(
+                this._terms,
+                this._cancellable);
+        }
+
+        this._results[provider.id] = results;
+        this._updateResults(provider, results);
     }
 
     _reset() {
@@ -547,23 +622,8 @@ var SearchResults = GObject.registerClass({
         this._results = {};
 
         this._providers.forEach(provider => {
-            provider.searchInProgress = true;
-
             const previousProviderResults = previousResults[provider.id];
-            if (this._isSubSearch && previousProviderResults) {
-                provider.getSubsearchResultSet(previousProviderResults,
-                    this._terms,
-                    results => {
-                        this._gotResults(results, provider);
-                    },
-                    this._cancellable);
-            } else {
-                provider.getInitialResultSet(this._terms,
-                    results => {
-                        this._gotResults(results, provider);
-                    },
-                    this._cancellable);
-            }
+            this._doProviderSearch(provider, previousProviderResults);
         });
 
         this._updateSearchProgress();
@@ -616,7 +676,7 @@ var SearchResults = GObject.registerClass({
     }
 
     _ensureProviderDisplay(provider) {
-        if (provider.display)
+        if (provider[this._displayId])
             return;
 
         let providerDisplay;
@@ -626,12 +686,12 @@ var SearchResults = GObject.registerClass({
             providerDisplay = new AppSearchResults(provider, this);
         providerDisplay.hide();
         this._content.add_child(providerDisplay);
-        provider.display = providerDisplay;
+        provider[this._displayId] = providerDisplay;
     }
 
     _clearDisplay() {
         this._providers.forEach(provider => {
-            provider.display.clear();
+            provider[this._displayId]?.clear();
         });
     }
 
@@ -641,7 +701,7 @@ var SearchResults = GObject.registerClass({
         const providers = this._providers;
         for (let i = 0; i < providers.length; i++) {
             const provider = providers[i];
-            const {display} = provider;
+            const display = provider[this._displayId];
 
             if (!display.visible)
                 continue;
@@ -670,7 +730,7 @@ var SearchResults = GObject.registerClass({
 
     _updateSearchProgress() {
         const haveResults = this._providers.some(provider => {
-            const {display} = provider;
+            const display = provider[this._displayId];
             return display.getFirstResult() !== null;
         });
 
@@ -689,7 +749,7 @@ var SearchResults = GObject.registerClass({
 
     _updateResults(provider, results) {
         const terms = this._terms;
-        const {display} = provider;
+        const display = provider[this._displayId];
         display.updateSearch(results, terms, () => {
             provider.searchInProgress = false;
 
@@ -727,24 +787,28 @@ var SearchResults = GObject.registerClass({
 
         return this._highlighter.highlight(description);
     }
-});
+}
 
-var ArcSearchProviderInfo = GObject.registerClass(
-class ArcMenuArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem {
-    _init(provider, menuLayout) {
-        super._init(menuLayout);
+export class ArcSearchProviderInfo extends BaseMenuItem {
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(provider, menuLayout) {
+        super(menuLayout);
         this.provider = provider;
         this._menuLayout = menuLayout;
-        this.style = 'padding-top: 6px; padding-bottom: 6px; margin-bottom: 2px;';
+        this._appInfo = provider.appInfo;
+        this.style = 'padding-top: 6px; padding-bottom: 6px;';
         this.x_expand = false;
         this.x_align = Clutter.ActorAlign.START;
 
-        this.description = this.provider.appInfo.get_description();
+        this.description = this._appInfo.get_description ? this._appInfo.get_description() : null;
         if (this.description)
             this.description = this.description.split('\n')[0];
 
         this.label = new St.Label({
-            text: provider.appInfo.get_name(),
+            text: this._appInfo.get_name(),
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
             style: 'font-weight: bold;',
@@ -763,4 +827,4 @@ class ArcMenuArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem {
         this._moreLabel.text = _('+ %d more', '+ %d more', count).format(count);
         this._moreLabel.visible = count > 0;
     }
-});
+}

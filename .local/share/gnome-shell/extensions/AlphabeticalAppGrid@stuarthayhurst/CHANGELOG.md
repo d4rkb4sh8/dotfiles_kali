@@ -1,5 +1,54 @@
 ## Changelog:
 
+### v42: - `2025-02-08`
+ - Added GNOME 48 support
+ - Added Bulgarian translation - [Iliya](https://github.com/iliqiliev) (#94)
+ - Updated Dutch translation (#95)
+
+### v41: - `2024-08-06`
+ - Added GNOME 47 support
+ - Added Farsi translation - [avds2](https://github.com/avds2) (#93)
+ - Updated installation instructions
+ - Updated pipeline runners
+
+### v40: - `2024-03-31`
+ - Fixed folder previews and contents getting stuck
+ - Fixed compatibility issues with "Favourites in AppGrid" extension (#87)
+ - Updated description
+ - General code cleanup
+
+### v39: - `2024-02-25`
+ - Added support for GNOME 46
+
+### v38: - `2024-01-25`
+ - Move AppSystem inside the constructor, to meet review guidelines
+
+### v37: - `2024-01-24`
+ - Updated extension to use newer GJS features
+ - Added Turkish translation - [Hakan](https://github.com/hkayrad) (#88)
+ - Added Japanese translation - [Ryo](https://github.com/ryonakano) (#89)
+
+### v36: - `2023-11-18`
+ - Updated Spanish translation (#85)
+ - Updated Russian translation (#86)
+ - Updated GitHub runners
+
+### v35: - `2023-09-17`
+ - Updated Italian translation (#84)
+
+### v34: - `2023-08-22`
+ - Added a new interface, using `libadwaita`
+ - Disabled fuzzy translations
+ - Stopped exporting generic class names
+ - Updated README and documentation
+ - Updated Spanish translation (#83)
+
+### v33: - `2023-08-19`
+ - Support GNOME 45
+   - **Support for earlier versions has been removed**
+ - General code improvements
+ - Build system improvements
+
 ### v32: - `2023-08-16`
 **This release will be the final release to support pre-45 versions of GNOME**
  - Updated Taiwanese translations (#81)

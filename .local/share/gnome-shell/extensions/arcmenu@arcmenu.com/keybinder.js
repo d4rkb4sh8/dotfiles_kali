@@ -1,14 +1,16 @@
-/* exported OverrideOverlayKey, CustomKeybinding */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
+import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
 
-const {Gio, GObject, Meta, Shell} = imports.gi;
-const Constants = Me.imports.constants;
-const Main = imports.ui.main;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
+import {ArcMenuManager} from './arcmenuManager.js';
+import * as Constants from './constants.js';
 
 const MUTTER_SCHEMA = 'org.gnome.mutter';
 
-var OverrideOverlayKey = class {
+export class OverrideOverlayKey {
     constructor() {
         this.isOverrideOverlayEnabled = false;
         this._ignoreHotKeyChangedEvent = false;
@@ -17,13 +19,12 @@ var OverrideOverlayKey = class {
 
         this._oldOverlayKey = this._mutterSettings.get_value('overlay-key');
 
-        this._overlayKeyChangedID = this._mutterSettings.connect('changed::overlay-key', () => {
+        this._mutterSettings.connectObject('changed::overlay-key', () => {
             if (!this._ignoreHotKeyChangedEvent)
                 this._oldOverlayKey = this._mutterSettings.get_value('overlay-key');
-        });
+        }, this);
 
-        this._mainStartUpComplete = Main.layoutManager.connect('startup-complete',
-            () => this._overrideOverlayKey());
+        Main.layoutManager.connectObject('startup-complete', () => this._overrideOverlayKey(), this);
     }
 
     enable(toggleMenu) {
@@ -45,10 +46,9 @@ var OverrideOverlayKey = class {
     disable() {
         this._ignoreHotKeyChangedEvent = true;
         this._mutterSettings.set_value('overlay-key', this._oldOverlayKey);
-        if (this.overlayKeyID) {
-            global.display.disconnect(this.overlayKeyID);
-            this.overlayKeyID = null;
-        }
+
+        global.display.disconnectObject(this);
+
         if (this.defaultOverlayKeyID) {
             GObject.signal_handler_unblock(global.display, this.defaultOverlayKeyID);
             this.defaultOverlayKeyID = null;
@@ -66,7 +66,7 @@ var OverrideOverlayKey = class {
         this.defaultOverlayKeyID = GObject.signal_handler_find(global.display, {signalId: 'overlay-key'});
 
         if (!this.defaultOverlayKeyID) {
-            log('ArcMenu Error - Failed to set Super_L hotkey');
+            console.log('ArcMenu Error - Failed to set Super_L hotkey');
             return;
         }
 
@@ -74,30 +74,25 @@ var OverrideOverlayKey = class {
 
         Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
 
-        this.overlayKeyID = global.display.connect('overlay-key', () => {
+        global.display.connectObject('overlay-key', () => {
             this._toggleMenu();
             // Workaround for PopShell extension conflicting with ArcMenu SUPER_L hotkey.
             // PopShell extension removes ActionMode.POPUP from 'overlay-key',
             // which prevents the use of the SUPER_L hotkey when popup menus are opened.
             // Set 'overlay-key' action mode to ActionMode.ALL when ArcMenu is opened.
             Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
-        });
+        }, this);
     }
 
     destroy() {
-        if (this._overlayKeyChangedID) {
-            this._mutterSettings.disconnect(this._overlayKeyChangedID);
-            this._overlayKeyChangedID = null;
-        }
+        this._mutterSettings.disconnectObject(this);
+        Main.layoutManager.disconnectObject(this);
         this.disable();
-        if (this._mainStartUpComplete) {
-            Main.layoutManager.disconnect(this._mainStartUpComplete);
-            this._mainStartUpComplete = null;
-        }
+        this._mutterSettings = null;
     }
-};
+}
 
-var CustomKeybinding = class {
+export class CustomKeybinding {
     constructor() {
         this._keybindings = new Map();
     }
@@ -106,7 +101,7 @@ var CustomKeybinding = class {
         if (!this._keybindings.has(keybindingNameKey)) {
             this._keybindings.set(keybindingNameKey, keybindingValueKey);
 
-            Main.wm.addKeybinding(keybindingValueKey, ExtensionUtils.getSettings(),
+            Main.wm.addKeybinding(keybindingValueKey, ArcMenuManager.settings,
                 Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
                 Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
                 keybindingHandler);
@@ -122,13 +117,13 @@ var CustomKeybinding = class {
     }
 
     unbindAll() {
-        this._keybindings.forEach((value, key) => {
+        this._keybindings.forEach(value => {
             Main.wm.removeKeybinding(value);
-            this._keybindings.delete(key);
         });
     }
 
     destroy() {
         this.unbindAll();
+        this._keybindings = null;
     }
-};
+}

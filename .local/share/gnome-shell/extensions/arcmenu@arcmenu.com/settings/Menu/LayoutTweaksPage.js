@@ -1,17 +1,17 @@
-/* exported LayoutTweaksPage */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const {Adw, GObject, Gtk} = imports.gi;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const {SettingsUtils} = Me.imports.settings;
-const _ = Gettext.gettext;
+import Adw from 'gi://Adw';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const Settings = Me.imports.settings;
-const {SubPage} = Settings.Menu.SubPage;
-const {ListPinnedPage} = Me.imports.settings.Menu.ListPinnedPage;
-const {ListOtherPage} = Me.imports.settings.Menu.ListOtherPage;
+import * as Constants from '../../constants.js';
+import {ListPinnedPage} from './ListPinnedPage.js';
+import {ListOtherPage} from './ListOtherPage.js';
+import * as PW from '../../prefsWidgets.js';
+import * as SettingsUtils from '../SettingsUtils.js';
+import {SubPage} from './SubPage.js';
 
-var LayoutTweaksPage = GObject.registerClass(
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+export const LayoutTweaksPage = GObject.registerClass(
 class ArcMenuLayoutTweaksPage extends SubPage {
     _init(settings, params) {
         super._init(settings, params);
@@ -21,7 +21,8 @@ class ArcMenuLayoutTweaksPage extends SubPage {
     }
 
     setActiveLayout(menuLayout) {
-        this.headerLabel.title = _(SettingsUtils.getMenuLayoutTweaksName(menuLayout));
+        const layoutName = SettingsUtils.getMenuLayoutName(menuLayout);
+        this.title = _('%s Layout Tweaks').format(_(layoutName));
 
         for (const child of this.page.children)
             this.page.remove(child);
@@ -98,10 +99,31 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         case Constants.MenuLayout.POP:
             this._loadPopTweaks();
             break;
+        case Constants.MenuLayout.SLEEK:
+            this._loadSleekTweaks();
+            break;
         default:
             this._loadPlaceHolderTweaks();
             break;
         }
+    }
+
+    _createExtraShortcutsRow(setting) {
+        const extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Extra Shortcuts'),
+            setting_string: setting,
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
+        });
+        const extraShortcutsRow = new PW.SettingRow({
+            title: _('Extra Shortcuts'),
+        });
+        extraShortcutsRow.settingPage = extraShortcutsPage;
+
+        extraShortcutsRow.connect('activated', () => {
+            this.get_root().push_subpage(extraShortcutsPage);
+            extraShortcutsPage.resetScrollAdjustment();
+        });
+        return extraShortcutsRow;
     }
 
     _createVertSeparatorRow() {
@@ -283,17 +305,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         tweaksGroup.add(disableFrequentAppsRow);
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'eleven-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('eleven-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -302,17 +316,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         tweaksGroup.add(this._createSearchBarLocationRow());
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'az-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('az-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -367,17 +373,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
 
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'windows-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('windows-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -410,17 +408,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         tweaksGroup.add(this._createVertSeparatorRow());
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Extra Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Extra Shortcuts'),
-            preferences_page: false,
-            setting_string: 'brisk-extra-shortcuts',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('brisk-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -598,17 +588,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         const widgetGroup = this._createWidgetsRows(Constants.MenuLayout.UNITY);
         this.add(widgetGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'unity-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('unity-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -669,17 +651,9 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         tweaksGroup.add(this._createVertSeparatorRow());
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'mint-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('mint-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
@@ -691,6 +665,41 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         tweaksGroup.add(this._createFlipHorizontalRow());
         tweaksGroup.add(this._createVertSeparatorRow());
         this.add(tweaksGroup);
+    }
+
+    _loadSleekTweaks() {
+        const tweaksGroup = new Adw.PreferencesGroup();
+
+        tweaksGroup.add(this._createAvatarShapeRow());
+        tweaksGroup.add(this._createSearchBarLocationRow());
+        tweaksGroup.add(this._createFlipHorizontalRow());
+
+        const rightPanelWidthSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 150, upper: 500, step_increment: 25, page_increment: 50, page_size: 0,
+            }),
+            climb_rate: 25,
+            valign: Gtk.Align.CENTER,
+            digits: 0,
+            numeric: true,
+        });
+        rightPanelWidthSpinButton.set_value(this._settings.get_int('sleek-layout-panel-width'));
+        rightPanelWidthSpinButton.connect('value-changed', widget => {
+            this._settings.set_int('sleek-layout-panel-width', widget.get_value());
+        });
+        const rightPanelWidthRow = new Adw.ActionRow({
+            title: _('Right-Panel Width'),
+            activatable_widget: rightPanelWidthSpinButton,
+        });
+        rightPanelWidthRow.add_suffix(rightPanelWidthSpinButton);
+        tweaksGroup.add(rightPanelWidthRow);
+
+        this.add(tweaksGroup);
+
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('sleek-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
+        this.add(extraShortcutsGroup);
     }
 
     _loadRedmondMenuTweaks() {
@@ -756,25 +765,19 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         const tweaksGroup = new Adw.PreferencesGroup();
         tweaksGroup.add(this._createVertSeparatorRow());
         tweaksGroup.add(this._createAvatarShapeRow());
+        tweaksGroup.add(this._disableAvatarRow());
         this.add(tweaksGroup);
 
-        const extraShortcutsGroup = new Adw.PreferencesGroup({
-            title: _('Button Shortcuts'),
-        });
-        const extraShortcutsPage = new ListPinnedPage(this._settings, {
-            title: _('Button Shortcuts'),
-            preferences_page: false,
-            setting_string: 'insider-extra-buttons',
-            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS,
-        });
-        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
-        extraShortcutsGroup.add(extraShortcutsPage);
+        const extraShortcutsGroup = new Adw.PreferencesGroup();
+        const extraShortcutsRow = this._createExtraShortcutsRow('insider-layout-extra-shortcuts');
+        extraShortcutsGroup.add(extraShortcutsRow);
         this.add(extraShortcutsGroup);
     }
 
     _loadGnomeMenuTweaks() {
         const tweaksGroup = new Adw.PreferencesGroup();
         tweaksGroup.add(this._createActivateOnHoverRow());
+        tweaksGroup.add(this._createSearchBarLocationRow());
         tweaksGroup.add(this._createFlipHorizontalRow());
         tweaksGroup.add(this._createVertSeparatorRow());
         this.add(tweaksGroup);
@@ -829,6 +832,21 @@ class ArcMenuLayoutTweaksPage extends SubPage {
             this._settings.set_enum('default-menu-view', widget.selected);
         });
         tweaksGroup.add(defaultViewRow);
+
+
+        const allAppsButtonActionsList = new Gtk.StringList();
+        allAppsButtonActionsList.append(_('Categories List'));
+        allAppsButtonActionsList.append(_('All Programs'));
+
+        const allAppsButtonActionRow = new Adw.ComboRow({
+            title: _("'All Apps' Button Action"),
+            model: allAppsButtonActionsList,
+            selected: this._settings.get_enum('all-apps-button-action'),
+        });
+        allAppsButtonActionRow.connect('notify::selected', widget => {
+            this._settings.set_enum('all-apps-button-action', widget.selected);
+        });
+        tweaksGroup.add(allAppsButtonActionRow);
 
         const searchBarBottomDefault = true;
         tweaksGroup.add(this._createAvatarShapeRow());

@@ -1,33 +1,29 @@
-/* eslint-disable jsdoc/require-jsdoc */
-/* exported getMenuLayoutEnum, Menu */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-const {Clutter, GObject, St} = imports.gi;
-const {BaseMenuLayout} = Me.imports.menulayouts.baseMenuLayout;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const MW = Me.imports.menuWidgets;
-const _ = Gettext.gettext;
+import {ArcMenuManager} from '../arcmenuManager.js';
+import {BaseMenuLayout} from './baseMenuLayout.js';
+import * as Constants from '../constants.js';
+import * as MW from '../menuWidgets.js';
+import {getOrientationProp} from '../utils.js';
 
-function getMenuLayoutEnum() {
-    return Constants.MenuLayout.TOGNEE;
-}
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
+export class Layout extends BaseMenuLayout {
     static {
         GObject.registerClass(this);
     }
 
     constructor(menuButton) {
         super(menuButton, {
-            has_search: true,
             display_type: Constants.DisplayType.LIST,
             search_display_type: Constants.DisplayType.LIST,
             context_menu_location: Constants.ContextMenuLocation.RIGHT,
             column_spacing: 0,
             row_spacing: 0,
             default_menu_width: 290,
-            vertical: true,
+            ...getOrientationProp(true),
             category_icon_size: Constants.MEDIUM_ICON_SIZE,
             apps_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
             quicklinks_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -41,7 +37,7 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
         });
 
         this._mainBox = new St.BoxLayout({
-            vertical: false,
+            ...getOrientationProp(false),
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -52,7 +48,7 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
         this.appBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
-            vertical: true,
+            ...getOrientationProp(true),
             y_align: Clutter.ActorAlign.FILL,
         });
         this.applicationsScrollBox = this._createScrollBox({
@@ -62,48 +58,48 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
             style_class: this._disableFadeEffect ? '' : 'small-vfade',
         });
         this.appBox.add_child(this.applicationsScrollBox);
-        this.applicationsBox = new St.BoxLayout({vertical: true});
-        this.applicationsScrollBox.add_actor(this.applicationsBox);
+        this.applicationsBox = new St.BoxLayout({...getOrientationProp(true)});
+        this._addChildToParent(this.applicationsScrollBox, this.applicationsBox);
 
         this.navigateBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
         });
         this.backButton = new MW.BackButton(this);
-        this.navigateBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM,
+        this.navigateBox.add_child(new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MEDIUM,
             Constants.SeparatorAlignment.HORIZONTAL));
         this.navigateBox.add_child(this.backButton);
         this.appBox.add_child(this.navigateBox);
 
-        const searchbarLocation = Me.settings.get_enum('searchbar-default-bottom-location');
+        const searchbarLocation = ArcMenuManager.settings.get_enum('searchbar-default-bottom-location');
         if (searchbarLocation === Constants.SearchbarLocation.TOP) {
-            this.searchBox.add_style_class_name('arcmenu-search-top');
-            this.appBox.insert_child_at_index(this.searchBox, 0);
+            this.searchEntry.add_style_class_name('arcmenu-search-top');
+            this.appBox.insert_child_at_index(this.searchEntry, 0);
         } else if (searchbarLocation === Constants.SearchbarLocation.BOTTOM) {
-            this.searchBox.add_style_class_name('arcmenu-search-bottom');
-            this.appBox.add_child(this.searchBox);
+            this.searchEntry.add_style_class_name('arcmenu-search-bottom');
+            this.appBox.add_child(this.searchEntry);
         }
 
         // Contains shortcutsBox and power buttons
         this.quickBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             style: 'spacing: 6px;',
         });
 
-        const verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM,
+        const verticalSeparator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MEDIUM,
             Constants.SeparatorAlignment.VERTICAL);
 
-        const horizontalFlip = Me.settings.get_boolean('enable-horizontal-flip');
+        const horizontalFlip = ArcMenuManager.settings.get_boolean('enable-horizontal-flip');
         this._mainBox.add_child(horizontalFlip ? this.appBox : this.quickBox);
         this._mainBox.add_child(verticalSeparator);
         this._mainBox.add_child(horizontalFlip ? this.quickBox : this.appBox);
 
         this.shortcutsBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: false,
             y_expand: true,
             x_align: Clutter.ActorAlign.START,
@@ -118,34 +114,36 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
             style_class: this._disableFadeEffect ? '' : 'small-vfade',
         });
         this.shortcutsScrollBox.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.EXTERNAL);
-        this.shortcutsScrollBox.add_actor(this.shortcutsBox);
+        this._addChildToParent(this.shortcutsScrollBox, this.shortcutsBox);
         this.quickBox.add_child(this.shortcutsScrollBox);
 
         this._displayPlaces();
 
-        const haveDirectoryShortcuts = Me.settings.get_value('directory-shortcuts-list').deep_unpack().length > 0;
-        const haveApplicationShortcuts = Me.settings.get_value('application-shortcuts-list').deep_unpack().length > 0;
+        const haveDirectoryShortcuts = ArcMenuManager.settings.get_value('directory-shortcuts').deep_unpack().length > 0;
+        const haveApplicationShortcuts = ArcMenuManager.settings.get_value('application-shortcuts').deep_unpack().length > 0;
         if (haveDirectoryShortcuts && haveApplicationShortcuts) {
-            const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG,
+            const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.LONG,
                 Constants.SeparatorAlignment.HORIZONTAL);
             this.shortcutsBox.add_child(separator);
         }
 
-        const applicationShortcuts = Me.settings.get_value('application-shortcuts-list').deep_unpack();
+        const applicationShortcuts = ArcMenuManager.settings.get_value('application-shortcuts').deep_unpack();
         for (let i = 0; i < applicationShortcuts.length; i++) {
             const shortcutMenuItem = this.createMenuItem(applicationShortcuts[i], Constants.DisplayType.BUTTON, false);
             if (shortcutMenuItem.shouldShow)
                 this.shortcutsBox.add_child(shortcutMenuItem);
+            else
+                shortcutMenuItem.destroy();
         }
 
         let leaveButton;
-        const powerDisplayStyle = Me.settings.get_enum('power-display-style');
+        const powerDisplayStyle = ArcMenuManager.settings.get_enum('power-display-style');
         if (powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
             leaveButton = new MW.PowerOptionsBox(this, true);
         else
             leaveButton = new MW.LeaveButton(this);
 
-        const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG,
+        const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.LONG,
             Constants.SeparatorAlignment.HORIZONTAL);
         this.quickBox.add_child(separator);
         this.quickBox.add_child(leaveButton);
@@ -154,10 +152,11 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
+        this._connectAppChangedEvents();
     }
 
     updateWidth(setDefaultMenuView) {
-        const widthAdjustment = Me.settings.get_int('menu-width-adjustment');
+        const widthAdjustment = ArcMenuManager.settings.get_int('menu-width-adjustment');
         let menuWidth = this.default_menu_width + widthAdjustment;
         // Set a 175px minimum limit for the menu width
         menuWidth = Math.max(175, menuWidth);
@@ -168,11 +167,11 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
     }
 
     _displayPlaces() {
-        const directoryShortcuts = Me.settings.get_value('directory-shortcuts-list').deep_unpack();
+        const directoryShortcuts = ArcMenuManager.settings.get_value('directory-shortcuts').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
-            const directory = directoryShortcuts[i];
+            const directoryData = directoryShortcuts[i];
             const isContainedInCategory = false;
-            const placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.BUTTON, isContainedInCategory);
+            const placeMenuItem = this.createMenuItem(directoryData, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.shortcutsBox.add_child(placeMenuItem);
         }
     }
@@ -181,10 +180,9 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
 
-        const extraCategories = Me.settings.get_value('extra-categories').deep_unpack();
+        const extraCategories = ArcMenuManager.settings.get_value('extra-categories').deep_unpack();
         for (let i = 0; i < extraCategories.length; i++) {
-            const categoryEnum = extraCategories[i][0];
-            const shouldShow = extraCategories[i][1];
+            const [categoryEnum, shouldShow] = extraCategories[i];
             if (shouldShow) {
                 const categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
@@ -214,7 +212,7 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
     setDefaultMenuView() {
         super.setDefaultMenuView();
 
-        const defaultMenuView = Me.settings.get_enum('default-menu-view-tognee');
+        const defaultMenuView = ArcMenuManager.settings.get_enum('default-menu-view-tognee');
         if (defaultMenuView === Constants.DefaultMenuViewTognee.CATEGORIES_LIST)
             this.displayCategories();
         else if (defaultMenuView === Constants.DefaultMenuViewTognee.ALL_PROGRAMS)
@@ -232,13 +230,13 @@ var Menu = class ArcMenuTogneeLayout extends BaseMenuLayout {
         this.navigateBox.show();
     }
 
-    _onSearchBoxChanged(searchBox, searchString) {
-        super._onSearchBoxChanged(searchBox, searchString);
-        if (searchBox.isEmpty()) {
+    _onSearchEntryChanged(searchEntry, searchString) {
+        super._onSearchEntryChanged(searchEntry, searchString);
+        if (searchEntry.isEmpty()) {
             this.navigateBox.hide();
-        } else if (!searchBox.isEmpty()) {
+        } else if (!searchEntry.isEmpty()) {
             this.navigateBox.show();
             this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;
         }
     }
-};
+}

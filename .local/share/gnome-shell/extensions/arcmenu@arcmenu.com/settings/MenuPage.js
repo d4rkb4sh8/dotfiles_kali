@@ -1,24 +1,23 @@
-/* exported MenuPage */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, Gio, GObject, Gtk} = imports.gi;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const Settings = Me.imports.settings;
-const _ = Gettext.gettext;
+import * as Constants from '../constants.js';
+import * as PW from '../prefsWidgets.js';
+import * as SettingsUtils from './SettingsUtils.js';
 
-const {FineTunePage} = Settings.Menu.FineTunePage;
-const {LayoutsPage} = Settings.Menu.LayoutsPage;
-const {LayoutTweaksPage} = Settings.Menu.LayoutTweaksPage;
-const {ListOtherPage} = Settings.Menu.ListOtherPage;
-const {ListPinnedPage} = Settings.Menu.ListPinnedPage;
-const {SearchOptionsPage} = Settings.Menu.SearchOptionsPage;
-const {ThemePage} = Settings.Menu.ThemePage;
-const {VisualSettingsPage} = Settings.Menu.VisualSettings;
-const {SettingsUtils} = Settings;
+import {FineTunePage} from './Menu/FineTunePage.js';
+import {LayoutsPage} from './Menu/LayoutsPage.js';
+import {LayoutTweaksPage} from './Menu/LayoutTweaksPage.js';
+import {ListOtherPage} from './Menu/ListOtherPage.js';
+import {ListPinnedPage} from './Menu/ListPinnedPage.js';
+import {SearchOptionsPage} from './Menu/SearchOptionsPage.js';
+import {ThemePage} from './Menu/ThemePage.js';
+import {VisualSettingsPage} from './Menu/VisualSettings.js';
 
-var MenuPage = GObject.registerClass(
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+export const MenuPage = GObject.registerClass(
 class ArcMenuMenuPage extends Adw.PreferencesPage {
     _init(settings, window) {
         super._init({
@@ -36,7 +35,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
 
         const visibleRow = { };
 
-        this.layoutRow = new SettingRow({
+        this.layoutRow = new PW.SettingRow({
             title: _('Menu Layout'),
             subtitle: _('Choose a layout style for the menu'),
             icon_name: 'settings-layouts-symbolic',
@@ -45,12 +44,14 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
             pageClass: LayoutsPage,
         });
         this.layoutRow.settingPage.connect('response', (_w, response) => {
-            if (response === Gtk.ResponseType.APPLY)
-                this.tweaksRow.title = _(SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
+            if (response === Gtk.ResponseType.APPLY) {
+                const layoutName = SettingsUtils.getMenuLayoutName(this._settings.get_enum('menu-layout'));
+                this.tweaksRow.title = _('%s Layout Tweaks').format(_(layoutName));
+            }
         });
         menuLooksGroup.add(this.layoutRow);
 
-        this.themeRow = new SettingRow({
+        this.themeRow = new PW.SettingRow({
             title: _('Menu Theme'),
             subtitle: _('Modify menu colors, font size, and border'),
             icon_name: 'settings-theme-symbolic',
@@ -60,7 +61,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         });
         menuLooksGroup.add(this.themeRow);
 
-        const visualSettingsRow = new SettingRow({
+        const visualSettingsRow = new PW.SettingRow({
             title: _('Menu Visual Appearance'),
             subtitle: _('Change menu height, width, location, and icon sizes'),
             icon_name: 'settings-settings-symbolic',
@@ -70,7 +71,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         });
         menuLooksGroup.add(visualSettingsRow);
 
-        const fineTuneRow = new SettingRow({
+        const fineTuneRow = new PW.SettingRow({
             title: _('Fine Tune'),
             subtitle: _('Adjust less commonly used visual settings'),
             icon_name: 'settings-finetune-symbolic',
@@ -85,17 +86,18 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         });
         this.add(whatToShowGroup);
 
-        this.tweaksRow = new SettingRow({
-            title: _(SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'))),
+        const layoutName = SettingsUtils.getMenuLayoutName(this._settings.get_enum('menu-layout'));
+        this.tweaksRow = new PW.SettingRow({
+            title: _('%s Layout Tweaks').format(_(layoutName)),
             subtitle: _('Settings specific to the current menu layout'),
-            icon_name: 'emblem-system-symbolic',
+            icon_name: 'applications-system-symbolic',
         });
         this._addSubPageToRow(this.tweaksRow, {
             pageClass: LayoutTweaksPage,
         });
         whatToShowGroup.add(this.tweaksRow);
 
-        this.pinnedAppsRow = new SettingRow({
+        this.pinnedAppsRow = new PW.SettingRow({
             title: _('Pinned Apps'),
             icon_name: 'view-pin-symbolic',
         });
@@ -106,7 +108,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         whatToShowGroup.add(this.pinnedAppsRow);
         visibleRow[Constants.SettingsPage.PINNED_APPS] = this.pinnedAppsRow;
 
-        const directoryShortcutsRow = new SettingRow({
+        const directoryShortcutsRow = new PW.SettingRow({
             title: _('Directory Shortcuts'),
             icon_name: 'folder-symbolic',
         });
@@ -117,7 +119,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         whatToShowGroup.add(directoryShortcutsRow);
         visibleRow[Constants.SettingsPage.DIRECTORY_SHORTCUTS] = directoryShortcutsRow;
 
-        const applicationShortcutsRow = new SettingRow({
+        const applicationShortcutsRow = new PW.SettingRow({
             title: _('Application Shortcuts'),
             icon_name: 'view-grid-symbolic',
         });
@@ -128,7 +130,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         whatToShowGroup.add(applicationShortcutsRow);
         visibleRow[Constants.SettingsPage.APPLICATION_SHORTCUTS] = applicationShortcutsRow;
 
-        const searchOptionsRow = new SettingRow({
+        const searchOptionsRow = new PW.SettingRow({
             title: _('Search Options'),
             icon_name: 'preferences-system-search-symbolic',
         });
@@ -138,7 +140,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         whatToShowGroup.add(searchOptionsRow);
         visibleRow[Constants.SettingsPage.SEARCH_OPTIONS] = searchOptionsRow;
 
-        const powerOptionsRow = new SettingRow({
+        const powerOptionsRow = new PW.SettingRow({
             title: _('Power Options'),
             subtitle: _('Choose which power options to show and the display style'),
             icon_name: 'gnome-power-manager-symbolic',
@@ -150,7 +152,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         whatToShowGroup.add(powerOptionsRow);
         visibleRow[Constants.SettingsPage.POWER_OPTIONS] = powerOptionsRow;
 
-        const extraCategoriesRow = new SettingRow({
+        const extraCategoriesRow = new PW.SettingRow({
             title: _('Extra Categories'),
             icon_name: 'view-list-symbolic',
             subtitle: _('Add or remove additional custom categories'),
@@ -167,7 +169,7 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         });
         this.add(contextMenuGroup);
 
-        const contextMenuRow = new SettingRow({
+        const contextMenuRow = new PW.SettingRow({
             title: _('Modify ArcMenu Context Menu'),
             icon_name: 'view-list-bullet-symbolic',
         });
@@ -193,10 +195,11 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
         row.settingPage = settingPage;
 
         row.connect('activated', () => {
+            this._window.push_subpage(settingPage);
+
             if (settingPage.setActiveLayout)
                 settingPage.setActiveLayout(this._settings.get_enum('menu-layout'));
 
-            this._window.present_subpage(settingPage);
             settingPage.resetScrollAdjustment();
         });
     }
@@ -204,35 +207,15 @@ class ArcMenuMenuPage extends Adw.PreferencesPage {
     presentSubpage(subpage) {
         if (subpage === Constants.SettingsPage.MENU_LAYOUT) {
             const row = this.layoutRow;
-            this._window.present_subpage(row.settingPage);
+            this._window.push_subpage(row.settingPage);
         }
         if (subpage === Constants.SettingsPage.MENU_THEME) {
             const row = this.themeRow;
-            this._window.present_subpage(row.settingPage);
+            this._window.push_subpage(row.settingPage);
         } else if (subpage === Constants.SettingsPage.RUNNER_TWEAKS) {
             const row = this.tweaksRow;
-            this._window.present_subpage(row.settingPage);
+            this._window.push_subpage(row.settingPage);
             row.settingPage.setActiveLayout(Constants.MenuLayout.RUNNER);
         }
-    }
-});
-
-var SettingRow = GObject.registerClass(
-class ArcMenuMenuLayoutRow extends Adw.ActionRow {
-    _init(params) {
-        super._init({
-            activatable: true,
-            ...params,
-        });
-
-        const goNextImage = new Gtk.Image({
-            gicon: Gio.icon_new_for_string('go-next-symbolic'),
-            halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            vexpand: false,
-        });
-
-        this.add_suffix(goNextImage);
     }
 });

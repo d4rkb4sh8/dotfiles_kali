@@ -1,33 +1,29 @@
-/* eslint-disable jsdoc/require-jsdoc */
-/* exported getMenuLayoutEnum, Menu */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-const {Clutter, GObject, St} = imports.gi;
-const {BaseMenuLayout} = Me.imports.menulayouts.baseMenuLayout;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const MW = Me.imports.menuWidgets;
-const _ = Gettext.gettext;
+import {ArcMenuManager} from '../arcmenuManager.js';
+import {BaseMenuLayout} from './baseMenuLayout.js';
+import * as Constants from '../constants.js';
+import * as MW from '../menuWidgets.js';
+import {getOrientationProp} from '../utils.js';
 
-function getMenuLayoutEnum() {
-    return Constants.MenuLayout.BUDGIE;
-}
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
+export class Layout extends BaseMenuLayout {
     static {
         GObject.registerClass(this);
     }
 
     constructor(menuButton) {
         super(menuButton, {
-            has_search: true,
             is_dual_panel: true,
             display_type: Constants.DisplayType.LIST,
             search_display_type: Constants.DisplayType.LIST,
             column_spacing: 0,
             row_spacing: 0,
             supports_category_hover_activation: true,
-            vertical: true,
+            ...getOrientationProp(true),
             category_icon_size: Constants.ICON_HIDDEN,
             apps_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
             quicklinks_icon_size: Constants.SMALL_ICON_SIZE,
@@ -36,7 +32,7 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
         });
 
         this._mainBox = new St.BoxLayout({
-            vertical: false,
+            ...getOrientationProp(false),
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -44,31 +40,31 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
         this.add_child(this._mainBox);
 
         this.rightBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
         });
 
-        this.applicationsBox = new St.BoxLayout({vertical: true});
+        this.applicationsBox = new St.BoxLayout({...getOrientationProp(true)});
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             style_class: this._disableFadeEffect ? '' : 'small-vfade',
         });
         this.applicationsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
-        this.applicationsScrollBox.add_actor(this.applicationsBox);
+        this._addChildToParent(this.applicationsScrollBox, this.applicationsBox);
         this.rightBox.add_child(this.applicationsScrollBox);
 
         this.leftBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
         });
 
-        const verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM,
+        const verticalSeparator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MEDIUM,
             Constants.SeparatorAlignment.VERTICAL);
-        const horizontalFlip = Me.settings.get_boolean('enable-horizontal-flip');
+        const horizontalFlip = ArcMenuManager.settings.get_boolean('enable-horizontal-flip');
         this._mainBox.add_child(horizontalFlip ? this.rightBox : this.leftBox);
         this._mainBox.add_child(verticalSeparator);
         this._mainBox.add_child(horizontalFlip ? this.leftBox : this.rightBox);
@@ -81,12 +77,12 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
         });
         this.leftBox.add_child(this.categoriesScrollBox);
 
-        this.categoriesBox = new St.BoxLayout({vertical: true});
-        this.categoriesScrollBox.add_actor(this.categoriesBox);
+        this.categoriesBox = new St.BoxLayout({...getOrientationProp(true)});
+        this._addChildToParent(this.categoriesScrollBox, this.categoriesBox);
 
-        if (Me.settings.get_boolean('enable-activities-shortcut')) {
+        if (ArcMenuManager.settings.get_boolean('enable-activities-shortcut')) {
             this.activitiesBox = new St.BoxLayout({
-                vertical: true,
+                ...getOrientationProp(true),
                 x_expand: true,
                 y_expand: true,
                 y_align: Clutter.ActorAlign.END,
@@ -96,33 +92,34 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
             this.leftBox.add_child(this.activitiesBox);
         }
 
-        const searchBarLocation = Me.settings.get_enum('searchbar-default-top-location');
+        const searchBarLocation = ArcMenuManager.settings.get_enum('searchbar-default-top-location');
         if (searchBarLocation === Constants.SearchbarLocation.TOP) {
-            const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX,
+            const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MAX,
                 Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += 'margin-bottom: 6px;';
 
-            this.searchBox.add_style_class_name('arcmenu-search-top');
-            this.searchBox.style = 'margin-bottom: 0px;';
+            this.searchEntry.add_style_class_name('arcmenu-search-top');
+            this.searchEntry.style = 'margin-bottom: 0px;';
 
-            this.insert_child_at_index(this.searchBox, 0);
+            this.insert_child_at_index(this.searchEntry, 0);
             this.insert_child_at_index(separator, 1);
         } else if (searchBarLocation === Constants.SearchbarLocation.BOTTOM) {
-            const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX,
+            const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.MAX,
                 Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += 'margin-top: 6px;';
 
-            this.searchBox.add_style_class_name('arcmenu-search-bottom');
-            this.searchBox.style = 'margin-top: 0px;';
+            this.searchEntry.add_style_class_name('arcmenu-search-bottom');
+            this.searchEntry.style = 'margin-top: 0px;';
 
             this.add_child(separator);
-            this.add_child(this.searchBox);
+            this.add_child(this.searchEntry);
         }
 
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
+        this._connectAppChangedEvents();
     }
 
     updateWidth(setDefaultMenuView) {
@@ -144,11 +141,10 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
 
-        const extraCategories = Me.settings.get_value('extra-categories').deep_unpack();
+        const extraCategories = ArcMenuManager.settings.get_value('extra-categories').deep_unpack();
 
         for (let i = 0; i < extraCategories.length; i++) {
-            const categoryEnum = extraCategories[i][0];
-            const shouldShow = extraCategories[i][1];
+            const [categoryEnum, shouldShow] = extraCategories[i];
             if (shouldShow) {
                 const categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
@@ -161,4 +157,4 @@ var Menu = class ArcMenuBudgieLayout extends BaseMenuLayout {
     displayCategories() {
         super.displayCategories(this.categoriesBox);
     }
-};
+}

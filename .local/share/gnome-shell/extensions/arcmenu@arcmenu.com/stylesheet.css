@@ -11,8 +11,26 @@
 }
 
 .ArcMenuIconGrid:drop {
-    border: 2px solid rgba(53, 132, 228, 0.8);
+    box-shadow: inset 0px 0px 0px 2px rgba(53, 132, 228, 0.8);
     background-color: rgba(53, 132, 228, 0.2);
+}
+
+.arcmenu-menu-item:drop {
+    box-shadow: inset 0px 0px 0px 2px rgba(53, 132, 228, 0.8);
+    background-color: rgba(53, 132, 228, 0.2);
+}
+
+.folder-header {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.arcmenu-folder-dialog {
+    border-width: 2px;
+}
+
+.folder-name-container{
+    spacing: 12px;
 }
 
 .bottomOfScreenMenu{
@@ -23,7 +41,6 @@
     min-height: 0px;
     border-width: 1px;
     padding: 7px 9px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .arcmenu-search-top{
@@ -46,7 +63,7 @@
     padding-bottom: 6px;
 }
 
-#arcmenu-plasma-button-top{
+.arcmenu-plasma-button{
     width: 90px;
     height: 65px;
     border-radius: 8px;
@@ -54,29 +71,6 @@
     padding: 5px;
     spacing: 0px;
     margin: 0px;
-    border-top-width: 2px;
-    border-color: transparent;
-}
-#arcmenu-plasma-button-top:active-item, .arcmenu-plasma-button-top:active{
-    background-color: rgba(245, 245, 245, .05);
-    border-top-width: 2px;
-    border-color: rgb(61, 174, 235);
-}
-#arcmenu-plasma-button-bottom{
-    width: 90px;
-    height: 65px;
-    border-radius: 8px;
-    text-align: center;
-    padding: 5px;
-    spacing: 0px;
-    margin: 0px;
-    border-bottom-width: 2px;
-    border-color: transparent;
-}
-#arcmenu-plasma-button-bottom:active-item, .arcmenu-plasma-button-bottom:active{
-    background-color: rgba(245, 245, 245, .05);
-    border-bottom-width: 2px;
-    border-color: rgb(61, 174, 235);
 }
 
 .small-vfade{
@@ -85,10 +79,6 @@
 
 .arcmenu-margin-box{
     margin: 0px 6px;
-}
-
-.arcmenu-menu .popup-menu-ornament{
-    width: 0;
 }
 
 .arcmenu-button{
@@ -132,7 +122,8 @@
 /* Recently Installed App Indicator Text */
 .arcmenu-text-indicator{
     font-size: small;
-    border-radius: 8px; 
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
     margin: 0px; 
     padding: 0px 10px;
 }

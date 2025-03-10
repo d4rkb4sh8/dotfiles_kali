@@ -1,14 +1,15 @@
-/* exported ManageThemesDialog */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const PW = Me.imports.prefsWidgets;
-const {SettingsUtils} = Me.imports.settings;
-const _ = Gettext.gettext;
+import * as PW from '../../prefsWidgets.js';
+import * as SettingsUtils from '../SettingsUtils.js';
 
-var SaveThemeDialog = GObject.registerClass(
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+export const SaveThemeDialog = GObject.registerClass(
 class ArcMenuSaveThemeDialog extends PW.DialogWindow {
     _init(settings, parent, themeName) {
         super._init(_('Save Theme As...'), parent);
@@ -53,7 +54,7 @@ class ArcMenuSaveThemeDialog extends PW.DialogWindow {
     }
 });
 
-var ManageThemesDialog = GObject.registerClass(
+export const ManageThemesDialog = GObject.registerClass(
 class ArcMenuManageThemesDialog extends PW.DialogWindow {
     _init(settings, parent) {
         super._init(_('Manage Themes'), parent);
@@ -102,12 +103,12 @@ class ArcMenuManageThemesDialog extends PW.DialogWindow {
 
                         const dialog = new SaveLoadThemesPage(this._settings, this,
                             importedMenuThemes, SaveLoadType.LOAD);
-                        this.present_subpage(dialog);
+                        this.push_subpage(dialog);
                         dialog.connect('response', (_w, response) => {
                             let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
                             const selectedThemesArray = dialog.selecetedThemesArray;
                             menuThemes = menuThemes.concat(selectedThemesArray);
-                            this.close_subpage();
+                            this.pop_subpage();
 
                             if (response === Gtk.ResponseType.ACCEPT) {
                                 this._settings.set_value('menu-themes', new GLib.Variant('aas', menuThemes));
@@ -130,10 +131,10 @@ class ArcMenuManageThemesDialog extends PW.DialogWindow {
         saveButton.connect('clicked', () => {
             const menuThemes = this._settings.get_value('menu-themes').deep_unpack();
             const dialog = new SaveLoadThemesPage(this._settings, this, menuThemes, SaveLoadType.SAVE);
-            this.present_subpage(dialog);
+            this.push_subpage(dialog);
             dialog.connect('response', (_w, response) => {
                 const selectedThemesArray = dialog.selecetedThemesArray;
-                this.close_subpage();
+                this.pop_subpage();
 
                 if (response === Gtk.ResponseType.ACCEPT) {
                     this._showFileChooser(
@@ -195,11 +196,11 @@ class ArcMenuManageThemesDialog extends PW.DialogWindow {
         const menuThemes = this._settings.get_value('menu-themes').deep_unpack();
         for (let i = 0; i < menuThemes.length; i++) {
             const theme = menuThemes[i];
-            const xpm = SettingsUtils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
+            const pixbuf = SettingsUtils.createThemePreviewPixbuf(theme[1], theme[2], theme[3], theme[8]);
 
             const row = new PW.DragRow({
                 title: theme[0],
-                xpm_pixbuf: GdkPixbuf.Pixbuf.new_from_xpm_data(xpm),
+                pixbuf,
                 icon_pixel_size: 42,
             });
             this.pageGroup.add(row);
@@ -273,7 +274,7 @@ class ArcMenuManageThemesDialog extends PW.DialogWindow {
                 try {
                     acceptHandler(dialog.get_file().get_path());
                 } catch (e) {
-                    log(`ArcMenu - Filechooser error: ${e}`);
+                    console.log(`ArcMenu - Filechooser error: ${e}`);
                 }
             }
             dialog.destroy();
@@ -298,11 +299,9 @@ var SaveLoadThemesPage = GObject.registerClass({
     Signals: {
         'response': {param_types: [GObject.TYPE_INT]},
     },
-}, class ArcMenuSaveLoadThemesPage extends Gtk.Box {
+}, class ArcMenuSaveLoadThemesPage extends Adw.NavigationPage {
     _init(settings, parent, themesArray, saveLoadType) {
-        super._init({
-            orientation: Gtk.Orientation.VERTICAL,
-        });
+        super._init();
 
         this._parent = parent;
         this._settings = settings;
@@ -310,39 +309,22 @@ var SaveLoadThemesPage = GObject.registerClass({
         this._themesArray = themesArray;
         this.selecetedThemesArray = [];
 
+        this.headerBar = new Adw.HeaderBar();
+
+        const sidebarToolBarView = new Adw.ToolbarView();
+        this.set_child(sidebarToolBarView);
+        sidebarToolBarView.add_top_bar(this.headerBar);
+
+        this.page = new Adw.PreferencesPage();
+        sidebarToolBarView.set_content(this.page);
+
         if (this._saveLoadType === SaveLoadType.SAVE)
             this.title = _('Save Themes');
         else if (this._saveLoadType === SaveLoadType.LOAD)
             this.title = _('Load Themes');
 
-        this.headerLabel = new Adw.WindowTitle({
-            title: _(this.title),
-        });
-
-        this.headerBar = new Adw.HeaderBar({
-            title_widget: this.headerLabel,
-            decoration_layout: '',
-        });
-
-        this.append(this.headerBar);
-        this.page = new Adw.PreferencesPage();
-        this.append(this.page);
-
         this.pageGroup = new Adw.PreferencesGroup();
         this.page.add(this.pageGroup);
-
-        const backButton = new Gtk.Button({
-            icon_name: 'go-previous-symbolic',
-            tooltip_text: _('Back'),
-            css_classes: ['flat'],
-        });
-
-        backButton.connect('clicked', () => {
-            const window = this.get_root();
-            window.close_subpage();
-        });
-
-        this.headerBar.pack_start(backButton);
 
         this._loadThemeRows();
 
@@ -365,8 +347,7 @@ var SaveLoadThemesPage = GObject.registerClass({
     _loadThemeRows() {
         for (let i = 0; i < this._themesArray.length; i++) {
             const theme = this._themesArray[i];
-            const xpm = SettingsUtils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
-
+            const pixbuf = SettingsUtils.createThemePreviewPixbuf(theme[1], theme[2], theme[3], theme[8]);
             const row = new Adw.ActionRow({
                 title: theme[0],
             });
@@ -374,7 +355,7 @@ var SaveLoadThemesPage = GObject.registerClass({
             const icon = new Gtk.Image({
                 pixel_size: 42,
             });
-            icon.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_xpm_data(xpm));
+            icon.set_from_pixbuf(pixbuf);
             row.add_prefix(icon);
 
             this.addButtonAction(row, theme);

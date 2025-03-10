@@ -1,15 +1,13 @@
-/* exported SearchOptionsPage */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, GLib, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import {SubPage} from './SubPage.js';
 
-const Settings = Me.imports.settings;
-const {SubPage} = Settings.Menu.SubPage;
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-var SearchOptionsPage = GObject.registerClass(
+export const SearchOptionsPage = GObject.registerClass(
 class ArcMenuSearchOptionsPage extends SubPage {
     _init(settings, params) {
         super._init(settings, params);
@@ -56,6 +54,20 @@ class ArcMenuSearchOptionsPage extends SubPage {
         const searchOptionsFrame = new Adw.PreferencesGroup({
             title: _('Search Options'),
         });
+
+        const searchDescriptionsSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        searchDescriptionsSwitch.set_active(this.searchResultsDetails);
+        searchDescriptionsSwitch.connect('notify::active', widget => {
+            this._settings.set_boolean('show-search-result-details', widget.get_active());
+        });
+        const searchDescriptionsRow = new Adw.ActionRow({
+            title: _('Show Search Result Descriptions'),
+            activatable_widget: searchDescriptionsSwitch,
+        });
+        searchDescriptionsRow.add_suffix(searchDescriptionsSwitch);
+        searchOptionsFrame.add(searchDescriptionsRow);
 
         const highlightSearchResultSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -157,6 +169,7 @@ class ArcMenuSearchOptionsPage extends SubPage {
                 this._settings.get_default_value('search-entry-border-radius').deep_unpack();
             searchBorderSpinButton.set_value(defaultSearchBorderValue);
             searchBorderSwitch.set_active(true);
+            searchDescriptionsSwitch.set_active(this.searchResultsDetails);
         };
     }
 });

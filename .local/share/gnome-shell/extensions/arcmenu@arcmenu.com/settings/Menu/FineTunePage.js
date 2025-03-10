@@ -1,44 +1,40 @@
-/* exported FineTunePage */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import {SubPage} from './SubPage.js';
 
-const Settings = Me.imports.settings;
-const {SubPage} = Settings.Menu.SubPage;
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-var FineTunePage = GObject.registerClass(
+export const FineTunePage = GObject.registerClass(
 class ArcMenuFineTunePage extends SubPage {
     _init(settings, params) {
         super._init(settings, params);
 
         this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
-        this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs');
+        this.alphabeticalGroupingList = this._settings.get_boolean('group-apps-alphabetically-list-layouts');
+        this.alphabeticalGroupingGrid = this._settings.get_boolean('group-apps-alphabetically-grid-layouts');
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.showHiddenRecentFiles = this._settings.get_boolean('show-hidden-recent-files');
 
         const miscGroup = new Adw.PreferencesGroup();
+        this.add(miscGroup);
 
-        const descriptionsGroup = new Adw.PreferencesGroup();
-        this.add(descriptionsGroup);
-
-        const searchDescriptionsSwitch = new Gtk.Switch({
+        const subMenusSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
         });
-        searchDescriptionsSwitch.set_active(this.searchResultsDetails);
-        searchDescriptionsSwitch.connect('notify::active', widget => {
-            this._settings.set_boolean('show-search-result-details', widget.get_active());
+        subMenusSwitch.set_active(this._settings.get_boolean('show-category-sub-menus'));
+        subMenusSwitch.connect('notify::active', widget => {
+            this._settings.set_boolean('show-category-sub-menus', widget.get_active());
         });
-        const searchDescriptionsRow = new Adw.ActionRow({
-            title: _('Show Search Result Descriptions'),
-            activatable_widget: searchDescriptionsSwitch,
+        const subMenusRow = new Adw.ActionRow({
+            title: _('Show Category Sub Menus'),
+            activatable_widget: subMenusSwitch,
         });
-        searchDescriptionsRow.add_suffix(searchDescriptionsSwitch);
-        descriptionsGroup.add(searchDescriptionsRow);
+        subMenusRow.add_suffix(subMenusSwitch);
+        miscGroup.add(subMenusRow);
 
         const appDescriptionsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -52,35 +48,7 @@ class ArcMenuFineTunePage extends SubPage {
             activatable_widget: appDescriptionsSwitch,
         });
         appDescriptionsRow.add_suffix(appDescriptionsSwitch);
-        descriptionsGroup.add(appDescriptionsRow);
-
-        const iconStyleGroup = new Adw.PreferencesGroup();
-        this.add(iconStyleGroup);
-
-        const iconTypes = new Gtk.StringList();
-        iconTypes.append(_('Full Color'));
-        iconTypes.append(_('Symbolic'));
-        const categoryIconTypeRow = new Adw.ComboRow({
-            title: _('Category Icon Type'),
-            subtitle: _('Some icon themes may not include selected icon type'),
-            model: iconTypes,
-            selected: this._settings.get_enum('category-icon-type'),
-        });
-        categoryIconTypeRow.connect('notify::selected', widget => {
-            this._settings.set_enum('category-icon-type', widget.selected);
-        });
-        iconStyleGroup.add(categoryIconTypeRow);
-
-        const shortcutsIconTypeRow = new Adw.ComboRow({
-            title: _('Shortcuts Icon Type'),
-            subtitle: _('Some icon themes may not include selected icon type'),
-            model: iconTypes,
-            selected: this._settings.get_enum('shortcut-icon-type'),
-        });
-        shortcutsIconTypeRow.connect('notify::selected', widget => {
-            this._settings.set_enum('shortcut-icon-type', widget.selected);
-        });
-        iconStyleGroup.add(shortcutsIconTypeRow);
+        miscGroup.add(appDescriptionsRow);
 
         const fadeEffectSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -110,19 +78,35 @@ class ArcMenuFineTunePage extends SubPage {
         tooltipRow.add_suffix(tooltipSwitch);
         miscGroup.add(tooltipRow);
 
-        const alphabetizeAllProgramsSwitch = new Gtk.Switch({
+        const alphabeticalGroupingListSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
+            active: this.alphabeticalGroupingList,
         });
-        alphabetizeAllProgramsSwitch.set_active(this._settings.get_boolean('alphabetize-all-programs'));
-        alphabetizeAllProgramsSwitch.connect('notify::active', widget => {
-            this._settings.set_boolean('alphabetize-all-programs', widget.get_active());
+        alphabeticalGroupingListSwitch.connect('notify::active', widget => {
+            this._settings.set_boolean('group-apps-alphabetically-list-layouts', widget.get_active());
         });
-        const alphabetizeAllProgramsRow = new Adw.ActionRow({
-            title: _("Alphabetize 'All Programs' Category"),
-            activatable_widget: alphabetizeAllProgramsSwitch,
+        const alphabeticalGroupingListRow = new Adw.ActionRow({
+            title: _('Group Apps Alphabetically on List Views'),
+            subtitle: _('For All Apps sections'),
+            activatable_widget: alphabeticalGroupingListSwitch,
         });
-        alphabetizeAllProgramsRow.add_suffix(alphabetizeAllProgramsSwitch);
-        miscGroup.add(alphabetizeAllProgramsRow);
+        alphabeticalGroupingListRow.add_suffix(alphabeticalGroupingListSwitch);
+        miscGroup.add(alphabeticalGroupingListRow);
+
+        const alphabeticalGroupingGridSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+            active: this.alphabeticalGroupingGrid,
+        });
+        alphabeticalGroupingGridSwitch.connect('notify::active', widget => {
+            this._settings.set_boolean('group-apps-alphabetically-grid-layouts', widget.get_active());
+        });
+        const alphabeticalGroupingGridRow = new Adw.ActionRow({
+            title: _('Group Apps Alphabetically on Grid Views'),
+            subtitle: _('For All Apps sections'),
+            activatable_widget: alphabeticalGroupingGridSwitch,
+        });
+        alphabeticalGroupingGridRow.add_suffix(alphabeticalGroupingGridSwitch);
+        miscGroup.add(alphabeticalGroupingGridRow);
 
         const hiddenFilesSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -145,31 +129,41 @@ class ArcMenuFineTunePage extends SubPage {
         multiLinedLabelSwitch.connect('notify::active', widget => {
             this._settings.set_boolean('multi-lined-labels', widget.get_active());
         });
-        const multiLinedLabelInfoButton = new Gtk.Button({
-            icon_name: 'help-about-symbolic',
-            valign: Gtk.Align.CENTER,
-        });
-        multiLinedLabelInfoButton.connect('clicked', () => {
-            const dialog = new Gtk.MessageDialog({
-                text: `<b>${_('Multi-Lined Labels')}</b>\n${_('Enable/Disable multi-lined labels on large application icon layouts.')}`,
-                use_markup: true,
-                buttons: Gtk.ButtonsType.OK,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true,
-            });
-            dialog.connect('response', () => {
-                dialog.destroy();
-            });
-            dialog.show();
-        });
         const multiLinedLabelRow = new Adw.ActionRow({
             title: _('Multi-Lined Labels'),
+            subtitle: _('Allow application labels to span multiple lines on grid style layouts'),
             activatable_widget: multiLinedLabelSwitch,
         });
         multiLinedLabelRow.add_suffix(multiLinedLabelSwitch);
-        multiLinedLabelRow.add_suffix(multiLinedLabelInfoButton);
         miscGroup.add(multiLinedLabelRow);
+
+        const iconStyleGroup = new Adw.PreferencesGroup();
+        this.add(iconStyleGroup);
+
+        const iconTypes = new Gtk.StringList();
+        iconTypes.append(_('Full Color'));
+        iconTypes.append(_('Symbolic'));
+        const categoryIconTypeRow = new Adw.ComboRow({
+            title: _('Category Icon Type'),
+            subtitle: _('Some icon themes may not include selected icon type'),
+            model: iconTypes,
+            selected: this._settings.get_enum('category-icon-type'),
+        });
+        categoryIconTypeRow.connect('notify::selected', widget => {
+            this._settings.set_enum('category-icon-type', widget.selected);
+        });
+        iconStyleGroup.add(categoryIconTypeRow);
+
+        const shortcutsIconTypeRow = new Adw.ComboRow({
+            title: _('Shortcuts Icon Type'),
+            subtitle: _('Some icon themes may not include selected icon type'),
+            model: iconTypes,
+            selected: this._settings.get_enum('shortcut-icon-type'),
+        });
+        shortcutsIconTypeRow.connect('notify::selected', widget => {
+            this._settings.set_enum('shortcut-icon-type', widget.selected);
+        });
+        iconStyleGroup.add(shortcutsIconTypeRow);
 
         const recentAppsGroup = new Adw.PreferencesGroup();
         this.add(recentAppsGroup);
@@ -211,16 +205,16 @@ class ArcMenuFineTunePage extends SubPage {
 
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
 
-        this.add(miscGroup);
-
         this.restoreDefaults = () => {
-            this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
+            this.alphabeticalGroupingList = this._settings.get_default_value('group-apps-alphabetically-list-layouts').unpack();
+            this.alphabeticalGroupingGrid = this._settings.get_default_value('group-apps-alphabetically-grid-layouts').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.showHiddenRecentFiles = this._settings.get_default_value('show-hidden-recent-files').unpack();
-            alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
+            alphabeticalGroupingListSwitch.set_active(this.alphabeticalGroupingList);
+            alphabeticalGroupingGridSwitch.set_active(this.alphabeticalGroupingGrid);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
             tooltipSwitch.set_active(this.disableTooltips);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
@@ -229,8 +223,7 @@ class ArcMenuFineTunePage extends SubPage {
             categoryIconTypeRow.selected = 0;
             shortcutsIconTypeRow.selected = 1;
             appDescriptionsSwitch.set_active(this._settings.get_default_value('apps-show-extra-details').unpack());
-            searchDescriptionsSwitch.set_active(
-                this._settings.get_default_value('show-search-result-details').unpack());
+            subMenusSwitch.set_active(this._settings.get_default_value('show-category-sub-menus').unpack());
         };
     }
 });

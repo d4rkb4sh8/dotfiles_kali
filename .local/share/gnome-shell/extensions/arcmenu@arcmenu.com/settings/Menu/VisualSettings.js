@@ -1,17 +1,15 @@
-/* exported VisualSettingsPage */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, GLib, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import * as Constants from '../../constants.js';
+import * as PW from '../../prefsWidgets.js';
+import {SubPage} from './SubPage.js';
 
-const Constants = Me.imports.constants;
-const PW = Me.imports.prefsWidgets;
-const Settings = Me.imports.settings;
-const {SubPage} = Settings.Menu.SubPage;
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-var VisualSettingsPage = GObject.registerClass(
+export const VisualSettingsPage = GObject.registerClass(
 class ArcMenuVisualSettingsPage extends SubPage {
     _init(settings, params) {
         super._init(settings, params);
@@ -112,7 +110,14 @@ class ArcMenuVisualSettingsPage extends SubPage {
         const menuLocations = new Gtk.StringList();
         menuLocations.append(_('Off'));
         menuLocations.append(_('Top Centered'));
+        menuLocations.append(_('Top Left'));
+        menuLocations.append(_('Top Right'));
         menuLocations.append(_('Bottom Centered'));
+        menuLocations.append(_('Bottom Left'));
+        menuLocations.append(_('Bottom Right'));
+        menuLocations.append(_('Left Centered'));
+        menuLocations.append(_('Right Centered'));
+        menuLocations.append(_('Monitor Centered'));
         const menuLocationRow = new Adw.ComboRow({
             title: _('Override Menu Location'),
             model: menuLocations,
@@ -138,8 +143,8 @@ class ArcMenuVisualSettingsPage extends SubPage {
         });
         const menuArrowRiseSpinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
-                lower: 0,
-                upper: 25,
+                lower: -50,
+                upper: 50,
                 step_increment: 1,
             }),
             climb_rate: 1,
@@ -198,7 +203,7 @@ class ArcMenuVisualSettingsPage extends SubPage {
         iconsSizeFrame.add(gridIconsSizeRow);
 
         const customGridIconButton = new Gtk.Button({
-            icon_name: 'emblem-system-symbolic',
+            icon_name: 'applications-system-symbolic',
             valign: Gtk.Align.CENTER,
             visible: gridIconsSizeRow.selected === Constants.GridIconSize.CUSTOM,
         });

@@ -1,13 +1,21 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsdoc/require-jsdoc */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import Pango from 'gi://Pango';
+import Shell from 'gi://Shell';
+import St from 'gi://St';
 
-const {Clutter, Gio, GLib, Pango, Shell, St} = imports.gi;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const Main = imports.ui.main;
-const MenuLayouts = Me.imports.menulayouts;
-const _ = Gettext.gettext;
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import {getLoginManager} from 'resource:///org/gnome/shell/misc/loginManager.js';
+
+import * as Constants from './constants.js';
+import {ArcMenuManager} from './arcmenuManager.js';
+
+import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+const [ShellVersion] = Config.PACKAGE_VERSION.split('.').map(s => Number(s));
 
 const InterfaceXml = `<node>
   <interface name="com.Extensions.ArcMenu">
@@ -15,8 +23,9 @@ const InterfaceXml = `<node>
   </interface>
 </node>`;
 
-var DBusService = class {
+export const DBusService = class {
     constructor() {
+        this._exported = false;
         this.ToggleArcMenu = () => {};
 
         this._dbusExportedObject = Gio.DBusExportedObject.wrapJSObject(InterfaceXml, this);
@@ -24,8 +33,10 @@ var DBusService = class {
         const onBusAcquired = (connection, _name) => {
             try {
                 this._dbusExportedObject.export(connection, '/com/Extensions/ArcMenu');
+                this._exported = true;
             } catch (error) {
-                global.log(`ArcMenu Error - onBusAcquired export failed: ${error}`);
+                console.log(`ArcMenu Error - onBusAcquired export failed: ${error}`);
+                this._exported = false;
             }
         };
 
@@ -38,13 +49,21 @@ var DBusService = class {
     }
 
     destroy() {
-        this._dbusExportedObject.unexport();
-        Gio.bus_unown_name(this._ownerId);
+        if (this._ownerId) {
+            Gio.bus_unown_name(this._ownerId);
+            this._ownerId = null;
+        }
+
+        if (this._dbusExportedObject && this._exported)
+            this._dbusExportedObject.unexport();
+        this._dbusExportedObject = null;
+        this._exported = null;
+        this.ToggleArcMenu = null;
     }
 };
 
-function activateHibernateOrSleep(powerType) {
-    const loginManager = imports.misc.loginManager.getLoginManager();
+export function activateHibernateOrSleep(powerType) {
+    const loginManager = getLoginManager();
     let callName, activateCall;
 
     if (powerType === Constants.PowerType.HIBERNATE) {
@@ -73,8 +92,8 @@ function activateHibernateOrSleep(powerType) {
     });
 }
 
-function canHibernateOrSleep(callName, asyncCallback) {
-    const loginManager = imports.misc.loginManager.getLoginManager();
+export function canHibernateOrSleep(callName, asyncCallback) {
+    const loginManager = getLoginManager();
 
     if (!loginManager._proxy)
         asyncCallback(false);
@@ -95,50 +114,8 @@ function canHibernateOrSleep(callName, asyncCallback) {
     });
 }
 
-function getMenuLayout(menuButton, layoutEnum, isStandaloneRunner) {
-    if (layoutEnum === Constants.MenuLayout.GNOME_OVERVIEW)
-        return null;
-
-    for (const menuLayout in MenuLayouts) {
-        const LayoutClass = MenuLayouts[menuLayout];
-        if (LayoutClass.getMenuLayoutEnum() === layoutEnum) {
-            const {Menu} = LayoutClass;
-            return new Menu(menuButton, isStandaloneRunner);
-        }
-    }
-
-    const {Menu} = MenuLayouts.arcmenu;
-    return new Menu(menuButton, isStandaloneRunner);
-}
-
-var SettingsConnectionsHandler = class ArcMenuSettingsConnectionsHandler {
-    constructor() {
-        this._connections = new Map();
-        this._eventPrefix = 'changed::';
-    }
-
-    connect(event, callback) {
-        this._connections.set(Me.settings.connect(this._eventPrefix + event, callback), Me.settings);
-    }
-
-    connectMultipleEvents(events, callback) {
-        for (const event of events)
-            this._connections.set(Me.settings.connect(this._eventPrefix + event, callback), Me.settings);
-    }
-
-    destroy() {
-        this._connections.forEach((object, id) => {
-            object.disconnect(id);
-            id = null;
-        });
-
-        this._connections = null;
-    }
-};
-
-function convertToButton(item) {
+export function convertToButton(item) {
     item.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
-    item.remove_child(item._ornamentLabel);
     item.remove_child(item.label);
     item.set({
         x_expand: false,
@@ -149,20 +126,20 @@ function convertToButton(item) {
     });
 }
 
-function convertToGridLayout(item) {
+export function convertToGridLayout(item) {
     const menuLayout = item._menuLayout;
     const icon = item._iconBin;
 
-    const iconSizeEnum = Me.settings.get_enum('menu-item-grid-icon-size');
-    const defaultIconSize = menuLayout.icon_grid_size;
-    const {width, height, _iconSize} = getGridIconSize(iconSizeEnum, defaultIconSize);
+    const {settings} = ArcMenuManager;
 
-    if (item._ornamentLabel)
-        item.remove_child(item._ornamentLabel);
+    const iconSizeEnum = settings.get_enum('menu-item-grid-icon-size');
+    const defaultIconSize = menuLayout.icon_grid_size;
+    const {width, height, iconSize_} = getGridIconSize(iconSizeEnum, defaultIconSize);
 
     item.add_style_class_name('ArcMenuIconGrid');
     item.set({
-        vertical: true,
+        ...getOrientationProp(true),
+        x_align: Clutter.ActorAlign.CENTER,
         tooltipLocation: Constants.TooltipLocation.BOTTOM_CENTERED,
         style: `width: ${width}px; height: ${height}px;`,
     });
@@ -182,7 +159,7 @@ function convertToGridLayout(item) {
         });
     }
 
-    if (!Me.settings.get_boolean('multi-lined-labels'))
+    if (!settings.get_boolean('multi-lined-labels'))
         return;
 
     icon?.set({
@@ -197,7 +174,7 @@ function convertToGridLayout(item) {
     });
 }
 
-function getIconSize(iconSizeEnum, defaultIconSize) {
+export function getIconSize(iconSizeEnum, defaultIconSize) {
     switch (iconSizeEnum) {
     case Constants.IconSize.DEFAULT:
         return defaultIconSize;
@@ -218,9 +195,11 @@ function getIconSize(iconSizeEnum, defaultIconSize) {
     }
 }
 
-function getGridIconSize(iconSizeEnum, defaultIconSize) {
+export function getGridIconSize(iconSizeEnum, defaultIconSize) {
+    const {settings} = ArcMenuManager;
+
     if (iconSizeEnum === Constants.GridIconSize.CUSTOM) {
-        const {width, height, iconSize} = Me.settings.get_value('custom-grid-icon-size').deep_unpack();
+        const {width, height, iconSize} = settings.get_value('custom-grid-icon-size').deep_unpack();
         return {width, height, iconSize};
     }
 
@@ -238,8 +217,10 @@ function getGridIconSize(iconSizeEnum, defaultIconSize) {
     return {width, height, iconSize};
 }
 
-function getCategoryDetails(currentCategory) {
-    let name, gicon, fallbackIcon = null;
+export function getCategoryDetails(iconTheme, currentCategory) {
+    const extensionPath = ArcMenuManager.extension.path;
+
+    let name = null, gicon = null, fallbackIcon = null;
 
     for (const entry of Constants.Categories) {
         if (entry.CATEGORY === currentCategory) {
@@ -256,13 +237,10 @@ function getCategoryDetails(currentCategory) {
     } else {
         name = currentCategory.get_name();
         const categoryIcon = currentCategory.get_icon();
-        const fallbackIconDirectory = `${Me.path}/icons/category-icons/`;
+        const fallbackIconDirectory = `${extensionPath}/icons/category-icons/`;
 
-        if (!categoryIcon) {
-            gicon = null;
-            fallbackIcon = Gio.icon_new_for_string(`${fallbackIconDirectory}applications-other-symbolic.svg`);
+        if (!categoryIcon)
             return [name, gicon, fallbackIcon];
-        }
 
         const categoryIconName = categoryIcon.to_string();
         const symbolicName = `${categoryIconName}-symbolic`;
@@ -270,12 +248,25 @@ function getCategoryDetails(currentCategory) {
 
         gicon = categoryIcon;
 
+        const categoryIconType = ArcMenuManager.settings.get_enum('category-icon-type');
+        if (categoryIconType === Constants.CategoryIconType.SYMBOLIC) {
+            const icon = iconTheme.lookup_icon(symbolicName, 26, St.IconLookupFlags.FORCE_SYMBOLIC);
+            if (icon) {
+                gicon = Gio.icon_new_for_string(symbolicName);
+            } else {
+                const filePath = `${fallbackIconDirectory}${symbolicIconFile}`;
+                const file = Gio.File.new_for_path(filePath);
+                if (file.query_exists(null))
+                    gicon = Gio.icon_new_for_string(`${fallbackIconDirectory}${symbolicIconFile}`);
+            }
+        }
+
         fallbackIcon = Gio.icon_new_for_string(`${fallbackIconDirectory}${symbolicIconFile}`);
         return [name, gicon, fallbackIcon];
     }
 }
 
-function getPowerTypeFromShortcutCommand(command) {
+export function getPowerTypeFromShortcutCommand(command) {
     switch (command) {
     case Constants.ShortcutCommands.LOG_OUT:
         return Constants.PowerType.LOGOUT;
@@ -298,12 +289,17 @@ function getPowerTypeFromShortcutCommand(command) {
     }
 }
 
-function getMenuButtonIcon(settings, path) {
+export function getMenuButtonIcon(path) {
+    const extensionPath = ArcMenuManager.extension.path;
+    const {settings} = ArcMenuManager;
+
     const iconType = settings.get_enum('menu-button-icon');
-    const iconDirectory = `${Me.path}/icons/hicolor/16x16/actions/`;
+    const iconDirectory = `${extensionPath}/icons/hicolor/16x16/actions/`;
 
     if (iconType === Constants.MenuIconType.CUSTOM) {
         if (path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;
+        else
             return path;
     } else if (iconType === Constants.MenuIconType.DISTRO_ICON) {
         const iconEnum = settings.get_int('distro-icon');
@@ -319,11 +315,11 @@ function getMenuButtonIcon(settings, path) {
             return iconPath;
     }
 
-    log('ArcMenu Error - Failed to set menu button icon. Set to System Default.');
+    console.log('ArcMenu Error - Failed to set menu button icon. Set to System Default.');
     return 'start-here-symbolic';
 }
 
-function findSoftwareManager() {
+export function findSoftwareManager() {
     const appSys = Shell.AppSystem.get_default();
 
     for (const softwareManagerID of Constants.SoftwareManagerIDs) {
@@ -334,13 +330,13 @@ function findSoftwareManager() {
     return 'ArcMenu_InvalidShortcut.desktop';
 }
 
-function areaOfTriangle(p1, p2, p3) {
+export function areaOfTriangle(p1, p2, p3) {
     return Math.abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0);
 }
 
 // modified from GNOME shell's ensureActorVisibleInScrollView()
-function ensureActorVisibleInScrollView(actor, axis = Clutter.Orientation.VERTICAL) {
-    let box = actor.get_allocation_box();
+export function ensureActorVisibleInScrollView(actor, axis = Clutter.Orientation.VERTICAL, dummyBox = null) {
+    let box = dummyBox ? dummyBox : actor.get_allocation_box();
     let {y1} = box, {y2} = box;
     let {x1} = box, {x2} = box;
 
@@ -357,69 +353,125 @@ function ensureActorVisibleInScrollView(actor, axis = Clutter.Orientation.VERTIC
         parent = parent.get_parent();
     }
 
-    let adjustment, startPoint, endPoint;
-
-    if (axis === Clutter.Orientation.VERTICAL) {
-        adjustment = parent.vscroll.adjustment;
-        startPoint = y1;
-        endPoint = y2;
-    } else {
-        adjustment = parent.hscroll.adjustment;
-        startPoint = x1;
-        endPoint = x2;
-    }
-
-    let [value, lower_, upper, stepIncrement_, pageIncrement_, pageSize] = adjustment.get_values();
+    const isVertical = axis === Clutter.Orientation.VERTICAL;
+    const {hadjustment, vadjustment} = getScrollViewAdjustments(parent);
+    const adjustment = isVertical ? vadjustment : hadjustment;
+    const [startPoint, endPoint] = isVertical ? [y1, y2] : [x1, x2];
+    const [value, lower_, upper, stepIncrement_, pageIncrement_, pageSize] = adjustment.get_values();
 
     let offset = 0;
+    let newValue;
+
     const fade = parent.get_effect('fade');
     if (fade)
-        offset = axis === Clutter.Orientation.VERTICAL ? fade.fade_margins.top : fade.fade_margins.left;
+        offset = isVertical ? fade.fade_margins.top : fade.fade_margins.left;
 
     if (startPoint < value + offset)
-        value = Math.max(0, startPoint - offset);
+        newValue = Math.max(0, startPoint - offset);
     else if (endPoint > value + pageSize - offset)
-        value = Math.min(upper, endPoint + offset - pageSize);
+        newValue = Math.min(upper, endPoint + offset - pageSize);
     else
         return;
 
-    adjustment.ease(value, {
+    adjustment.ease(newValue, {
         mode: Clutter.AnimationMode.EASE_OUT_QUAD,
         duration: 100,
     });
 }
 
-// modified from GNOME shell to allow opening other extension setttings
-function openPrefs(uuid) {
-    try {
-        const {extensionManager} = imports.ui.main;
-        extensionManager.openExtensionPrefs(uuid, '', {});
-    } catch (e) {
-        if (e.name === 'ImportError')
-            throw new Error('openPrefs() cannot be called from preferences');
-        logError(e, 'Failed to open extension preferences');
-    }
+export function getCategories(info) {
+    const categoriesStr = info.get_categories();
+    if (!categoriesStr)
+        return [];
+    return categoriesStr.split(';');
 }
 
-function getDashToPanelPosition(settings, index) {
-    var positions = null;
-    var side = 'NONE';
+export function findBestFolderName(apps) {
+    const appInfos = apps.map(app => app.get_app_info());
 
-    try {
-        positions = JSON.parse(settings.get_string('panel-positions'));
-        side = positions[index];
-    } catch (e) {
-        log(`Error parsing Dash to Panel positions: ${e.message}`);
+    const categoryCounter = {};
+    const commonCategories = [];
+
+    appInfos.reduce((categories, appInfo) => {
+        for (const category of getCategories(appInfo)) {
+            if (!(category in categoryCounter))
+                categoryCounter[category] = 0;
+
+            categoryCounter[category] += 1;
+
+            // If a category is present in all apps, its counter will
+            // reach appInfos.length
+            if (category.length > 0 &&
+                categoryCounter[category] === appInfos.length)
+                categories.push(category);
+        }
+        return categories;
+    }, commonCategories);
+
+    for (const category of commonCategories) {
+        const directory = `${category}.directory`;
+        const translated = Shell.util_get_translated_folder_name(directory);
+        if (translated !== null)
+            return translated;
     }
 
-    if (side === 'TOP')
-        return St.Side.TOP;
-    else if (side === 'RIGHT')
-        return St.Side.RIGHT;
-    else if (side === 'BOTTOM')
-        return St.Side.BOTTOM;
-    else if (side === 'LEFT')
-        return St.Side.LEFT;
+    return null;
+}
+
+export function openPrefs(uuid) {
+    const extension = Extension.lookupByUUID(uuid);
+    if (extension !== null)
+        extension.openPreferences();
+}
+
+/**
+ *
+ * @param {Clutter.Actor} parent
+ * @param {Clutter.Actor} child
+ * @description GNOME 46 no longer supports add_actor() method.\
+ *              Check which method to use to maintain compatibility with GNOME 45 and 46.
+ */
+export function addChildToParent(parent, child) {
+    if (parent.add_actor)
+        parent.add_actor(child);
+    else if (parent instanceof St.Button || parent instanceof St.ScrollView)
+        parent.set_child(child);
     else
-        return St.Side.BOTTOM;
+        parent.add_child(child);
+}
+
+/**
+ * GNOME 46 renamed the extension states. Use this const instead.
+ */
+export const ExtensionState = {
+    ACTIVE: 1,
+    INACTIVE: 2,
+};
+
+/**
+ *
+ * @param {St.ScrollView} scrollView
+ * @description ScrollView.(hv)scroll was deprecated in GNOME 46.\
+ *              Check which ScrollView property to use to maintain compatibility with GNOME 45 and 46.
+ */
+export function getScrollViewAdjustments(scrollView) {
+    const hadjustment = scrollView.hadjustment ?? scrollView.hscroll.adjustment;
+    const vadjustment = scrollView.vadjustment ?? scrollView.vscroll.adjustment;
+
+    return {
+        hadjustment,
+        vadjustment,
+    };
+}
+
+/**
+ *
+ * @param {boolean} vertical
+ * @description GNOME 48 - St.BoxLayout uses 'orientation' instead of 'vertical'
+ */
+export function getOrientationProp(vertical) {
+    if (ShellVersion >= 48)
+        return {orientation: vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL};
+    else
+        return {vertical};
 }

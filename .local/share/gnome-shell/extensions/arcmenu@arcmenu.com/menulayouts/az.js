@@ -1,33 +1,29 @@
-/* eslint-disable jsdoc/require-jsdoc */
-/* exported getMenuLayoutEnum, Menu */
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-const {Clutter, GObject, St} = imports.gi;
-const {BaseMenuLayout} = Me.imports.menulayouts.baseMenuLayout;
-const Constants = Me.imports.constants;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const Main = imports.ui.main;
-const MW = Me.imports.menuWidgets;
-const _ = Gettext.gettext;
+import {ArcMenuManager} from '../arcmenuManager.js';
+import {BaseMenuLayout} from './baseMenuLayout.js';
+import * as Constants from '../constants.js';
+import * as MW from '../menuWidgets.js';
+import {getOrientationProp} from '../utils.js';
 
-function getMenuLayoutEnum() {
-    return Constants.MenuLayout.AZ;
-}
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
+export class Layout extends BaseMenuLayout {
     static {
         GObject.registerClass(this);
     }
 
     constructor(menuButton) {
         super(menuButton, {
-            has_search: true,
             display_type: Constants.DisplayType.GRID,
             search_display_type: Constants.DisplayType.GRID,
+            search_results_spacing: 4,
             context_menu_location: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             column_spacing: 4,
             row_spacing: 4,
-            vertical: true,
+            ...getOrientationProp(true),
             default_menu_width: 460,
             icon_grid_size: Constants.GridIconSize.LARGE_RECT,
             category_icon_size: Constants.MEDIUM_ICON_SIZE,
@@ -42,7 +38,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
                 this.backButton.activate(event);
         });
 
-        this.searchBox.style = 'margin: 5px 10px;';
+        this.searchEntry.style = 'margin: 5px 10px;';
         this.arcMenu.box.style = 'padding: 0px; margin: 0px;';
 
         this._mainBox = new St.BoxLayout({
@@ -50,7 +46,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
-            vertical: true,
+            ...getOrientationProp(true),
         });
         this.add_child(this._mainBox);
 
@@ -59,7 +55,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
             y_expand: false,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
-            vertical: false,
+            ...getOrientationProp(false),
         });
         this._mainBox.add_child(this.topBox);
 
@@ -81,7 +77,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
         this._mainBox.add_child(this.allAppsButton);
 
         this.applicationsBox = new St.BoxLayout({
-            vertical: true,
+            ...getOrientationProp(true),
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -96,15 +92,15 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
             y_align: Clutter.ActorAlign.START,
             style_class: this._disableFadeEffect ? '' : 'vfade',
         });
-        this.applicationsScrollBox.add_actor(this.applicationsBox);
+        this._addChildToParent(this.applicationsScrollBox, this.applicationsBox);
         this._mainBox.add_child(this.applicationsScrollBox);
 
         this.bottomBox = new St.BoxLayout({
             x_expand: true,
-            y_expand: true,
+            y_expand: false,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.END,
-            vertical: false,
+            ...getOrientationProp(false),
         });
         this._mainBox.add_child(this.bottomBox);
 
@@ -113,20 +109,20 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.CENTER,
-            vertical: false,
+            ...getOrientationProp(false),
         });
         this.actionsBox.style = 'margin: 0px 10px; spacing: 10px;';
 
-        const searchBarLocation = Me.settings.get_enum('searchbar-default-top-location');
+        const searchBarLocation = ArcMenuManager.settings.get_enum('searchbar-default-top-location');
         if (searchBarLocation === Constants.SearchbarLocation.TOP) {
-            this.topBox.add_child(this.searchBox);
+            this.topBox.add_child(this.searchEntry);
             this.bottomBox.add_child(this.actionsBox);
         } else {
             this.topBox.add_child(this.actionsBox);
-            this.bottomBox.add_child(this.searchBox);
+            this.bottomBox.add_child(this.searchEntry);
         }
 
-        Me.settings.connectObject('changed::az-extra-buttons', () => this._createExtraButtons(), this);
+        ArcMenuManager.settings.connectObject('changed::az-layout-extra-shortcuts', () => this._createExtraButtons(), this);
         this._createExtraButtons();
 
         this.updateStyle();
@@ -134,21 +130,22 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
+        this._connectAppChangedEvents();
     }
 
     _createExtraButtons() {
         this.actionsBox.destroy_all_children();
 
-        const userMenuItem = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add_child(userMenuItem);
+        const avatarMenuItem = new MW.AvatarMenuItem(this, Constants.DisplayType.LIST);
+        this.actionsBox.add_child(avatarMenuItem);
 
         const isContainedInCategory = false;
-        const extraButtons = Me.settings.get_value('az-extra-buttons').deep_unpack();
+        const extraButtons = ArcMenuManager.settings.get_value('az-layout-extra-shortcuts').deep_unpack();
 
         for (let i = 0; i < extraButtons.length; i++) {
-            const command = extraButtons[i][2];
-            if (command === Constants.ShortcutCommands.SEPARATOR) {
-                const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG,
+            const {id} = extraButtons[i];
+            if (id === Constants.ShortcutCommands.SEPARATOR) {
+                const separator = new MW.ArcMenuSeparator(this, Constants.SeparatorStyle.LONG,
                     Constants.SeparatorAlignment.VERTICAL);
                 separator.x_expand = false;
                 this.actionsBox.add_child(separator);
@@ -157,10 +154,12 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
                     isContainedInCategory);
                 if (button.shouldShow)
                     this.actionsBox.add_child(button);
+                else
+                    button.destroy();
             }
         }
 
-        const powerDisplayStyle = Me.settings.get_enum('power-display-style');
+        const powerDisplayStyle = ArcMenuManager.settings.get_enum('power-display-style');
         let leaveButton;
         if (powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
             leaveButton = new MW.PowerOptionsBox(this);
@@ -183,16 +182,8 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
     }
 
     displayAllApps() {
-        this.setGridLayout(Constants.DisplayType.LIST, 3);
-        const appList = [];
-        this.applicationsMap.forEach((value, key, _map) => {
-            appList.push(key);
-        });
-        appList.sort((a, b) => {
-            return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-        });
-        this._clearActorsFromBox();
-        this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
+        this.setGridLayout(Constants.DisplayType.LIST, 4);
+        super.displayAllApps();
         this.setGridLayout(Constants.DisplayType.GRID, 4, false);
     }
 
@@ -211,8 +202,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
     updateStyle() {
         const themeNode = this.arcMenu.box.get_theme_node();
         let borderRadius = themeNode.get_length('border-radius');
-        const monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
-        const scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
+        const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
         borderRadius /= scaleFactor;
 
         const roundBottomBorder = `border-radius: 0px 0px ${borderRadius}px ${borderRadius}px;`;
@@ -228,7 +218,7 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
                 this.applicationsScrollBox.style_class = this._disableFadeEffect ? '' : 'small-vfade';
             else
                 this.applicationsScrollBox.style_class = this._disableFadeEffect ? '' : 'vfade';
-            this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL
+            this.applicationsGrid.halign = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL
                 : Clutter.ActorAlign.CENTER;
         }
 
@@ -246,8 +236,10 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
     }
 
     displayPinnedApps() {
-        this._clearActorsFromBox();
-        this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
+        super.displayPinnedApps();
+        this._hideNavigationRow();
+
+        this.allAppsButton.visible = true;
     }
 
     _displayAppList(apps, category, grid) {
@@ -266,16 +258,17 @@ var Menu = class ArcMenuAzLayout extends BaseMenuLayout {
         this.backButton.visible = false;
     }
 
-    _onSearchBoxChanged(searchBox, searchString) {
-        if (!searchBox.isEmpty())
+    _onSearchEntryChanged(searchEntry, searchString) {
+        if (!searchEntry.isEmpty())
             this._hideNavigationRow();
-        super._onSearchBoxChanged(searchBox, searchString);
+        super._onSearchEntryChanged(searchEntry, searchString);
     }
 
-    destroy() {
-        this.arcMenu.box.style = null;
+    _onDestroy() {
+        if (this.arcMenu)
+            this.arcMenu.box.style = null;
         this.backButton.destroy();
         this.allAppsButton.destroy();
-        super.destroy();
+        super._onDestroy();
     }
-};
+}

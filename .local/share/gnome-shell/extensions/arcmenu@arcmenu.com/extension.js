@@ -1,182 +1,251 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsdoc/require-jsdoc */
-/*
- * ArcMenu - Application Menu Extension for GNOME
- * Andrew Zaech https://gitlab.com/AndrewZaech
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const Constants = Me.imports.constants;
-const Controller = Me.imports.controller;
-const Main = imports.ui.main;
-const Theming = Me.imports.theming;
+import {ArcMenuManager} from './arcmenuManager.js';
+import * as Constants from './constants.js';
+import {MenuController} from './menuController.js';
+import {SearchProviderEmitter} from './searchProviders/searchProviderEmitter.js';
+import * as Theming from './theming.js';
 
-let extensionChangedId, settingsControllers, _realHasOverview;
+import * as Utils from './utils.js';
+import {UpdateNotification} from './updateNotifier.js';
 
-function init() {
-    _realHasOverview = Main.sessionMode.hasOverview;
-    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
-}
+export default class ArcMenu extends Extension {
+    enable() {
+        this.settings = this.getSettings();
+        this._arcmenuManager = new ArcMenuManager(this);
 
-function enable() {
-    Me.settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+        this.searchProviderEmitter = new SearchProviderEmitter();
 
-    const hideOverviewOnStartup = Me.settings.get_boolean('hide-overview-on-startup');
-    if (hideOverviewOnStartup && Main.layoutManager._startingUp) {
-        Main.sessionMode.hasOverview = false;
-        Main.layoutManager.connect('startup-complete', () => {
-            Main.sessionMode.hasOverview = _realHasOverview;
-        });
-        // handle Ubuntu's method
-        if (Main.layoutManager.startInOverview)
-            Main.layoutManager.startInOverview = false;
-    }
+        this._azTaskbarActive = false;
+        this._dtpActive = false;
 
-    Me.settings.connect('changed::multi-monitor', () => _reload());
-    Me.settings.connect('changed::dash-to-panel-standalone', () => _reload());
-    settingsControllers = [];
+        this._updateNotification = new UpdateNotification(this);
 
-    Theming.createStylesheet(Me.settings);
-
-    _enableButtons();
-
-    // dash to panel might get enabled after ArcMenu
-    extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-        if (extension.uuid === Constants.DASH_TO_PANEL_UUID || extension.uuid === Constants.AZTASKBAR_UUID) {
-            _disconnectExtensionSignals();
-            _connectExtensionSignals();
-            _reload();
+        const hideOverviewOnStartup = this.settings.get_boolean('hide-overview-on-startup');
+        if (hideOverviewOnStartup && Main.layoutManager._startingUp) {
+            const hadOverview = Main.sessionMode.hasOverview;
+            Main.sessionMode.hasOverview = false;
+            Main.layoutManager.connectObject('startup-complete', () => {
+                Main.sessionMode.hasOverview = hadOverview;
+            }, this);
         }
-    });
 
-    // listen to dash to panel if they are compatible and already enabled
-    _connectExtensionSignals();
-}
+        this._getPanelExtensionStates();
 
-function disable() {
-    Main.sessionMode.hasOverview = _realHasOverview;
+        this.settings.connectObject('changed::multi-monitor', () => this._reload(), this);
+        this.settings.connectObject('changed::dash-to-panel-standalone', () => this._reload(), this);
+        this.menuControllers = [];
 
-    if (extensionChangedId) {
-        Main.extensionManager.disconnect(extensionChangedId);
-        extensionChangedId = null;
+        this.customStylesheet = null;
+        Theming.createStylesheet();
+
+        this._enableButtons();
+
+        Main.extensionManager.connectObject('extension-state-changed', (data, extension) => {
+            const isDtp = extension.uuid === Constants.DASH_TO_PANEL_UUID;
+            const isAzTaskbar = extension.uuid === Constants.AZTASKBAR_UUID;
+            const isActive = extension.state === Utils.ExtensionState.ACTIVE;
+
+            if (isDtp && (isActive !== this._dtpActive)) {
+                this._dtpActive = isActive;
+                this._disconnectExtensionSignals();
+                this._connectExtensionSignals();
+                this._reload();
+            }
+
+            if (isAzTaskbar && (isActive !== this._azTaskbarActive)) {
+                this._azTaskbarActive = isActive;
+                this._disconnectExtensionSignals();
+                this._connectExtensionSignals();
+                this._reload();
+            }
+        }, this);
+
+        this._connectExtensionSignals();
+
+        global.connectObject('shutdown', () => Theming.deleteStylesheet(), this);
     }
 
-    Theming.deleteStylesheet();
-    delete Me.customStylesheet;
+    disable() {
+        this._disconnectExtensionSignals();
+        Main.layoutManager.disconnectObject(this);
+        Main.extensionManager.disconnectObject(this);
+        global.disconnectObject(this);
+        this.settings.disconnectObject(this);
 
-    _disconnectExtensionSignals();
+        this._updateNotification.destroy();
+        this._updateNotification = null;
 
-    _disableButtons();
-    settingsControllers = null;
+        Theming.deleteStylesheet();
+        this.customStylesheet = null;
 
-    Me.settings.run_dispose();
-    delete Me.settings;
-}
+        this._disableButtons();
+        this.menuControllers = null;
 
-function _connectExtensionSignals() {
-    if (global.dashToPanel)
-        global.dashToPanel._panelsCreatedId = global.dashToPanel.connect('panels-created', () => _reload());
+        this.searchProviderEmitter.destroy();
+        this.searchProviderEmitter = null;
 
-    if (global.azTaskbar)
-        global.azTaskbar._panelsCreatedId = global.azTaskbar.connect('panels-created', () => _reload());
-}
+        this._arcmenuManager.destroy();
+        this._arcmenuManager = null;
 
-function _disconnectExtensionSignals() {
-    if (global.dashToPanel?._panelsCreatedId) {
-        global.dashToPanel.disconnect(global.dashToPanel._panelsCreatedId);
-        delete global.dashToPanel._panelsCreatedId;
-    }
-    if (global.azTaskbar?._panelsCreatedId) {
-        global.azTaskbar.disconnect(global.azTaskbar._panelsCreatedId);
-        delete global.azTaskbar._panelsCreatedId;
-    }
-}
-
-function _reload() {
-    _disableButtons();
-    _enableButtons();
-}
-
-function _enableButtons() {
-    const multiMonitor = Me.settings.get_boolean('multi-monitor');
-
-    let panelExtensionEnabled = false;
-    let panels;
-
-    if (global.dashToPanel && global.dashToPanel.panels) {
-        panels = global.dashToPanel.panels.map(pw => pw);
-        panelExtensionEnabled = true;
-    } else if (global.azTaskbar && global.azTaskbar.panels) {
-        panels = global.azTaskbar.panels.map(pw => pw);
-        panels.unshift(Main.panel);
-        panelExtensionEnabled = true;
-    } else {
-        panels = [Main.panel];
+        this.settings = null;
     }
 
-    const panelLength = multiMonitor ? panels.length : 1;
-    for (var i = 0; i < panelLength; i++) {
-        // Dash to Panel and AzTaskbar don't store the actual 'panel' in their global 'panels' object
-        let panel = panels[i].panel ?? panels[i];
-        const panelParent = panels[i].panel ? panels[i] : Main.panel;
-
-        let panelBox;
-        if (panels[i].panelBox) // case Dash To Panel
-            panelBox = panels[i].panelBox;
-        else if (panels[i].panel) // case AzTaskbar
-            panelBox = panels[i];
-        else
-            panelBox = Main.layoutManager.panelBox;
-
-        // Place ArcMenu in main top panel when
-        // Dash to Panel setting "Keep original gnome-shell top panel" is on
-        const isStandalone = Me.settings.get_boolean('dash-to-panel-standalone') &&
-                             global.dashToPanel && panelExtensionEnabled;
-        if (isStandalone && ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone)
-            panel = Main.panel;
-
-        const isPrimaryPanel = i === 0;
-        const settingsController = new Controller.MenuSettingsController(settingsControllers,
-            panel, panelBox, panelParent, isPrimaryPanel);
-
-        settingsController.monitorIndex = panelParent.monitor?.index ?? 0;
-
-        if (panelExtensionEnabled)
-            panel._amDestroyId = panel.connect('destroy', () => _disableButton(settingsController));
-
-        settingsController.enableButton();
-        settingsController.connectSettingsEvents();
-        settingsControllers.push(settingsController);
-    }
-}
-
-function _disableButtons() {
-    for (let i = settingsControllers.length - 1; i >= 0; --i) {
-        const sc = settingsControllers[i];
-        _disableButton(sc);
-    }
-}
-
-function _disableButton(controller) {
-    if (controller.panel?._amDestroyId) {
-        controller.panel.disconnect(controller.panel._amDestroyId);
-        delete controller.panel._amDestroyId;
+    _getPanelExtensionStates() {
+        this._azTaskbarActive = this._isExtensionActive(Constants.AZTASKBAR_UUID);
+        this._dtpActive = this._isExtensionActive(Constants.DASH_TO_PANEL_UUID);
     }
 
-    settingsControllers.splice(settingsControllers.indexOf(controller), 1);
-    controller.destroy();
+    _isExtensionActive(uuid) {
+        const extension = Main.extensionManager.lookup(uuid);
+        if (extension?.state === Utils.ExtensionState.ACTIVE)
+            return true;
+
+        return false;
+    }
+
+    /**
+     *
+     * @param {*} panel Dash to Panel's 'panel'
+     * @param {boolean} panelExtensionEnabled is Dash to Panel enabled
+     * @returns {boolean}
+     * @description Returns true if `panel` isPrimary and isStandalone\
+     *              and ArcMenu setting 'dash-to-panel-standalone' is enabled.
+     */
+    _isPrimaryStandalonePanel(panel, panelExtensionEnabled) {
+        const standalone = this.settings.get_boolean('dash-to-panel-standalone');
+        if (!standalone)
+            return false;
+
+        const dtpEnabled = global.dashToPanel && panelExtensionEnabled;
+        if (!dtpEnabled)
+            return false;
+
+        const isPrimaryStandalone = panel.isPrimary && panel.isStandalone;
+        if (isPrimaryStandalone)
+            return true;
+
+        return false;
+    }
+
+    _connectExtensionSignals() {
+        if (this._dtpActive && global.dashToPanel)
+            global.dashToPanel.connectObject('panels-created', () => this._reload(), this);
+
+        if (this._azTaskbarActive && global.azTaskbar)
+            global.azTaskbar.connectObject('panels-created', () => this._reload(), this);
+    }
+
+    _disconnectExtensionSignals() {
+        if (global.dashToPanel)
+            global.dashToPanel.disconnectObject(this);
+
+        if (global.azTaskbar)
+            global.azTaskbar.disconnectObject(this);
+    }
+
+    _reload() {
+        this._disableButtons();
+        this._enableButtons();
+    }
+
+    _enableButtons() {
+        const multiMonitor = this.settings.get_boolean('multi-monitor');
+
+        let panelExtensionEnabled = false;
+        let panels;
+
+        if (this._dtpActive && global.dashToPanel?.panels) {
+            panels = global.dashToPanel.panels.filter(p => p);
+            panelExtensionEnabled = true;
+        } else if (this._azTaskbarActive && global.azTaskbar?.panels) {
+            panels = global.azTaskbar.panels.filter(p => p);
+            panelExtensionEnabled = true;
+        } else {
+            panels = [Main.panel];
+        }
+
+        const primaryPanelIndex = Main.layoutManager.primaryMonitor?.index;
+
+        const panelsCount = multiMonitor ? panels.length : Math.min(panels.length, 1);
+        for (var i = 0; i < panelsCount; i++) {
+            if (!panels[i]) {
+                console.log(`ArcMenu Error: panel ${i} not found. Skipping...`);
+                continue;
+            }
+
+            let panel, panelBox, panelParent;
+            if (panelExtensionEnabled) {
+                panel = panels[i].panel;
+                panelBox = this._dtpActive ? panels[i].panelBox : panels[i];
+                panelParent = panels[i];
+            } else {
+                panel = panels[i];
+                panelBox = Main.layoutManager.panelBox;
+                panelParent = Main.panel;
+            }
+
+            const isPrimaryStandalone = this._isPrimaryStandalonePanel(panelParent, panelExtensionEnabled);
+            if (isPrimaryStandalone)
+                panel = Main.panel;
+
+            let monitorIndex = 0;
+            if (panelParent.monitor) // App Icons Taskbar 'panelParent' may be Main.panel, which doesnt have a 'monitor' property.
+                monitorIndex = panelParent.monitor.index;
+            else if (panel === Main.panel)
+                monitorIndex = primaryPanelIndex ?? 0;
+
+            const isPrimaryPanel = monitorIndex === primaryPanelIndex;
+            const panelInfo = {panel, panelBox, panelParent, isPrimaryPanel};
+
+            const menuController = new MenuController(panelInfo, monitorIndex);
+
+            panel.connectObject('destroy', () => this._disableButton(menuController, panel), this);
+
+            menuController.enableButton();
+            menuController.connectSettingsEvents();
+            this.menuControllers.push(menuController);
+        }
+    }
+
+    _disableButtons() {
+        for (let i = this.menuControllers.length - 1; i >= 0; --i) {
+            const mc = this.menuControllers[i];
+            this._disableButton(mc, mc.panel);
+        }
+    }
+
+    _disableButton(controller, panel) {
+        panel.disconnectObject(this);
+
+        const index = this.menuControllers.indexOf(controller);
+        if (index !== -1)
+            this.menuControllers.splice(index, 1);
+
+        controller.destroy();
+    }
+
+    openPreferences() {
+        // Find if an extension preferences window is already open
+        const prefsWindow = global.get_window_actors().map(wa => wa.meta_window).find(w => w.wm_class === 'org.gnome.Shell.Extensions');
+
+        if (!prefsWindow) {
+            super.openPreferences();
+            return;
+        }
+
+        // The current prefsWindow belongs to this extension, activate it
+        if (prefsWindow.title === this.metadata.name) {
+            Main.activateWindow(prefsWindow);
+            return;
+        }
+
+        // If another extension's preferences are open, close it and open this extension's preferences
+        prefsWindow.connectObject('unmanaged', () => {
+            super.openPreferences();
+            prefsWindow.disconnectObject(this);
+        }, this);
+        prefsWindow.delete(global.get_current_time());
+    }
 }

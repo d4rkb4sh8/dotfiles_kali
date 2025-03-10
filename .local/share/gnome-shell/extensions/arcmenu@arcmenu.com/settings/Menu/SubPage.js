@@ -1,19 +1,14 @@
-/* exported SubPage */
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Adw from 'gi://Adw';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const {Adw, GLib, GObject, Gtk} = imports.gi;
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-var SubPage = GObject.registerClass({
+export const SubPage = GObject.registerClass({
     Properties: {
         'setting-string': GObject.ParamSpec.string(
             'setting-string', 'setting-string', 'setting-string',
-            GObject.ParamFlags.READWRITE,
-            ''),
-        'title': GObject.ParamSpec.string(
-            'title', 'title', 'title',
             GObject.ParamFlags.READWRITE,
             ''),
         'list-type': GObject.ParamSpec.int(
@@ -26,27 +21,22 @@ var SubPage = GObject.registerClass({
             true),
     },
 },
-class ArcMenuSubPage extends Gtk.Box {
+class ArcMenuSubPage extends Adw.NavigationPage {
     _init(settings, params) {
         super._init({
-            orientation: Gtk.Orientation.VERTICAL,
             ...params,
         });
         this._settings = settings;
 
-        this.headerLabel = new Adw.WindowTitle({
-            title: _(this.title),
-        });
+        this.headerBar = new Adw.HeaderBar();
 
-        this.headerBar = new Adw.HeaderBar({
-            title_widget: this.headerLabel,
-            decoration_layout: '',
-        });
+        const sidebarToolBarView = new Adw.ToolbarView();
 
         if (this.preferences_page) {
-            this.append(this.headerBar);
+            sidebarToolBarView.add_top_bar(this.headerBar);
+            this.set_child(sidebarToolBarView);
             this.page = new PrefsPage();
-            this.append(this.page);
+            sidebarToolBarView.set_content(this.page);
         }
 
         this.restoreDefaultsButton = new Gtk.Button({
@@ -72,18 +62,6 @@ class ArcMenuSubPage extends Gtk.Box {
             dialog.show();
         });
 
-        const backButton = new Gtk.Button({
-            icon_name: 'go-previous-symbolic',
-            tooltip_text: _('Back'),
-            css_classes: ['flat'],
-        });
-
-        backButton.connect('clicked', () => {
-            const window = this.get_root();
-            window.close_subpage();
-        });
-
-        this.headerBar.pack_start(backButton);
         if (this.preferences_page)
             this.headerBar.pack_end(this.restoreDefaultsButton);
     }
@@ -92,7 +70,7 @@ class ArcMenuSubPage extends Gtk.Box {
         if (this.preferences_page)
             this.page.add(widget);
         else
-            this.append(widget);
+            this.set_child(widget);
     }
 
     resetScrollAdjustment() {
