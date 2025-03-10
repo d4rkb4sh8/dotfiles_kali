@@ -123,6 +123,16 @@ cargo install cargo-update cargo-list kanata binsider
 log "Installing tgpt"
 curl -sSL https://raw.githubusercontent.com/aandrew-me/tgpt/main/install | bash -s /usr/local/bin
 
+# Install GTFOB lookup
+log "Installing GTFOB..."
+pipx install git+https://github.com/nccgroup/GTFOBLookup.git
+
+# alfa wireless adapter realtek
+cd $HOME/gitprojects/
+git clone https://github.com/aircrack-ng/rtl8812au.git
+cd rtl8812au
+sudo make dkms_install
+
 # Section: Ollama Installation
 log "Installing Ollama..."
 curl -fsSL https://ollama.com/install.sh | sh
