@@ -64,6 +64,8 @@
   lts (tap-hold $tap-time $hold-time M-A-C-l M-A-C-l)
   bdl (tap-hold $tap-time $hold-time [ C-bspc)
   fdl (tap-hold $tap-time $hold-time ] S-C-del)
+  mwu (mwheel-up 50 120)
+  mwd (mwheel-down 50 120)
 )
 
 ;; LAYER ONE - main mods
@@ -81,7 +83,7 @@
   caps f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    @yy  @uu  @ii  @oo  p    @dtb @dte \
-  esc  @aa  _    _    _    g    left down up   rght ;    '    ret
+  esc  @aa  _    _    _    g    left down up   rght @mwd @mwu ret
   lsft @zz  @xx  @cc  @vv  b    @nn  @mm  @tbd @tfd /    rsft
   _    _    _           spc               _    _    _
 )
