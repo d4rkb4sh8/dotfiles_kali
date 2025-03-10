@@ -1,5 +1,5 @@
 [global_config]
-  inactive_color_offset = 0.4013605442176871
+  inactive_color_offset = 0.49053030303030304
   enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, TerminatorThemes
   always_split_with_profile = True
   link_single_click = True
@@ -23,7 +23,7 @@
 [profiles]
   [[default]]
     background_color = "#1c1b22"
-    background_darkness = 0.91
+    background_darkness = 0.95
     background_type = transparent
     cursor_bg_color = "#708284"
     font = Hack Nerd Font 13

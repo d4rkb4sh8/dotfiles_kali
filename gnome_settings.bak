@@ -37,7 +37,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='applications'
+last-panel='background'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/app-folders]
@@ -187,7 +187,7 @@ welcome-dialog-last-shown-version='46.3.1'
 arcmenu-hotkey=['<Alt>m']
 custom-menu-button-icon-size=27.0
 distro-icon=9
-left-panel-width=240
+left-panel-width=340
 menu-button-fg-color=(true, 'rgb(98,160,234)')
 menu-button-icon='Distro_Icon'
 menu-height=750
@@ -278,11 +278,11 @@ mouse-action-scroll-up='NONE'
 
 [org/gnome/shell/extensions/quake-terminal]
 auto-hide-window=false
-horizontal-size=95
+horizontal-size=97
 render-on-primary-monitor=true
 terminal-id='terminator.desktop'
 terminal-shortcut=['<Alt><Super>q']
-vertical-size=95
+vertical-size=92
 
 [org/gnome/shell/extensions/tiling-assistant]
 active-window-hint-color='rgb(53,132,228)'
@@ -316,7 +316,7 @@ sort-directories-first=true
 [org/gtk/settings/file-chooser]
 date-format='regular'
 location-mode='path-bar'
-show-hidden=false
+show-hidden=true
 show-size-column=true
 show-type-column=true
 sidebar-width=189
@@ -324,5 +324,5 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(26, 23)
+window-position=(0, 47)
 window-size=(1231, 902)
