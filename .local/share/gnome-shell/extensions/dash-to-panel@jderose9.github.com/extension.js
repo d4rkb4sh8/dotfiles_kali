@@ -19,6 +19,7 @@
 
 import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
+import Shell from 'gi://Shell'
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import { EventEmitter } from 'resource:///org/gnome/shell/misc/signals.js'
@@ -45,6 +46,7 @@ export let TERMINALSETTINGS = null
 export let NOTIFICATIONSSETTINGS = null
 export let PERSISTENTSTORAGE = null
 export let EXTENSION_PATH = null
+export let tracker = null
 
 export default class DashToPanelExtension extends Extension {
   constructor(metadata) {
@@ -70,6 +72,8 @@ export default class DashToPanelExtension extends Extension {
     })
     EXTENSION_PATH = this.path
 
+    tracker = Shell.WindowTracker.get_default()
+
     //create a global object that can emit signals and conveniently expose functionalities to other extensions
     global.dashToPanel = new EventEmitter()
 
@@ -81,9 +85,9 @@ export default class DashToPanelExtension extends Extension {
     // To remove later, try to map settings using monitor indexes to monitor ids
     PanelSettings.adjustMonitorSettings(SETTINGS)
 
-    // show the donate icon every 120 days (10368000000 milliseconds)
+    // show the donate icon every 360 days (31104000000 milliseconds)
     let donateIconUnixtime = SETTINGS.get_string('hide-donate-icon-unixtime')
-    if (donateIconUnixtime && donateIconUnixtime < Date.now() - 10368000000)
+    if (donateIconUnixtime && donateIconUnixtime < Date.now() - 31104000000)
       SETTINGS.set_string('hide-donate-icon-unixtime', '')
 
     // if new version, display a notification linking to release notes

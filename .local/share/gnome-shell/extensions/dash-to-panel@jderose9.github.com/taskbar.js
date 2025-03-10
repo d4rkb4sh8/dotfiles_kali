@@ -42,7 +42,7 @@ import * as PanelSettings from './panelSettings.js'
 import * as Pos from './panelPositions.js'
 import * as Utils from './utils.js'
 import * as WindowPreview from './windowPreview.js'
-import { DTP_EXTENSION, SETTINGS } from './extension.js'
+import { DTP_EXTENSION, SETTINGS, tracker } from './extension.js'
 
 const SearchController = Main.overview.searchController
 
@@ -63,7 +63,7 @@ let donateDummyApp = {
     should_show: () => false,
     list_actions: () => ['opts'],
     get_action_name: (action) =>
-      action == 'opts' ? _('Donation options') : '',
+      action == 'opts' ? _('Hide and donation options') : '',
   },
   connect: () => [],
   disconnect: () => false,
@@ -1014,7 +1014,7 @@ export const Taskbar = class extends EventEmitter {
   }
 
   _adjustIconSize() {
-    let panelSize = this.dtpPanel.geom.iconSize
+    let panelSize = this.dtpPanel.geom.iconSize / Utils.getScaleFactor()
     let availSize = panelSize - SETTINGS.get_int('appicon-padding') * 2
     let minIconSize = MIN_ICON_SIZE + (panelSize % 2)
 
@@ -1222,7 +1222,6 @@ export const Taskbar = class extends EventEmitter {
   }
 
   _getRunningApps() {
-    let tracker = Shell.WindowTracker.get_default()
     let windows = Utils.getAllMetaWindows()
     let apps = []
 
@@ -1242,7 +1241,6 @@ export const Taskbar = class extends EventEmitter {
       let separateApps = []
 
       if (apps.length) {
-        let tracker = Shell.WindowTracker.get_default()
         let windows = AppIcons.getInterestingWindows(
           null,
           this.dtpPanel.monitor,
@@ -1298,6 +1296,8 @@ export const Taskbar = class extends EventEmitter {
     if (this.dtpPanel.isPrimary) hotkeyAppNumbers = {}
 
     this._getAppIcons().forEach((icon) => {
+      if (icon.app == this._donateApp) return
+
       if (
         this.dtpPanel.isPrimary &&
         (!hotkeyAppNumbers[icon.app] || this.allowSplitApps)
@@ -1611,7 +1611,6 @@ export const Taskbar = class extends EventEmitter {
 
   popupFocusedAppSecondaryMenu() {
     let appIcons = this._getAppIcons()
-    let tracker = Shell.WindowTracker.get_default()
 
     for (let i in appIcons) {
       if (appIcons[i].app == tracker.focus_app) {

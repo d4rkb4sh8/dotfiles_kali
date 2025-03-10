@@ -10,6 +10,7 @@ log() {
 
 # Section: Initial Setup
 log "Starting initial setup..."
+sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y git gh curl gawk cmake
 
 # Section: Install APT Packages
@@ -118,10 +119,9 @@ source $HOME/.bashrc
 log "Installing cargo packages..."
 cargo install cargo-update cargo-list kanata binsider
 
-# Section: tgpt and Atuin Installation
-log "Installing tgpt and atuin..."
+# Section: tgpt
+log "Installing tgpt"
 curl -sSL https://raw.githubusercontent.com/aandrew-me/tgpt/main/install | bash -s /usr/local/bin
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 # Section: Ollama Installation
 log "Installing Ollama..."
