@@ -12,6 +12,22 @@ window-height=541
 window-maximized=false
 window-width=469
 
+[org/gnome/calculator]
+accuracy=9
+angle-units='degrees'
+base=10
+button-mode='basic'
+number-format='automatic'
+show-thousands=false
+show-zeroes=false
+source-currency=''
+source-units='degree'
+target-currency=''
+target-units='radian'
+window-maximized=false
+window-size=(360, 627)
+word-size=64
+
 [org/gnome/clocks]
 world-clocks=[{'location': <(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.0295270260429752)], [(0.69689057971334611, 2.0313596217575696)])>)>}, {'location': <(uint32 2, <('Tokyo', 'RJTI', true, [(0.62191898430954862, 2.4408429589140699)], [(0.62282074357417661, 2.4391218722853854)])>)>}, {'location': <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>}, {'location': <(uint32 2, <('Sydney', 'YSSY', true, [(-0.59253928105207498, 2.6386469349889961)], [(-0.59137572239964786, 2.6392287230418559)])>)>}, {'location': <(uint32 2, <('Los Angeles', 'KCQT', true, [(0.59370283970450188, -2.0644336110828618)], [(0.59432360095955872, -2.063741622941031)])>)>}, {'location': <(uint32 2, <('Toronto', 'CYTZ', true, [(0.76154532446909495, -1.3857914260834978)], [(0.76212711252195475, -1.3860823201099277)])>)>}, {'location': <(uint32 2, <('Mexico City', 'MMMX', true, [(0.33917564548646723, -1.7296212887263802)], [(0.33919020153242879, -1.7302951778038682)])>)>}, {'location': <(uint32 2, <('Rio de Janeiro', 'SBRJ', true, [(-0.39968039870670141, -0.75340046626198298)], [(-0.39968039870670141, -0.75456400746111763)])>)>}, {'location': <(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>}, {'location': <(uint32 2, <('London', 'EGWU', true, [(0.89971722940307675, -0.007272211034407213)], [(0.89884456477707964, -0.0020362232784242244)])>)>}, {'location': <(uint32 2, <('Paris', 'LFPB', true, [(0.85462956287765413, 0.042760566673861078)], [(0.8528842336256599, 0.040724343395436846)])>)>}]
 
@@ -160,7 +176,8 @@ app-picker-layout=[{'kali-aircrack-ng.desktop': <{'position': <0>}>, 'kali-amass
 disable-user-extensions=false
 disabled-extensions=['readingstrip@lupantano.gihthub', 'dash-to-dock@micxgx.gmail.com', 'ding@rastersoft.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'ubuntu-appindicators@ubuntu.com']
 enabled-extensions=['ProxySwitcher@flannaghan.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'AlphabeticalAppGrid@stuarthayhurst', 'appindicatorsupport@rgcjonas.gmail.com', 'arcmenu@arcmenu.com', 'quake-terminal@diegodario88.github.io', 'blur-my-shell@aunetx', 'clipboard-indicator@tudmotu.com', 'dash-to-panel@jderose9.github.com', 'mediacontrols@cliffniff.github.com', 'Vitals@CoreCoding.com', 'GPaste@gnome-shell-extensions.gnome.org']
-favorite-apps=['mullvad-vpn.desktop', 'terminator.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'start-tor-browser.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'com.ktechpit.whatsie.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
+favorite-apps=['mullvad-vpn.desktop', 'terminator.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'start-tor-browser.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
+remember-mount-password=true
 welcome-dialog-last-shown-version='46.3.1'
 
 [org/gnome/shell/extensions/arcmenu]
@@ -173,7 +190,7 @@ menu-button-icon='Distro_Icon'
 menu-height=750
 menu-layout='Whisker'
 prefs-visible-page=0
-recently-installed-apps=['org.gnome.Calendar.desktop', 'org.gnome.clocks.desktop', 'org.gnome.Weather.desktop', 'ulauncher.desktop', 'virtualbox.desktop', 'mullvad-vpn.desktop', 'start-tor-browser.desktop', 'snap-store_snap-store.desktop', 'csbooks_csbooks.desktop']
+recently-installed-apps=['org.gnome.clocks.desktop', 'org.gnome.Weather.desktop', 'ulauncher.desktop', 'virtualbox.desktop', 'mullvad-vpn.desktop', 'start-tor-browser.desktop', 'snap-store_snap-store.desktop', 'csbooks_csbooks.desktop', 'debian-xterm.desktop', 'debian-uxterm.desktop', 'cutecom.desktop', 'chirp.desktop', 'gnuradio-grc.desktop', 'dk.gqrx.gqrx.desktop', 'org.wireshark.Wireshark.desktop', 're.rizin.cutter.desktop', 'rfdump.desktop', 'kali-mifare-classic-format.desktop', 'kali-sctpscan.desktop', 'kali-fang.desktop', 'kali-sfuzz.desktop', 'kali-siparmyknife.desktop', 'kali-truecrack.desktop', 'kali-mfcuk.desktop', 'kali-sipcrack.desktop', 'kali-hackrf_info.desktop', 'kali-ubertooth-util.desktop', 'kali-bettercap.desktop', 'kali-ohrwurm.desktop', 'kali-rtpinsertsound.desktop', 'kali-btscanner.desktop', 'kali-wifi-honey.desktop', 'kali-nfc-mfclassic.desktop', 'kali-heartleech.desktop', 'kali-blueranger.desktop', 'kali-cowpatty.desktop', 'kali-nfc-list.desktop', 'kali-crackle.desktop', 'kali-iaxflood.desktop', 'kali-airgeddon.desktop', 'kali-svreport.desktop', 'kali-beef-xss-stop.desktop', 'kali-enumiax.desktop', 'kali-regripper.desktop', 'kali-protos-sip.desktop', 'kali-sipp.desktop', 'kali-rtpbreak.desktop', 'kali-asleap.desktop', 'kali-ollydbg.desktop', 'kali-mfterm.desktop', 'kali-shellter.desktop', 'kali-ettercap.desktop', 'kali-bluelog.desktop', 'kali-svmap.desktop', 'kali-beef-xss.desktop', 'kali-svcrack.desktop', 'kali-rtpflood.desktop', 'kali-mfoc.desktop', 'kali-inviteflood.desktop', 'kali-afl-fuzz.desktop', 'kali-mdk3.desktop', 'kali-eapmd5pass.desktop', 'kali-svcrash.desktop', 'kali-bluesnarfer.desktop', 'kali-rtpmixsound.desktop', 'kali-svwar.desktop', 'org.gnome.Shotwell.desktop', 'org.gnome.Cheese.desktop', 'guvcview.desktop']
 search-entry-border-radius=(true, 25)
 update-notifier-project-version=65
 
@@ -234,6 +251,7 @@ dot-style-focused='DOTS'
 dot-style-unfocused='DOTS'
 extension-version=66
 hide-donate-icon-unixtime='1741581936904'
+hide-overview-on-startup=true
 hotkeys-overlay-combo='TEMPORARILY'
 intellihide=false
 panel-anchors='{"CMN-0x00000000":"MIDDLE"}'
