@@ -3,6 +3,9 @@
 #gnome settings
 dconf dump / >$HOME/dotfiles_kali/gnome_settings.bak
 
+#apt_list
+apt list --installed | cut -d "/" -f1 | grep -v "Listing..." >$HOME/dotfiles_kali/apt_list.bak
+
 #flatpaks_list
 flatpak list --app --columns=application >$HOME/dotfiles_kali/flatpaks_list.bak
 

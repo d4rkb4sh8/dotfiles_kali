@@ -274,6 +274,7 @@ mouse-action-scroll-down='NONE'
 mouse-action-scroll-up='NONE'
 
 [org/gnome/shell/extensions/quake-terminal]
+auto-hide-window=false
 horizontal-size=95
 render-on-primary-monitor=true
 terminal-id='terminator.desktop'

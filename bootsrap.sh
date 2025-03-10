@@ -5,7 +5,7 @@ set -e
 
 # Function to log messages with a timestamp
 log() {
-	echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $*"
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $*"
 }
 
 # Section: Initial Setup
@@ -14,17 +14,17 @@ sudo apt install -y git gh curl gawk cmake
 
 # Section: Install APT Packages
 log "Installing APT packages..."
-APT_PACKAGES=(
-	apparmor-profiles apparmor-utils asciiart autoconf bat btop build-essential
-	cmake cpufetch curl dconf-cli dict clamav cryptsetup-nuke-password dkms fail2ban
-	fastfetch fd-find file flatpak font-manager fzf gawk gdebi gh git gir1.2-gtop-2.0
-	gnome-software-plugin-flatpak sd rsync gnome-shell-extension-manager gpaste-2
-	gpg gtk2-engines-murrine httpie imagemagick info linux-headers-$(uname -r) lm-sensors
-	lolcat lynis mitmproxy most nala ncal openssl pass patchelf pipx plocate
-	hw-probe pandoc pkg-config speedtest-cli python-is-python3 rc rkhunter snapd stow
-	tldr terminator tmux ufw uptimed thefuck vlc whois w3m wget wikipedia2text zathura
-)
-sudo apt update -y && sudo apt full-upgrade -y && sudo apt install -y "${APT_PACKAGES[@]}" && sudo apt autoremove -y && sudo apt autoclean -y
+# APT_PACKAGES=(
+# 	apparmor-profiles apparmor-utils asciiart autoconf bat btop build-essential
+# 	cmake cpufetch curl dconf-cli dict clamav cryptsetup-nuke-password dkms fail2ban
+# 	fastfetch fd-find file flatpak font-manager fzf gawk gdebi gh git gir1.2-gtop-2.0
+# 	gnome-software-plugin-flatpak sd rsync gnome-shell-extension-manager gpaste-2
+# 	gpg gtk2-engines-murrine httpie imagemagick info linux-headers-$(uname -r) lm-sensors
+# 	lolcat lynis mitmproxy most nala ncal openssl pass patchelf pipx plocate
+# 	hw-probe pandoc pkg-config speedtest-cli python-is-python3 rc rkhunter snapd stow
+# 	tldr terminator tmux ufw uptimed thefuck vlc whois w3m wget wikipedia2text zathura
+# )
+sudo apt install $(cat $HOME/dotfiles_kali/apt_list.bak)
 
 # Section: Git Projects and dotfiles_kali Setup
 log "Setting up gitprojects and dotfiles_kali..."
