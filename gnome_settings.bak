@@ -146,7 +146,7 @@ migrated-gtk-settings=true
 search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
-initial-size=(890, 550)
+initial-size=(960, 1043)
 initial-size-file-chooser=(890, 550)
 
 [org/gnome/portal/filechooser/gnome-background-panel]
@@ -157,6 +157,9 @@ last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 
 [org/gnome/portal/filechooser/org.gnome.Settings]
 last-folder-path='/home/h4ck3r/Pictures/wallpapers'
+
+[org/gnome/portal/filechooser/org.gnome.World.PikaBackup]
+last-folder-path='/media/h4ck3r/Backups'
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=true
@@ -338,5 +341,5 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(0, 47)
+window-position=(0, 7)
 window-size=(1231, 902)
