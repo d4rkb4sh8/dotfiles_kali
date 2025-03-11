@@ -62,8 +62,8 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_002.jpg'
-picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_002.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_009.jpg'
+picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_009.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -72,6 +72,7 @@ mru-sources=[('xkb', 'us'), ('xkb', 'gb')]
 sources=[('xkb', 'gb'), ('xkb', 'us')]
 
 [org/gnome/desktop/interface]
+accent-color='blue'
 document-font-name='Hack Nerd Font 11'
 font-name='Hack Nerd Font 11'
 gtk-theme='Adwaita-dark'
@@ -114,7 +115,7 @@ two-finger-scrolling-enabled=true
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_002.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-03-10-00-46-14-wallpaper_009.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -149,6 +150,9 @@ initial-size=(890, 550)
 initial-size-file-chooser=(890, 550)
 
 [org/gnome/portal/filechooser/gnome-background-panel]
+last-folder-path='/home/h4ck3r/Pictures/wallpapers'
+
+[org/gnome/portal/filechooser/io.github.realmazharhussain.GdmSettings]
 last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 
 [org/gnome/portal/filechooser/org.gnome.Settings]
@@ -255,7 +259,7 @@ appicon-padding=4
 dot-position='BOTTOM'
 dot-style-focused='DOTS'
 dot-style-unfocused='DOTS'
-extension-version=67
+extension-version=68
 hide-donate-icon-unixtime='1741581936904'
 hide-overview-on-startup=true
 hotkeys-overlay-combo='TEMPORARILY'
@@ -268,6 +272,8 @@ panel-sizes='{"CMN-0x00000000":37}'
 prefs-opened=false
 primary-monitor='CMN-0x00000000'
 target-prefs-page=''
+trans-bg-color='#191919'
+trans-use-custom-bg=true
 window-preview-title-position='TOP'
 
 [org/gnome/shell/extensions/ding]
@@ -308,10 +314,13 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 
 [org/gnome/software]
 first-run=false
+flatpak-purge-timestamp=int64 1741662406
+install-timestamp=int64 1741653043
+update-notification-timestamp=int64 1741666643
 
 [org/gtk/gtk4/settings/color-chooser]
-custom-colors=[(0.94901961088180542, 0.94901961088180542, 0.94901961088180542, 1.0)]
-selected-color=(true, 0.38431373238563538, 0.62745100259780884, 0.91764706373214722, 1.0)
+custom-colors=[(0.098039217293262482, 0.098039217293262482, 0.098039217293262482, 1.0), (0.94901961088180542, 0.94901961088180542, 0.94901961088180542, 1.0)]
+selected-color=(true, 0.098039217293262482, 0.098039217293262482, 0.098039217293262482, 1.0)
 
 [org/gtk/gtk4/settings/file-chooser]
 show-hidden=false
