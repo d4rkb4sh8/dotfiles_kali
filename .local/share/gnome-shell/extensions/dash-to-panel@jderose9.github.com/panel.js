@@ -531,16 +531,9 @@ export const Panel = GObject.registerClass(
         let allocationMap = this.allocationMap[pos.element]
 
         if (allocationMap.actor) {
-          let considerActor =
-            pos.visible &&
-            (pos.element == Pos.DESKTOP_BTN ||
-              allocationMap.actor.get_children().length)
+          allocationMap.actor.visible = pos.visible
 
-          allocationMap.actor.visible = considerActor
-
-          if (!considerActor) {
-            return
-          }
+          if (!pos.visible) return
 
           // if the panel length is dynamic, get all visible
           // elements as a single group
@@ -1110,6 +1103,12 @@ export const Panel = GObject.registerClass(
       clipContainer.set_position(this.geom.x, this.geom.y)
 
       this._setVertical(this.panel, this.checkIfVertical())
+
+      // center the system menu popup relative to its panel button
+      if (this.statusArea.quickSettings?.menu) {
+        this.statusArea.quickSettings.menu._arrowSide = this.geom.position
+        this.statusArea.quickSettings.menu._arrowAlignment = 0.5
+      }
 
       // styles for theming
       Object.keys(St.Side).forEach((p) => {
