@@ -129,6 +129,7 @@ pixman
 pmix
 portaudio
 pulseaudio
+python-setuptools
 python@3.13
 rav1e
 readline

@@ -256,6 +256,7 @@ notify-on-copy=true
 animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
 appicon-margin=0
 appicon-padding=4
+click-action='TOGGLE-SPREAD'
 dot-position='BOTTOM'
 dot-style-focused='DOTS'
 dot-style-unfocused='DOTS'
