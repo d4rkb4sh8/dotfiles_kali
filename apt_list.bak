@@ -219,6 +219,7 @@ dracut-install
 dsniff
 dvisvgm
 e2fsprogs
+eaphammer
 eapmd5pass
 easy-rsa
 eatmydata
@@ -2610,6 +2611,7 @@ python3-bottle
 python3-brlapi
 python3-brotli
 python3-bs4
+python3-cachecontrol
 python3-cairo
 python3-capstone
 python3-cbor
@@ -2680,6 +2682,7 @@ python3-filteralchemy
 python3-flasgger
 python3-flask-celery-helper
 python3-flask-classful
+python3-flask-cors
 python3-flask-kvsession
 python3-flask-limiter
 python3-flask-login
@@ -2826,6 +2829,7 @@ python3-pastedeploy
 python3-pastescript
 python3-pcapy
 python3-pefile
+python3-pem
 python3-pexpect
 python3-pgspecial
 python3-phonenumbers
@@ -2898,6 +2902,7 @@ python3-pyqt5
 python3-pyqt6.sip
 python3-pyqt6
 python3-pyqtgraph
+python3-pyquery
 python3-pyramid
 python3-pyside2.qtcore
 python3-pyside2.qtgui
@@ -2909,6 +2914,7 @@ python3-pyte
 python3-python-multipart
 python3-pytz
 python3-pyvnc
+python3-pywebcopy
 python3-pywerview
 python3-pyzipper
 python3-qrcode
@@ -3272,6 +3278,7 @@ scrounge-ntfs
 sctpscan
 sd
 seabios
+seclists
 secure-socket-funneling-windows-binaries
 sed
 selinux-utils
