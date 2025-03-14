@@ -37,7 +37,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='power'
+last-panel='wifi'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/app-folders]
@@ -321,7 +321,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 
 [org/gnome/software]
 first-run=false
-flatpak-purge-timestamp=int64 1741740257
+flatpak-purge-timestamp=int64 1741921237
 install-timestamp=int64 1741653043
 update-notification-timestamp=int64 1741666643
 
