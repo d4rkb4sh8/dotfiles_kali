@@ -42,6 +42,7 @@ aspnetcore-targeting-pack-6.0
 at-spi2-common
 at-spi2-core
 atftpd
+atop
 attr
 atuin
 autoconf
@@ -81,6 +82,7 @@ bluez-hcidump
 bluez-obexd
 bluez-test-scripts
 bluez
+bmon
 bolt
 bsd-mailx
 bsdextrautils
@@ -94,6 +96,7 @@ bully
 bundler
 burpsuite
 busybox
+byobu
 bzip2
 ca-certificates-java
 ca-certificates
@@ -121,6 +124,7 @@ clang-19
 clang
 cmake-data
 cmake
+cmatrix
 colord-data
 colord
 comerr-dev
@@ -132,6 +136,7 @@ coreboot-utils-doc
 coreboot-utils
 coreutils
 cowpatty
+cowsay
 cpio
 cpp-13-x86-64-linux-gnu
 cpp-13
@@ -557,11 +562,13 @@ heartleech
 heif-gdk-pixbuf
 heif-thumbnailer
 hicolor-icon-theme
+hollywood
 hostapd-wpe
 hostapd
 hostname
 hotpatch
 hping3
+htop
 httpie
 hunspell-en-us
 hw-probe
@@ -624,6 +631,7 @@ java-wrappers
 javascript-common
 john-data
 john
+jp2a
 jq
 kali-archive-keyring
 kali-defaults-desktop
@@ -904,6 +912,8 @@ libconfig++11
 libconfig-inifiles-perl
 libconfig-tiny-perl
 libconfig11
+libconfuse-common
+libconfuse2
 libconst-fast-perl
 libcpanel-json-xs-perl
 libcppunit-1.15-0
@@ -1326,6 +1336,7 @@ libice-dev
 libice6
 libicu-dev
 libicu72
+libicu76
 libidn12
 libidn2-0
 libiec61883-0
@@ -1349,12 +1360,14 @@ libio-compress-brotli-perl
 libio-html-perl
 libio-interactive-perl
 libio-multiplex-perl
+libio-pty-perl
 libio-socket-inet6-perl
 libio-socket-ssl-perl
 libio-string-perl
 libio-stringy-perl
 libip4tc2
 libip6tc2
+libipc-run-perl
 libipc-run3-perl
 libipc-shareable-perl
 libipc-system-simple-perl
@@ -2208,6 +2221,7 @@ libxml2-dev
 libxml2-utils
 libxml2
 libxmlb2
+libxmp4
 libxmu6
 libxmuu1
 libxnnpack0
@@ -2354,6 +2368,7 @@ miredo
 mitmproxy
 mobile-broadband-provider-info
 modemmanager
+moreutils
 mosquitto
 most
 mount
@@ -2385,6 +2400,7 @@ ncurses-hexedit
 ncurses-term
 ndiff
 net-tools
+net.downloadhelper.coapp
 netbase
 netcat-traditional
 netdiscover
@@ -2460,6 +2476,7 @@ parted
 pass
 passing-the-hash
 passwd
+pastebinit
 patator
 patch
 patchelf
@@ -3151,6 +3168,7 @@ ruby-builder
 ruby-bundler
 ruby-cms-scanner
 ruby-concurrent
+ruby-connection-pool
 ruby-console
 ruby-daemons
 ruby-dev
@@ -3325,6 +3343,7 @@ sound-theme-freedesktop
 speech-dispatcher-audio-plugins
 speech-dispatcher-espeak-ng
 speech-dispatcher
+speedometer
 speedtest-cli
 sphinx-rtd-theme-common
 spiderfoot
