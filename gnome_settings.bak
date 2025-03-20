@@ -171,6 +171,9 @@ last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 [org/gnome/portal/filechooser/io.github.realmazharhussain.GdmSettings]
 last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 
+[org/gnome/portal/filechooser/net.cozic.joplin_desktop]
+last-folder-path='/home/h4ck3r/Downloads'
+
 [org/gnome/portal/filechooser/org.gnome.Settings]
 last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 
@@ -205,7 +208,7 @@ app-picker-layout=[{'kali-aircrack-ng.desktop': <{'position': <0>}>, 'kali-amass
 disable-user-extensions=false
 disabled-extensions=['readingstrip@lupantano.gihthub', 'dash-to-dock@micxgx.gmail.com', 'ding@rastersoft.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'ubuntu-appindicators@ubuntu.com']
 enabled-extensions=['ProxySwitcher@flannaghan.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'AlphabeticalAppGrid@stuarthayhurst', 'appindicatorsupport@rgcjonas.gmail.com', 'arcmenu@arcmenu.com', 'quake-terminal@diegodario88.github.io', 'blur-my-shell@aunetx', 'clipboard-indicator@tudmotu.com', 'dash-to-panel@jderose9.github.com', 'mediacontrols@cliffniff.github.com', 'Vitals@CoreCoding.com', 'GPaste@gnome-shell-extensions.gnome.org']
-favorite-apps=['mullvad-vpn.desktop', 'terminator.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'start-tor-browser.desktop', 'csbooks_csbooks.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'guvcview.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
+favorite-apps=['mullvad-vpn.desktop', 'terminator.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'chromium.desktop', 'start-tor-browser.desktop', 'csbooks_csbooks.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'guvcview.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
 remember-mount-password=true
 welcome-dialog-last-shown-version='46.3.1'
 
@@ -376,7 +379,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 
 [org/gnome/software]
 first-run=false
-flatpak-purge-timestamp=int64 1741921237
+flatpak-purge-timestamp=int64 1742436102
 install-timestamp=int64 1741653043
 update-notification-timestamp=int64 1741666643
 
