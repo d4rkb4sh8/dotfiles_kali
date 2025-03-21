@@ -37,8 +37,8 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='wifi'
-window-state=(980, 640, false)
+last-panel='keyboard'
+window-state=(1040, 733, false)
 
 [org/gnome/desktop/app-folders]
 folder-children=['Utilities', 'YaST', 'Pardus']
@@ -124,6 +124,11 @@ secondary-color='#000000000000'
 idle-delay=uint32 0
 
 [org/gnome/desktop/wm/keybindings]
+begin-move=@as []
+begin-resize=@as []
+close=['<Control>q']
+cycle-group=@as []
+cycle-group-backward=@as []
 maximize=@as []
 move-to-workspace-1=['<Super><Shift>1']
 move-to-workspace-10=['<Super><Shift>0']
@@ -135,6 +140,10 @@ move-to-workspace-6=['<Super><Shift>6']
 move-to-workspace-7=['<Super><Shift>7']
 move-to-workspace-8=['<Super><Shift>8']
 move-to-workspace-9=['<Super><Shift>9']
+panel-run-dialog=@as []
+switch-to-workspace-left=['<Alt>F11']
+switch-to-workspace-right=['<Alt>F12']
+toggle-maximized=@as []
 unmaximize=@as []
 
 [org/gnome/desktop/wm/preferences]
@@ -187,13 +196,13 @@ night-light-temperature=uint32 3410
 
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
-mic-mute=['F8']
+mic-mute=['<Alt>F8']
 screen-brightness-down=['<Ctrl><Super>Down']
 screen-brightness-up=['<Ctrl><Super>Up']
 screensaver=['<Control><Alt><Super>l']
-volume-down=['F6']
-volume-mute=['F5']
-volume-up=['F7']
+volume-down=['<Alt>F6']
+volume-mute=['<Alt>F5']
+volume-up=['<Alt>F7']
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control>space'
@@ -213,7 +222,7 @@ remember-mount-password=true
 welcome-dialog-last-shown-version='46.3.1'
 
 [org/gnome/shell/extensions/arcmenu]
-arcmenu-hotkey=['<Alt>m']
+arcmenu-hotkey=['<Alt>F2']
 custom-menu-button-icon-size=27.0
 distro-icon=9
 left-panel-width=340
@@ -344,7 +353,7 @@ auto-hide-window=false
 horizontal-size=97
 render-on-primary-monitor=true
 terminal-id='terminator.desktop'
-terminal-shortcut=['<Alt><Super>q']
+terminal-shortcut=['<Alt>F1']
 vertical-size=92
 
 [org/gnome/shell/extensions/space-bar/appearance]
@@ -368,7 +377,7 @@ overridden-settings={'org.gnome.mutter.edge-tiling': <@mb nothing>, 'org.gnome.d
 name=''
 
 [org/gnome/shell/keybindings]
-show-screenshot-ui=['<Shift><Control>5']
+show-screenshot-ui=['<Alt>F9']
 
 [org/gnome/shell/weather]
 automatic-location=true
