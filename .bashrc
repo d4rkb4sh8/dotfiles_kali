@@ -2,6 +2,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Ghostty shell integration for Bash. This should be at the top of your bashrc!
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+  builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
+
 # If not running interactively, don't do anything
 case $- in
 *i*) ;;
@@ -86,7 +91,7 @@ echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 
 # Atuin
- eval "$(atuin init bash)"
+eval "$(atuin init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"

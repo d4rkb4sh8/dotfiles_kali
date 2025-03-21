@@ -217,7 +217,7 @@ app-picker-layout=[{'kali-aircrack-ng.desktop': <{'position': <0>}>, 'kali-amass
 disable-user-extensions=false
 disabled-extensions=['readingstrip@lupantano.gihthub', 'dash-to-dock@micxgx.gmail.com', 'ding@rastersoft.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'ubuntu-appindicators@ubuntu.com']
 enabled-extensions=['ProxySwitcher@flannaghan.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'AlphabeticalAppGrid@stuarthayhurst', 'appindicatorsupport@rgcjonas.gmail.com', 'arcmenu@arcmenu.com', 'quake-terminal@diegodario88.github.io', 'blur-my-shell@aunetx', 'clipboard-indicator@tudmotu.com', 'dash-to-panel@jderose9.github.com', 'mediacontrols@cliffniff.github.com', 'Vitals@CoreCoding.com', 'GPaste@gnome-shell-extensions.gnome.org']
-favorite-apps=['mullvad-vpn.desktop', 'terminator.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'chromium.desktop', 'start-tor-browser.desktop', 'csbooks_csbooks.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'guvcview.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
+favorite-apps=['mullvad-vpn.desktop', 'ghostty_ghostty.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'firefox-esr.desktop', 'chromium.desktop', 'start-tor-browser.desktop', 'csbooks_csbooks.desktop', 'net.cozic.joplin_desktop.desktop', 'org.onlyoffice.desktopeditors.desktop', 'com.discordapp.Discord.desktop', 'guvcview.desktop', 'org.gnome.Software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.World.PikaBackup.desktop']
 remember-mount-password=true
 welcome-dialog-last-shown-version='46.3.1'
 
@@ -352,7 +352,7 @@ mouse-action-scroll-up='NONE'
 auto-hide-window=false
 horizontal-size=97
 render-on-primary-monitor=true
-terminal-id='terminator.desktop'
+terminal-id='ghostty_ghostty.desktop'
 terminal-shortcut=['<Alt>F1']
 vertical-size=92
 
