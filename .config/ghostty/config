@@ -2,7 +2,7 @@
 theme = Dracula+ 
 
 # FONTS 
-font-size = 12
+font-size = 13
 font-family = Hack Nerd Font
 font-feature = liga
 
