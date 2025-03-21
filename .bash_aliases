@@ -10,7 +10,6 @@ alias make10mb='truncate -s 10m ./10MB.dat' # make10mb:     Creates a file of 10
 alias bat='batcat --theme=Coldark-Dark  --style=full'
 alias ff='fastfetch --logo $HOME/.config/fastfetch/h4cker_ascii.txt'
 alias ffa='fastfetch -c all --logo $HOME/.config/fastfetch/h4cker_ascii.txt'
-alias rcedit='$EDITOR $HOME/.bashrc'
 alias c='clear'
 
 #   -------------------------------
