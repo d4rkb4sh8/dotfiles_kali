@@ -403,7 +403,6 @@ gir1.2-handy-1
 gir1.2-harfbuzz-0.0
 gir1.2-ibus-1.0
 gir1.2-javascriptcoregtk-4.1
-gir1.2-keybinder-3.0
 gir1.2-malcontent-0
 gir1.2-mutter-15
 gir1.2-nm-1.0
@@ -1417,7 +1416,6 @@ libkadm5clnt-mit12
 libkadm5srv-mit12
 libkate1
 libkdb5-10t64
-libkeybinder-3.0-0
 libkeyutils1
 libkf5syntaxhighlighting-data
 libkf5syntaxhighlighting5
@@ -3386,7 +3384,6 @@ tcpick
 tcpreplay
 tdb-tools
 tecla
-terminator
 testdisk
 tex-common
 tex-gyre
