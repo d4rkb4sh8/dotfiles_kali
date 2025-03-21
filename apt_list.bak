@@ -312,7 +312,6 @@ fonts-droid-fallback
 fonts-firacode
 fonts-font-awesome
 fonts-freefont-ttf
-fonts-inter-variable
 fonts-lato
 fonts-liberation-sans-narrow
 fonts-liberation
@@ -727,6 +726,7 @@ libaprutil1-ldap
 libaprutil1t64
 libapt-pkg-perl
 libapt-pkg6.0t64
+libapt-pkg7.0
 libarchive-zip-perl
 libarchive13t64
 libargon2-1
@@ -1132,7 +1132,6 @@ libgeoclue-2-0
 libgeocode-glib-2-0
 libgeoip1t64
 libgeos-c1t64
-libgeos3.13.0
 libgeos3.13.1
 libgeotiff5
 libges-1.0-0
@@ -1151,7 +1150,6 @@ libgjs0g
 libgl-dev
 libgl1-mesa-dri
 libgl1
-libglapi-mesa
 libgles2
 libglfw3
 libglib-object-introspection-perl
@@ -1410,6 +1408,7 @@ libjsoncpp26
 libjudydebian1
 libjxl-gdk-pixbuf
 libjxl0.10
+libjxl0.11
 libjxl0.9
 libjxr-tools
 libjxr0t64
@@ -2962,7 +2961,6 @@ python3-secretsocks
 python3-secure
 python3-serial
 python3-service-identity
-python3-setproctitle
 python3-setuptools-whl
 python3-setuptools
 python3-sgmllib3k
@@ -3187,8 +3185,6 @@ ruby-fiber-local
 ruby-get-process-mem
 ruby-gssapi
 ruby-gyoku
-ruby-hashie-forbidden-attributes
-ruby-hashie
 ruby-hitimes
 ruby-http-accept
 ruby-http-cookie
@@ -3269,7 +3265,6 @@ ruby-winrm-fs
 ruby-winrm
 ruby-xmlrpc
 ruby-yajl
-ruby-zeitwerk
 ruby-zip
 ruby3.3-dev
 ruby3.3-doc
