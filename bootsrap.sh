@@ -13,20 +13,6 @@ log "Starting initial setup..."
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y git gh curl gawk cmake
 
-# Section: Install APT Packages
-log "Installing APT packages..."
-# APT_PACKAGES=(
-# 	apparmor-profiles apparmor-utils asciiart autoconf bat btop build-essential
-# 	cmake cpufetch curl dconf-cli dict clamav cryptsetup-nuke-password dkms fail2ban
-# 	fastfetch fd-find file flatpak font-manager fzf gawk gdebi gh git gir1.2-gtop-2.0
-# 	gnome-software-plugin-flatpak sd rsync gnome-shell-extension-manager gpaste-2
-# 	gpg gtk2-engines-murrine httpie imagemagick info linux-headers-$(uname -r) lm-sensors
-# 	lolcat lynis mitmproxy most nala ncal openssl pass patchelf pipx plocate
-# 	hw-probe pandoc pkg-config speedtest-cli python-is-python3 rc rkhunter snapd stow
-# 	tldr terminator tmux ufw uptimed thefuck vlc whois w3m wget wikipedia2text zathura
-# )
-sudo apt install $(cat $HOME/dotfiles_kali/apt_list.bak)
-
 # Section: Git Projects and dotfiles_kali Setup
 log "Setting up gitprojects and dotfiles_kali..."
 mkdir -p $HOME/gitprojects
@@ -34,6 +20,10 @@ git clone https://github.com/d4rkb4sh8/notes.git $HOME/gitprojects/notes
 git clone https://github.com/d4rkb4sh8/dotfiles_kali.git $HOME/dotfiles_kali
 cd $HOME/dotfiles_kali && stow --adopt . && git restore .
 cp -r $HOME/dotfiles_kali/wallpapers $HOME/Pictures
+
+# Section: Install APT Packages
+log "Installing APT packages..."
+sudo apt install $(cat $HOME/dotfiles_kali/apt_list.bak)
 
 # Section: Flatpak and Snap Setup
 log "Setting up Flatpak and Snap..."
