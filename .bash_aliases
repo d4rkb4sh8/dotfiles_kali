@@ -7,11 +7,11 @@ alias make5mb='truncate -s 5m ./5MB.dat'    # make5mb:      Creates a file of 5m
 alias make10mb='truncate -s 10m ./10MB.dat' # make10mb:     Creates a file of 10mb size (all zeros)
 # alias cd='z'
 # alias cdi='zi'
-alias bat='batcat --theme=Coldark-Dark  --style=full'
+alias bat='batcat --color=always'
 alias ff='fastfetch --logo $HOME/.config/fastfetch/h4cker_ascii.txt'
 alias ffa='fastfetch -c all --logo $HOME/.config/fastfetch/h4cker_ascii.txt'
 alias c='clear'
-
+alias fzf='fzf --preview "batcat --color=always {}"'
 #   -------------------------------
 #  2. SAVE COPYING
 #   -------------------------------
@@ -163,13 +163,13 @@ alias clean='sudo nala autopurge && sudo nala autoremove && sudo nala clean'
 alias clearhistory='echo "" > ~/.bash_history && history -c && atuin search --delete-it-all'
 
 # a better ls
-alias ls='eza --icons --git'
-alias ll='eza -l --icons --git --header'
-alias llog='eza -l --icons --git --header -og'
+alias ls='eza --icons --git --group-directories-first'
+alias ll='eza -l --icons --git --header --group-directories-first'
+alias llog='eza -l --icons --git --header -og --group-directories-first'
 alias lt='eza --tree --level=2 --icons'
-alias lsa='eza -a --icons --git'
-alias lla='eza -la --icons --git --header'
-alias llaog='eza -la --icons --git --header -og'
+alias lsa='eza -a --icons --git --group-directories-first'
+alias lla='eza -la --icons --git --header --group-directories-first'
+alias llaog='eza -la --icons --git --header -og --group-directories-first'
 alias lta='eza -a --tree --level=2 --icons'
 
 # color ip command
