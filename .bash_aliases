@@ -36,6 +36,7 @@ alias ..4="cd ../../../../"
 #   -------------------------------
 # 4. COLOR
 #   -------------------------------
+alias cmatrix='cmatrix -r'
 
 #colorize output
 alias env='grc env'
