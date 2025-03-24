@@ -155,7 +155,7 @@ alias ux='chmod u+x'                   # ---x------ (user: --x, group: -, other:
 # 12.  GENERAL_TOOLS
 #-----------------------------------------------------------------------
 # update
-alias update='sudo apt update && sudo apt full-upgrade -y && brew update && brew upgrade && flatpak upgrade && rustup update && cargo install-update -a && snap refresh && sudo freshclam && sudo update-grub && sudo update-initramfs -u -k all && sudo updatedb -v;figlet "machine is updated !"|lolcat'
+alias update='sudo apt update && sudo apt full-upgrade -y && brew update && brew upgrade && flatpak upgrade && rustup update && cargo install-update -a && snap refresh && sudo update-grub && sudo update-initramfs -u -k all && sudo updatedb -v;figlet "machine is updated !"|lolcat'
 
 #clean
 alias clean='sudo nala autopurge && sudo nala autoremove && sudo nala clean'
@@ -291,3 +291,4 @@ alias wadl='gtfoblookup wadcoms list'
 alias hijacks='gtfoblookup hijacklibs search'
 alias hijackl='gtfoblookup hijacklibs list'
 alias gtfobs='gtfoblookup gtfobins search'
+alias gtfobl='gtfoblookup gtfobins list'
