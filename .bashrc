@@ -95,7 +95,7 @@ eval "$(atuin init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"
-export STARSHIP_CONFIG=~/$HOME/.config/starship/starship.toml
+export STARSHIP_CONFIG=~/$HOME/.config/starship/.config/starship.toml
 
 # zoxide
 eval "$(zoxide init bash)"
