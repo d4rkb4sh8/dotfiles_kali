@@ -1854,9 +1854,6 @@ libpython2.7-minimal
 libpython2.7-stdlib
 libpython3-dev
 libpython3-stdlib
-libpython3.12-minimal
-libpython3.12-stdlib
-libpython3.12t64
 libpython3.13-dev
 libpython3.13-minimal
 libpython3.13-stdlib
@@ -2239,8 +2236,10 @@ libvulkan1
 libwacom-common
 libwacom9
 libwavpack1
+libwayland-bin
 libwayland-client0
 libwayland-cursor0
+libwayland-dev
 libwayland-egl1
 libwayland-server0
 libwbclient0
@@ -2942,6 +2941,7 @@ python3-marshmallow
 python3-masky
 python3-matplotlib-inline
 python3-matplotlib
+python3-maturin
 python3-md2pdf
 python3-mdurl
 python3-mechanize
