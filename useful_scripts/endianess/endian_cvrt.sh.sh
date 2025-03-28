@@ -64,4 +64,4 @@ echo "${overlay}${divider}${reset}"
 
 printf "${sapphire}%-25s ${overlay}│${reset} ${sky}%s${reset}\n" "Big-Endian (BE)" "$big_endian"
 printf "${sapphire}%-25s ${overlay}│${reset} ${peach}%s${reset}\n" "Little-Endian (LE)" "$little_endian"
-echo "${overlay}${divider}${reset}\n"
+echo "${overlay}${divider}${reset}"

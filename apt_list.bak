@@ -110,6 +110,7 @@ certipy-ad
 cewl
 cfortran
 cgpt
+checksec
 cherrytree
 chirp
 chntpw
@@ -350,6 +351,7 @@ gcc-13-base
 gcc-13-x86-64-linux-gnu
 gcc-13
 gcc-14-base
+gcc-14-base
 gcc-14-x86-64-linux-gnu
 gcc-14
 gcc-mingw-w64-base
@@ -363,10 +365,13 @@ gcr4
 gcr
 gdal-data
 gdal-plugins
+gdb
+gdbserver
 gdebi-core
 gdebi
 gdisk
 gdm3
+genisoimage
 geoclue-2.0
 geocode-glib-common
 geoip-database
@@ -795,6 +800,7 @@ libayatana-indicator3-7
 libb-hooks-endofscope-perl
 libb-hooks-op-check-perl
 libb2-1
+libbabeltrace1
 libbcg729-0
 libbdplus0
 libberkeleydb-perl
@@ -856,8 +862,11 @@ libbz2-dev
 libc-bin
 libc-dev-bin
 libc-l10n
+libc6-dbg
+libc6-dbg
 libc6-dev
 libc6-i386
+libc6
 libc6
 libcaca0
 libcacard0
@@ -992,6 +1001,8 @@ libdca0
 libdconf1
 libde265-0
 libdebconfclient0
+libdebuginfod-common
+libdebuginfod1t64
 libdecor-0-0
 libdeflate-dev
 libdeflate0
@@ -1151,6 +1162,7 @@ libgbm1
 libgc1
 libgcc-13-dev
 libgcc-14-dev
+libgcc-s1
 libgcc-s1
 libgck-1-0
 libgck-2-2
@@ -1395,6 +1407,7 @@ libicu76
 libid3tag0
 libidn12
 libidn2-0
+libidn2-0
 libidn2-dev
 libiec61883-0
 libieee1284-3t64
@@ -1431,6 +1444,7 @@ libipc-run-perl
 libipc-run3-perl
 libipc-shareable-perl
 libipc-system-simple-perl
+libipt2
 libiptcdata0
 libiscsi7
 libisl23
@@ -2034,6 +2048,8 @@ libsoup-2.4-1
 libsoup-3.0-0
 libsoup-3.0-common
 libsoup2.4-common
+libsource-highlight-common
+libsource-highlight4t64
 libsoxr0
 libspa-0.2-bluetooth
 libspa-0.2-modules
@@ -2176,6 +2192,7 @@ libunibreak6
 libunicode-linebreak-perl
 libunicode-map-perl
 libunicode-utf8-perl
+libunistring5
 libunistring5
 libunsafessl1.0.2
 libunwind8
