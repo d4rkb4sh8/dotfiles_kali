@@ -29,6 +29,7 @@ apparmor
 appstream
 apt-config-icons
 apt-file
+apt-listchanges
 apt-utils
 apt
 arj
@@ -2818,6 +2819,7 @@ python3-cvss
 python3-cycler
 python3-dateutil
 python3-dbus
+python3-debconf
 python3-debian
 python3-decorator
 python3-defusedxml

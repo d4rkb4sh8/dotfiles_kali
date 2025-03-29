@@ -403,7 +403,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 
 [org/gnome/software]
 first-run=false
-flatpak-purge-timestamp=int64 1743134320
+flatpak-purge-timestamp=int64 1743206554
 install-timestamp=int64 1741653043
 update-notification-timestamp=int64 1741666643
 
@@ -425,10 +425,10 @@ location-mode='path-bar'
 show-hidden=false
 show-size-column=true
 show-type-column=true
-sidebar-width=189
+sidebar-width=252
 sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(26, 23)
+window-position=(344, 47)
 window-size=(1231, 902)
