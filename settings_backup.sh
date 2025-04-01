@@ -3,6 +3,9 @@
 #gnome settings
 dconf dump / >$HOME/dotfiles_kali/gnome_settings.bak
 
+# XFCE settings
+#cp -Trv $HOME/.config/xfce4 $HOME/dotfiles/xfce4/
+
 #apt_list
 apt list --installed | cut -d "/" -f1 | grep -v "Listing..." >$HOME/dotfiles_kali/apt_list.bak
 
