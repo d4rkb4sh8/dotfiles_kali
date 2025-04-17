@@ -74,7 +74,7 @@ export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/:/home/h4ck3r/.cargo/bin:home/h
 #EDITOR=nano
 
 #homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #ble.sh
 source ~/.local/share/blesh/ble.sh
@@ -101,4 +101,4 @@ export STARSHIP_CONFIG=~/$HOME/.config/starship/.config/starship.toml
 eval "$(zoxide init bash)"
 
 # rust/cargo
-. "$HOME/.cargo/env"
+#. "$HOME/.cargo/env"
