@@ -1,12 +1,3 @@
-add_newline = false
-format = """$directory$character""""
-right_format = """$all""""
-
-[os]
-format = "on [($name )]($style)"
-style = "bold red"
-disabled = false
-
 [aws]
 symbol = "  "
 

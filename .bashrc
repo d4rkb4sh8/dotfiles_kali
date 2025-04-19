@@ -59,28 +59,31 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
 
+
 # colorize output
 GRC_ALIASES=true
-[[ -s "/etc/profile.d/grc.sh" ]] && source /etc/grc.sh
 
 #Brightness control from keybaord
 gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-up "['<Ctrl><Super>Up']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-down "['<Ctrl><Super>Down']"
 
 #path
-export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/:/home/h4ck3r/.cargo/bin:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/games:/usr/local/bin
+export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/:/home/h4ck3r/.local/bin:/usr/bin:/usr/games:/usr/local/bin:/opt
 
 # preferred text editor
-#EDITOR=nano
+export EDITOR='nvim'
 
 #homebrew
-#eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #ble.sh
 source ~/.local/share/blesh/ble.sh
 
 #most - colorful output for man
 #export PAGER=most
+
+# Colorful manpages
+export MANPAGER='nvim +Man!'
 
 #highlight less
 # export LESSOPEN="| /usr/bin/highlight %s --out-format xterm256 --force"
@@ -93,12 +96,12 @@ echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 # Atuin
 eval "$(atuin init bash)"
 
-#starship prompt - shell prompt
-eval "$(starship init bash)"
-export STARSHIP_CONFIG=~/$HOME/.config/starship/.config/starship.toml
-
 # zoxide
 eval "$(zoxide init bash)"
 
-# rust/cargo
-#. "$HOME/.cargo/env"
+#starship prompt - shell prompt
+eval "$(starship init bash)"
+
+
+
+

@@ -1,20 +1,16 @@
 [global_config]
-  inactive_color_offset = 0.49053030303030304
-  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, TerminatorThemes, SearchPlugin
-  ask_before_closing = never
+  inactive_color_offset = 0.4013605442176871
+  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, TerminatorThemes
+  suppress_multiple_term_dialog = True
   always_split_with_profile = True
   link_single_click = True
 [keybindings]
-  go_up = <Alt>k
-  go_down = <Alt>j
-  go_left = <Alt>h
-  go_right = <Alt>l
   split_horiz = <Primary><Alt>minus
   split_vert = <Primary><Alt>backslash
-  resize_up = <Shift><Alt>k
-  resize_down = <Shift><Alt>j
-  resize_left = <Shift><Alt>h
-  resize_right = <Shift><Alt>l
+  resize_up = <Shift><Alt>Up
+  resize_down = <Shift><Alt>Down
+  resize_left = <Shift><Alt>Left
+  resize_right = <Shift><Alt>Right
   switch_to_tab_1 = <Alt>1
   switch_to_tab_2 = <Alt>2
   switch_to_tab_3 = <Alt>3
@@ -25,37 +21,18 @@
   switch_to_tab_8 = <Alt>8
   switch_to_tab_9 = <Alt>9
   switch_to_tab_10 = <Alt>0
-  layout_launcher = ""
 [profiles]
   [[default]]
     background_color = "#1c1b22"
-    background_darkness = 0.95
+    background_darkness = 0.91
     background_type = transparent
     cursor_bg_color = "#708284"
-    font = Hack Nerd Font 14
+    font = Hack Nerd Font 13
     foreground_color = "#ffffff"
     scrollback_infinite = True
     palette = "#7d8b8f:#b23a52:#789b6a:#b9ac4a:#2a7fac:#bd4f5a:#44a799:#d2d8d9:#888888:#f24840:#80c470:#ffeb62:#4196ff:#fc5275:#53cdbd:#d2d8d9"
     use_system_font = False
-    bold_is_bright = True
-    copy_on_selection = True
-    title_hide_sizetext = True
-    title_transmit_fg_color = "#2a2a2a"
-    title_transmit_bg_color = "#99c1f1"
-    title_receive_fg_color = "#2a2a2a"
-    title_receive_bg_color = "#ffbe6f"
-    title_inactive_fg_color = "#deddda"
-    title_inactive_bg_color = "#2a2a2a"
-  [[Darkside]]
-    background_color = "#222324"
-    background_darkness = 0.96
-    background_type = transparent
-    cursor_bg_color = "#bbbbbb"
-    font = Hack Nerd Font 13
-    foreground_color = "#bababa"
-    scrollback_infinite = True
-    palette = "#000000:#e8341c:#68c256:#f2d42c:#1c98e8:#8e69c9:#1c98e8:#bababa:#000000:#e05a4f:#77b869:#efd64b:#387cd3:#957bbe:#3d97e2:#bababa"
-    use_system_font = False
+    use_theme_colors = True
     bold_is_bright = True
     copy_on_selection = True
     title_hide_sizetext = True
