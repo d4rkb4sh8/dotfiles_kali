@@ -572,6 +572,10 @@ kismet-capture-ubertooth-one
 kismet-core
 kismet-logtools
 kismet
+kitty-doc
+kitty-shell-integration
+kitty-terminfo
+kitty
 klibc-utils
 kmod
 krb5-locales

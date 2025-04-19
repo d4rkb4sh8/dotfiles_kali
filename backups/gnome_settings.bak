@@ -49,6 +49,7 @@ secondary-color='#000000000000'
 
 [org/gnome/desktop/input-sources]
 mru-sources=[('xkb', 'us'), ('xkb', 'gb')]
+show-all-sources=true
 sources=[('xkb', 'gb'), ('xkb', 'us')]
 
 [org/gnome/desktop/interface]
@@ -56,7 +57,7 @@ accent-color='blue'
 clock-show-weekday=true
 document-font-name='Hack Nerd Font 11'
 font-name='Hack Nerd Font 11'
-gtk-theme='adw-gtk3-blue-dark'
+gtk-theme='adw-gtk3-dark'
 icon-theme='Tela-circle-dark'
 monospace-font-name='Hack Nerd Font 10'
 show-battery-percentage=true
@@ -65,7 +66,7 @@ show-battery-percentage=true
 automount=true
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-nautilus', 'firefox-esr', 'org-gnome-software', 'ulauncher']
+application-children=['org-gnome-nautilus', 'firefox-esr', 'org-gnome-software', 'ulauncher', 'org-gnome-tweaks']
 
 [org/gnome/desktop/notifications/application/firefox-esr]
 application-id='firefox-esr.desktop'
@@ -75,6 +76,9 @@ application-id='org.gnome.Nautilus.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-software]
 application-id='org.gnome.Software.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-tweaks]
+application-id='org.gnome.tweaks.desktop'
 
 [org/gnome/desktop/notifications/application/ulauncher]
 application-id='ulauncher.desktop'
@@ -196,6 +200,7 @@ menu-height=700
 menu-layout='Whisker'
 multi-monitor=true
 prefs-visible-page=0
+recently-installed-apps=['kitty.desktop']
 search-entry-border-radius=(true, 25)
 update-notifier-project-version=65
 
@@ -338,6 +343,9 @@ tile-topright-quarter-ignore-ta=@as []
 toggle-always-on-top=@as []
 toggle-tiling-popup=@as []
 
+[org/gnome/shell/extensions/user-theme]
+name=''
+
 [org/gnome/shell/keybindings]
 show-screenshot-ui=['<Alt>F9']
 
@@ -352,5 +360,5 @@ custom-colors=[(0.94901961088180542, 0.94901961088180542, 0.94901961088180542, 1
 selected-color=(true, 0.96470588445663452, 0.3803921639919281, 0.31764706969261169, 1.0)
 
 [org/gtk/gtk4/settings/file-chooser]
-show-hidden=false
+show-hidden=true
 sort-directories-first=true
