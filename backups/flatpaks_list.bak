@@ -1,8 +1,9 @@
 com.discordapp.Discord
 com.github.jeromerobert.pdfarranger
 com.ktechpit.whatsie
-com.neatdecisions.Detwinner
+net.code_industry.MasterPDFEditor
 net.sourceforge.Pdfedit
+net.sourceforge.jpdftweak.jPdfTweak
 org.gnome.World.PikaBackup
 org.onlyoffice.desktopeditors
 org.qbittorrent.qBittorrent

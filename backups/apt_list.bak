@@ -140,6 +140,7 @@ brutespray
 bsd-mailx
 bsdextrautils
 bsdutils
+btop
 btscanner
 bubblewrap
 build-essential
@@ -417,6 +418,7 @@ fdisk
 fern-wifi-cracker
 feroxbuster
 ferret-sidejack
+ffmpeg
 ffuf
 fierce
 figlet
@@ -1079,6 +1081,7 @@ libavahi-core7
 libavahi-glib1
 libavc1394-0
 libavcodec61
+libavdevice61
 libavfilter10
 libavformat61
 libavif-gdk-pixbuf
@@ -3087,6 +3090,7 @@ mpg123
 msfpc
 mssqlpwner
 mtd-utils
+mullvad-vpn
 multiforcer
 multimac
 multimon-ng
@@ -3121,6 +3125,7 @@ neo4j
 neovim-runtime
 neovim
 net-tools
+net.downloadhelper.coapp
 netbase
 netcat-traditional
 netdiscover
@@ -3811,6 +3816,7 @@ python3-msgpack
 python3-msldap
 python3-multi-key-dict
 python3-multidict
+python3-mutagen
 python3-mypy-boto3-ebs
 python3-mypy-extensions
 python3-mysqldb
@@ -4899,6 +4905,7 @@ yara
 yelp-xsl
 yelp
 yersinia
+yt-dlp
 zaproxy
 zenity-common
 zenity

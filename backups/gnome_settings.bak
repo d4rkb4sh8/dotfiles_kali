@@ -57,7 +57,7 @@ accent-color='blue'
 clock-show-weekday=true
 document-font-name='Hack Nerd Font 11'
 font-name='Hack Nerd Font 11'
-gtk-theme='Kali-Dark'
+gtk-theme='adw-gtk3-blue-dark'
 icon-theme='Tela-circle-dark'
 monospace-font-name='Hack Nerd Font 10'
 show-battery-percentage=true
@@ -66,7 +66,7 @@ show-battery-percentage=true
 automount=true
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-nautilus', 'firefox-esr', 'org-gnome-software', 'ulauncher', 'org-gnome-tweaks', 'gnome-power-panel']
+application-children=['org-gnome-nautilus', 'firefox-esr', 'org-gnome-software', 'ulauncher', 'org-gnome-tweaks', 'gnome-power-panel', 'org-qbittorrent-qbittorrent']
 
 [org/gnome/desktop/notifications/application/firefox-esr]
 application-id='firefox-esr.desktop'
@@ -82,6 +82,9 @@ application-id='org.gnome.Software.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-tweaks]
 application-id='org.gnome.tweaks.desktop'
+
+[org/gnome/desktop/notifications/application/org-qbittorrent-qbittorrent]
+application-id='org.qbittorrent.qBittorrent.desktop'
 
 [org/gnome/desktop/notifications/application/ulauncher]
 application-id='ulauncher.desktop'
@@ -125,6 +128,19 @@ unmaximize=['<Super>Down']
 [org/gnome/desktop/wm/preferences]
 button-layout='close,minimize,maximize:appmenu'
 
+[org/gnome/evince/default]
+continuous=true
+dual-page=false
+dual-page-odd-left=false
+enable-spellchecking=true
+fullscreen=false
+inverted-colors=false
+show-sidebar=true
+sidebar-page='thumbnails'
+sidebar-size=132
+sizing-mode='automatic'
+window-ratio=(1.5686274509803921, 1.3181818181818181)
+
 [org/gnome/evolution-data-server]
 migrated=true
 
@@ -158,7 +174,13 @@ search-filter-time-type='last_modified'
 [org/gnome/nautilus/window-state]
 initial-size=(800, 550)
 initial-size-file-chooser=(890, 550)
-maximized=false
+maximized=true
+
+[org/gnome/portal/filechooser/chromium]
+last-folder-path='/home/h4ck3r/Downloads/WhatSie'
+
+[org/gnome/portal/filechooser/net.code_industry.MasterPDFEditor]
+last-folder-path='/home/h4ck3r/Downloads/WhatSie'
 
 [org/gnome/portal/filechooser/org.gnome.World.PikaBackup]
 last-folder-path='/media/h4ck3r/Backups'
@@ -206,7 +228,7 @@ menu-height=700
 menu-layout='Whisker'
 multi-monitor=true
 prefs-visible-page=0
-recently-installed-apps=['kitty.desktop', 'debian-xterm.desktop', 'debian-uxterm.desktop', 'chirp.desktop', 'code-oss.desktop', 'cutecom.desktop', 'dbeaver.desktop', 'driftnet.desktop', 'edb.desktop', 'fwbuilder.desktop', 'gnuradio-grc.desktop', 'xgpsspeed.desktop', 'xgps.desktop', 'dk.gqrx.gqrx.desktop', 'org.gtkhash.gtkhash.desktop', 'hexwalk.desktop', 'imhex.desktop', 'kali-autopilot.desktop', 'xsser.desktop', 'mcedit.desktop', 'org.zim_wiki.Zim.desktop', 'mc.desktop', 'rfdump.desktop', 're.rizin.cutter.desktop', 'kde4-nmapsi4.desktop', 'routerkeygen.desktop', 'obsidian.desktop', 'tiger.desktop', 'lynis.desktop', 'kali-ext4magic.desktop', 'kali-iaxflood.desktop', 'kali-copy-router-config.pl.desktop', 'kali-asleap.desktop', 'kali-grokevt-addlog.desktop', 'kali-blueranger.desktop', 'kali-ftest.desktop', 'kali-thc-ssl-dos.desktop', 'kali-wifi-honey.desktop', 'kali-braa.desktop', 'kali-dradis.desktop', 'kali-ollydbg.desktop', 'kali-sherlock.desktop', 'kali-mdk3.desktop', 'kali-dnswalk.desktop', 'kali-yersinia.desktop', 'kali-fiked.desktop', 'kali-regripper.desktop', 'kali-enumiax.desktop', 'kali-paros.desktop', 'kali-bloodhound.desktop', 'kali-reglookup.desktop', 'kali-johnny.desktop', 'kali-sparrow-wifi.desktop', 'kali-safecopy.desktop', 'kali-ubertooth-util.desktop', 'kali-p0f.desktop', 'kali-rtpflood.desktop', 'kali-vinetto.desktop', 'kali-eapmd5pass.desktop', 'kali-missidentify.desktop', 'kali-merge-router-config.pl.desktop', 'kali-defectdojo.desktop', 'kali-readpe.desktop', 'kali-cmospwd.desktop', 'kali-mfoc.desktop', 'kali-recoverjpeg.desktop', 'kali-galleta.desktop', 'kali-gvm-start.desktop', 'kali-snort.desktop', 'kali-villain.desktop', 'kali-dc3dd.desktop', 'kali-padbuster.desktop', 'kali-xplico-webui-stop.desktop', 'kali-fcrackzip.desktop', 'kali-sfuzz.desktop', 'kali-sniffjoke.desktop', 'kali-crackle.desktop', 'kali-exploitdb-papers.desktop', 'kali-affcat.desktop', 'kali-sipcrack.desktop', 'kali-sctpscan.desktop', 'kali-oscanner.desktop', 'kali-mdb-sql.desktop', 'kali-ssdeep.desktop', 'kali-xplico-webui.desktop', 'kali-yara.desktop', 'kali-armitage.desktop', 'kali-maskgen.desktop', 'kali-statsgen.desktop', 'kali-rtpinsertsound.desktop', 'kali-mac-robber.desktop', 'kali-httrack.desktop', 'kali-shellter.desktop', 'kali-beef-xss.desktop', 'kali-dhcpig.desktop', 'kali-jboss-win.desktop', 'kali-chkrootkit.desktop', 'kali-shellnoob.desktop', 'kali-gvm-feed-update.desktop', 'kali-apktool.desktop', 'kali-sidguess.desktop', 'kali-ncat.desktop', 'kali-nipper.desktop', 'kali-tlssled.desktop', 'kali-jd-gui.desktop', 'kali-tcpflow.desktop', 'kali-rifiuti.desktop', 'kali-bettercap.desktop', 'kali-0trace.sh.desktop', 'kali-firewalk.desktop', 'kali-metagoofil.desktop', 'kali-myrescue.desktop', 'kali-hackrf_info.desktop', 'kali-pasco.desktop', 'kali-ext3grep.desktop', 'kali-zaproxy.desktop', 'kali-jsql.desktop', 'kali-termineter.desktop', 'kali-hexinject.desktop', 'kali-dradis-stop.desktop', 'kali-svcrash.desktop', 'kali-rtpmixsound.desktop', 'kali-bluelog.desktop', 'kali-witnessme.desktop', 'kali-mifare-classic-format.desktop', 'kali-veil.desktop', 'kali-ohrwurm.desktop', 'kali-ass.desktop', 'kali-sipsak.desktop', 'kali-rtpbreak.desktop', 'kali-CAT.desktop', 'kali-havoc.desktop', 'kali-gvm-stop.desktop', 'kali-sslsniff.desktop', 'kali-joomscan.desktop', 'kali-t50.desktop', 'kali-sucrack.desktop', 'kali-btscanner.desktop', 'kali-sipp.desktop', 'kali-airgeddon.desktop', 'kali-defectdojo-stop.desktop', 'kali-mfterm.desktop', 'kali-protos-sip.desktop', 'kali-sqlninja.desktop', 'kali-webscarab.desktop', 'kali-dd_rescue.desktop', 'kali-rcrack.desktop', 'kali-truecrack.desktop', 'kali-svmap.desktop', 'kali-bluesnarfer.desktop', 'kali-sentrypeer.desktop', 'kali-ghidra.desktop', 'kali-nfc-mfclassic.desktop', 'kali-beef-xss-stop.desktop', 'kali-owasp-mantra-ff.desktop', 'kali-clamscan.desktop', 'kali-assetfinder.desktop', 'kali-cisco-torch.desktop', 'kali-maryam.desktop', 'groovyConsole.desktop', 'kali-grokevt-builddb.desktop', 'kali-dirsearch.desktop', 'kali-foremost.desktop', 'kali-darkstat.desktop', 'gvim.desktop', 'kali-gvm-check-setup.desktop', 'kali-cdp.desktop', 'kali-heartleech.desktop', 'kali-grokevt-parselog.desktop', 'kali-hashrat.desktop', 'kali-tnscmd10g.desktop', 'kali-cge.pl.desktop', 'kali-hamster-sidejack.desktop', 'kali-webacoo.desktop', 'kali-afl-fuzz.desktop', 'kali-uniscan-gui.desktop', 'kali-eyewitness.desktop', 'kali-maltego.desktop', 'kali-svreport.desktop', 'kali-apache-users.desktop', 'kali-rfcat.desktop', 'kali-policygen.desktop', 'kali-nfc-list.desktop', 'kali-grokevt-findlogs.desktop', 'kali-bed.desktop', 'kali-crackmapexec.desktop', 'kali-parsero.desktop', 'kali-svwar.desktop', 'kali-intrace.desktop', 'kali-nishang.desktop', 'kali-d2j-dex2jar.desktop', 'kali-jadx-gui.desktop', 'kali-sqldict.desktop', 'kali-grokevt-ripdll.desktop', 'kali-fang.desktop', 'kali-rkhunter.desktop', 'kali-jboss-linux.desktop', 'kali-undbx.desktop', 'kali-rcracki_mt.desktop', 'kali-twofi.desktop', 'kali-readpst.desktop', 'kali-ferret-sidejack.desktop', 'kali-dnstracer.desktop', 'kali-evilgrade.desktop', 'kali-ettercap.desktop', 'kali-freeradius.desktop', 'kali-rifiuti2.desktop', 'kali-watobo.desktop', 'kali-urlcrazy.desktop', 'kali-hb-honeypot.desktop', 'kali-javasnoop.desktop', 'kali-slowhttptest.desktop', 'kali-siparmyknife.desktop', 'kali-recoverdm.desktop', 'kali-above.desktop', 'kali-siege.desktop', 'kali-gvm-setup.desktop', 'kali-cowpatty.desktop', 'kali-cymothoa.desktop', 'kali-mfcuk.desktop', 'kali-sqlsus.desktop', 'kali-extundelete.desktop', 'kali-inviteflood.desktop', 'kali-dcfldd.desktop', 'kali-unhide.desktop', 'kali-osrframework-cli.desktop', 'kali-sara.desktop', 'kali-bytecode-viewer.desktop', 'kali-svcrack.desktop', 'kali-ewfacquire.desktop', 'kali-fragrouter.desktop', 'kali-cisco-ocs.desktop']
+recently-installed-apps=['kitty.desktop', 'debian-xterm.desktop', 'debian-uxterm.desktop', 'chirp.desktop', 'code-oss.desktop', 'cutecom.desktop', 'dbeaver.desktop', 'driftnet.desktop', 'edb.desktop', 'fwbuilder.desktop', 'gnuradio-grc.desktop', 'xgpsspeed.desktop', 'xgps.desktop', 'dk.gqrx.gqrx.desktop', 'org.gtkhash.gtkhash.desktop', 'hexwalk.desktop', 'imhex.desktop', 'kali-autopilot.desktop', 'xsser.desktop', 'mcedit.desktop', 'org.zim_wiki.Zim.desktop', 'mc.desktop', 'rfdump.desktop', 're.rizin.cutter.desktop', 'kde4-nmapsi4.desktop', 'routerkeygen.desktop', 'obsidian.desktop', 'tiger.desktop', 'lynis.desktop', 'kali-ext4magic.desktop', 'kali-iaxflood.desktop', 'kali-copy-router-config.pl.desktop', 'kali-asleap.desktop', 'kali-grokevt-addlog.desktop', 'kali-blueranger.desktop', 'kali-ftest.desktop', 'kali-thc-ssl-dos.desktop', 'kali-wifi-honey.desktop', 'kali-braa.desktop', 'kali-dradis.desktop', 'kali-ollydbg.desktop', 'kali-sherlock.desktop', 'kali-mdk3.desktop', 'kali-dnswalk.desktop', 'kali-yersinia.desktop', 'kali-fiked.desktop', 'kali-regripper.desktop', 'kali-enumiax.desktop', 'kali-paros.desktop', 'kali-bloodhound.desktop', 'kali-reglookup.desktop', 'kali-johnny.desktop', 'kali-sparrow-wifi.desktop', 'kali-safecopy.desktop', 'kali-ubertooth-util.desktop', 'kali-p0f.desktop', 'kali-rtpflood.desktop', 'kali-vinetto.desktop', 'kali-eapmd5pass.desktop', 'kali-missidentify.desktop', 'kali-merge-router-config.pl.desktop', 'kali-defectdojo.desktop', 'kali-readpe.desktop', 'kali-cmospwd.desktop', 'kali-mfoc.desktop', 'kali-recoverjpeg.desktop', 'kali-galleta.desktop', 'kali-gvm-start.desktop', 'kali-snort.desktop', 'kali-villain.desktop', 'kali-dc3dd.desktop', 'kali-padbuster.desktop', 'kali-xplico-webui-stop.desktop', 'kali-fcrackzip.desktop', 'kali-sfuzz.desktop', 'kali-sniffjoke.desktop', 'kali-crackle.desktop', 'kali-exploitdb-papers.desktop', 'kali-affcat.desktop', 'kali-sipcrack.desktop', 'kali-sctpscan.desktop', 'kali-oscanner.desktop', 'kali-mdb-sql.desktop', 'kali-ssdeep.desktop', 'kali-xplico-webui.desktop', 'kali-yara.desktop', 'kali-armitage.desktop', 'kali-maskgen.desktop', 'kali-statsgen.desktop', 'kali-rtpinsertsound.desktop', 'kali-mac-robber.desktop', 'kali-httrack.desktop', 'kali-shellter.desktop', 'kali-beef-xss.desktop', 'kali-dhcpig.desktop', 'kali-jboss-win.desktop', 'kali-chkrootkit.desktop', 'kali-shellnoob.desktop', 'kali-gvm-feed-update.desktop', 'kali-apktool.desktop', 'kali-sidguess.desktop', 'kali-ncat.desktop', 'kali-nipper.desktop', 'kali-tlssled.desktop', 'kali-jd-gui.desktop', 'kali-tcpflow.desktop', 'kali-rifiuti.desktop', 'kali-bettercap.desktop', 'kali-0trace.sh.desktop', 'kali-firewalk.desktop', 'kali-metagoofil.desktop', 'kali-myrescue.desktop', 'kali-hackrf_info.desktop', 'kali-pasco.desktop', 'kali-ext3grep.desktop', 'kali-zaproxy.desktop', 'kali-jsql.desktop', 'kali-termineter.desktop', 'kali-hexinject.desktop', 'kali-dradis-stop.desktop', 'kali-svcrash.desktop', 'kali-rtpmixsound.desktop', 'kali-bluelog.desktop', 'kali-witnessme.desktop', 'kali-mifare-classic-format.desktop', 'kali-veil.desktop', 'kali-ohrwurm.desktop', 'kali-ass.desktop', 'kali-sipsak.desktop', 'kali-rtpbreak.desktop', 'kali-CAT.desktop', 'kali-havoc.desktop', 'kali-gvm-stop.desktop', 'kali-sslsniff.desktop', 'kali-joomscan.desktop', 'kali-t50.desktop', 'kali-sucrack.desktop', 'kali-btscanner.desktop', 'kali-sipp.desktop', 'kali-airgeddon.desktop', 'kali-defectdojo-stop.desktop', 'kali-mfterm.desktop', 'kali-protos-sip.desktop', 'kali-sqlninja.desktop', 'kali-webscarab.desktop', 'kali-dd_rescue.desktop', 'kali-rcrack.desktop', 'kali-truecrack.desktop', 'kali-svmap.desktop', 'kali-bluesnarfer.desktop', 'kali-sentrypeer.desktop', 'kali-ghidra.desktop', 'kali-nfc-mfclassic.desktop', 'kali-beef-xss-stop.desktop', 'kali-owasp-mantra-ff.desktop', 'kali-clamscan.desktop', 'kali-assetfinder.desktop', 'kali-cisco-torch.desktop', 'kali-maryam.desktop', 'groovyConsole.desktop', 'kali-grokevt-builddb.desktop', 'kali-dirsearch.desktop', 'kali-foremost.desktop', 'kali-darkstat.desktop', 'gvim.desktop', 'kali-gvm-check-setup.desktop', 'kali-cdp.desktop', 'kali-heartleech.desktop', 'kali-grokevt-parselog.desktop', 'kali-hashrat.desktop', 'kali-tnscmd10g.desktop', 'kali-cge.pl.desktop', 'kali-hamster-sidejack.desktop', 'kali-webacoo.desktop', 'kali-afl-fuzz.desktop', 'kali-uniscan-gui.desktop', 'kali-eyewitness.desktop', 'kali-maltego.desktop', 'kali-svreport.desktop', 'kali-apache-users.desktop', 'kali-rfcat.desktop', 'kali-policygen.desktop', 'kali-nfc-list.desktop', 'kali-grokevt-findlogs.desktop', 'kali-bed.desktop', 'kali-crackmapexec.desktop', 'kali-parsero.desktop', 'kali-svwar.desktop', 'kali-intrace.desktop', 'kali-nishang.desktop', 'kali-d2j-dex2jar.desktop', 'kali-jadx-gui.desktop', 'kali-sqldict.desktop', 'kali-grokevt-ripdll.desktop', 'kali-fang.desktop', 'kali-rkhunter.desktop', 'kali-jboss-linux.desktop', 'kali-undbx.desktop', 'kali-rcracki_mt.desktop', 'kali-twofi.desktop', 'kali-readpst.desktop', 'kali-ferret-sidejack.desktop', 'kali-dnstracer.desktop', 'kali-evilgrade.desktop', 'kali-ettercap.desktop', 'kali-freeradius.desktop', 'kali-rifiuti2.desktop', 'kali-watobo.desktop', 'kali-urlcrazy.desktop', 'kali-hb-honeypot.desktop', 'kali-javasnoop.desktop', 'kali-slowhttptest.desktop', 'kali-siparmyknife.desktop', 'kali-recoverdm.desktop', 'kali-above.desktop', 'kali-siege.desktop', 'kali-gvm-setup.desktop', 'kali-cowpatty.desktop', 'kali-cymothoa.desktop', 'kali-mfcuk.desktop', 'kali-sqlsus.desktop', 'kali-extundelete.desktop', 'kali-inviteflood.desktop', 'kali-dcfldd.desktop', 'kali-unhide.desktop', 'kali-osrframework-cli.desktop', 'kali-sara.desktop', 'kali-bytecode-viewer.desktop', 'kali-svcrack.desktop', 'kali-ewfacquire.desktop', 'kali-fragrouter.desktop', 'kali-cisco-ocs.desktop', 'net.sourceforge.jpdftweak.jPdfTweak.desktop', 'net.code_industry.MasterPDFEditor.desktop', 'mullvad-vpn.desktop', 'btop.desktop']
 search-entry-border-radius=(true, 25)
 update-notifier-project-version=65
 
@@ -350,7 +372,7 @@ toggle-always-on-top=@as []
 toggle-tiling-popup=@as []
 
 [org/gnome/shell/extensions/user-theme]
-name='Kali-Dark'
+name=''
 
 [org/gnome/shell/keybindings]
 show-screenshot-ui=['<Alt>F9']
@@ -360,7 +382,7 @@ locations=@av []
 
 [org/gnome/software]
 first-run=false
-flatpak-purge-timestamp=int64 1745107061
+flatpak-purge-timestamp=int64 1745212829
 
 [org/gtk/gtk4/settings/color-chooser]
 custom-colors=[(0.94901961088180542, 0.94901961088180542, 0.94901961088180542, 1.0)]
@@ -369,3 +391,17 @@ selected-color=(true, 0.96470588445663452, 0.3803921639919281, 0.317647069692611
 [org/gtk/gtk4/settings/file-chooser]
 show-hidden=true
 sort-directories-first=true
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=197
+sort-column='name'
+sort-directories-first=true
+sort-order='ascending'
+type-format='category'
+window-position=(36, 33)
+window-size=(1231, 902)
