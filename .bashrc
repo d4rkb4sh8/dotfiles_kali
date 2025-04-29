@@ -78,7 +78,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-up 
 gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-down "['<Ctrl><Super>Down']"
 
 #path
-export PATH=$PATH:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/games:/usr/local/bin
+export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/games:/usr/local/bin
 
 # preferred text editor
 export EDITOR='nvim'
@@ -111,5 +111,3 @@ eval "$(zoxide init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"
-source ~/.local/share/blesh/ble.sh
-source ~/.local/share/blesh/ble.sh

@@ -8,6 +8,7 @@ adb
 adduser
 adw-gtk3-kali
 adwaita-icon-theme
+adwaita-qt6
 aesfix
 aeskeyfind
 afflib-tools
@@ -290,6 +291,7 @@ desktop-file-utils
 dex2jar
 dhcpcd-base
 dhcpig
+dict
 dictionaries-common
 diffstat
 diffutils
@@ -811,6 +813,7 @@ hostsman
 hotpatch
 hping3
 hprof-conv
+htop
 htshells
 httprint
 httprobe
@@ -1015,6 +1018,8 @@ libacl1
 libad9361-0
 libadns1t64
 libadwaita-1-0
+libadwaitaqt6-1
+libadwaitaqt6priv1
 libaec0
 libafflib0t64
 libaio1t64
@@ -1920,6 +1925,7 @@ liblzf1
 liblzma-dev
 liblzma5
 liblzo2-2
+libmaa4
 libmagic-dev
 libmagic-mgc
 libmagic1t64
@@ -3090,6 +3096,7 @@ mpg123
 msfpc
 mssqlpwner
 mtd-utils
+mullvad-vpn
 multiforcer
 multimac
 multimon-ng
@@ -4735,6 +4742,7 @@ udptunnel
 ufw
 uhd-host
 uhd-images
+ulauncher
 unar
 unblob
 undbx
@@ -4780,6 +4788,7 @@ vim-runtime
 vim-tiny
 vim
 vinetto
+virtualbox-7.1
 vlan
 voiphopper
 vopono
