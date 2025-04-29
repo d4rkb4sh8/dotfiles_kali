@@ -508,6 +508,7 @@ fwbuilder-doc
 fwbuilder
 fwupd-amd64-signed
 fwupd
+fzf
 g++-14-x86-64-linux-gnu
 g++-14
 g++-mingw-w64-i686-posix
@@ -731,7 +732,6 @@ gr-osmosdr
 gradle
 graphviz
 graudit
-grc
 greenbone-feed-sync
 greenbone-security-assistant
 grep
@@ -3090,7 +3090,6 @@ mpg123
 msfpc
 mssqlpwner
 mtd-utils
-mullvad-vpn
 multiforcer
 multimac
 multimon-ng
@@ -3125,7 +3124,6 @@ neo4j
 neovim-runtime
 neovim
 net-tools
-net.downloadhelper.coapp
 netbase
 netcat-traditional
 netdiscover
@@ -4635,7 +4633,6 @@ sslsplit
 sslstrip
 sslyze
 starkiller
-starship
 statsprocessor
 stegcracker
 steghide
@@ -4738,7 +4735,6 @@ udptunnel
 ufw
 uhd-host
 uhd-images
-ulauncher
 unar
 unblob
 undbx
@@ -4784,7 +4780,6 @@ vim-runtime
 vim-tiny
 vim
 vinetto
-virtualbox-7.1
 vlan
 voiphopper
 vopono
