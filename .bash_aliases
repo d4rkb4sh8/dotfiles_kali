@@ -8,7 +8,7 @@ alias make10mb='truncate -s 10m ./10MB.dat' # make10mb:     Creates a file of 10
 # alias cd='z'
 # alias cdi='zi'
 alias bat='batcat --color=always'
-alias ff='fastfetch --logo-preserve-aspect-ratio true --kitty-direct $HOME/.config/fastfetch/h4ck3r.png'
+alias ff='fastfetch --logo-preserve-aspect-ratio true --kitty-direct $HOME/dotfiles/.config/fastfetch/h4ck3r.png'
 alias c='clear'
 alias fzf='fzf --preview "batcat --color=always {}"'
 #   -------------------------------
@@ -182,7 +182,7 @@ alias aidr2='ollama run deepseek-r1:7b'
 alias ait='tgpt'
 
 # cheat sheet
-#alias cheat='tldr'
+alias cheat='tldr'
 
 #zathura for pdf's
 alias pdf='zathura'
@@ -296,7 +296,7 @@ alias gtfobl='gtfoblookup gtfobins list'
 
 # aliases for grc(1)
 
-GRC="$(which grc)"
+GRC="/home/linuxbrew/.linuxbrew/bin/grc"
 if tty -s && [ -n "$TERM" ] && [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
   alias colourify="$GRC -es"
   alias blkid='colourify blkid'
@@ -340,5 +340,6 @@ if tty -s && [ -n "$TERM" ] && [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
   alias semanage='colourify semanage'
   alias getsebool='colourify getsebool'
   alias ifconfig='colourify ifconfig'
+  alias nmap='colourify nmap'
   alias sockstat='colourify sockstat'
 fi
