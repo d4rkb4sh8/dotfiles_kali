@@ -169,6 +169,7 @@ certi
 certipy-ad
 cewl
 cgpt
+chafa
 chainsaw
 changeme
 chaosreader
@@ -1210,6 +1211,7 @@ libcfitsio10t64
 libcgi-fast-perl
 libcgi-pm-perl
 libcgraph6
+libchafa0t64
 libchromaprint1
 libcjson1
 libclamav12
@@ -2570,6 +2572,8 @@ libsigsegv2
 libsimple-http-java
 libsisu-inject-java
 libsisu-plexus-java
+libsixel-bin
+libsixel1
 libslang2
 libslf4j-java
 libslirp0
@@ -4739,6 +4743,7 @@ ucf
 udev
 udisks2
 udptunnel
+ueberzug
 ufw
 uhd-host
 uhd-images
@@ -4794,6 +4799,7 @@ voiphopper
 vopono
 vpnc-scripts
 vpnc
+w3m
 wafw00f
 wamerican
 wapiti
