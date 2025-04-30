@@ -29,7 +29,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='keyboard'
+last-panel='system'
 window-state=(960, 640, false)
 
 [org/gnome/desktop/app-folders]
@@ -59,8 +59,8 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_009.jpg'
-picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_009.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_002.jpg'
+picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_002.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -125,7 +125,7 @@ remove-old-trash-files=true
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_009.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-04-30-08-53-17-wallpaper_002.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -193,13 +193,16 @@ search-filter-time-type='last_modified'
 [org/gnome/nautilus/window-state]
 initial-size=(800, 550)
 initial-size-file-chooser=(890, 550)
-maximized=true
+maximized=false
 
 [org/gnome/portal/filechooser/chromium]
 last-folder-path='/home/h4ck3r/Downloads/WhatSie'
 
 [org/gnome/portal/filechooser/gnome-background-panel]
 last-folder-path='/home/h4ck3r/Pictures/wallpapers'
+
+[org/gnome/portal/filechooser/io.gitlab.adhami3310.Impression]
+last-folder-path='/home/h4ck3r/Downloads'
 
 [org/gnome/portal/filechooser/net.code_industry.MasterPDFEditor]
 last-folder-path='/home/h4ck3r/Downloads/WhatSie'
@@ -348,11 +351,11 @@ layout=[['gnome@main', 'quick-settings-audio-panel@rayzeq.github.io/main']]
 timeout=2000
 
 [org/gnome/shell/extensions/quake-terminal]
-horizontal-size=80
+horizontal-size=95
 render-on-primary-monitor=true
 terminal-id='kitty.desktop'
 terminal-shortcut=['<Control><Alt>q']
-vertical-size=80
+vertical-size=95
 
 [org/gnome/shell/extensions/quick-settings-audio-panel]
 panel-type='merged-panel'
