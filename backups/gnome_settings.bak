@@ -451,5 +451,5 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(0, 36)
+window-position=(345, 51)
 window-size=(1231, 902)
