@@ -85,7 +85,7 @@ while read -r pkg; do
     failed_flatpak+=("$pkg")
   fi
 done <"$HOME/dotfiles/backups/flatpaks_list.bak"
-
+sudo systemctl enable --now snapd apparmor
 sudo snap install snapd snap-store
 snap install $(cat "$HOME/dotfiles/backups/snap_list.bak")
 
