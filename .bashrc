@@ -71,7 +71,7 @@ if ! shopt -oq posix; then
 fi
 
 # VIM mode for bash prompt
-set -o vi
+#set -o vi
 
 # colorize output
 export GRC_ALIASES=true
