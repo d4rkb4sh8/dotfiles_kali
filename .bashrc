@@ -73,6 +73,9 @@ fi
 # VIM mode for bash prompt
 #set -o vi
 
+# Terminal
+export TERM=xterm-256color
+
 # colorize output
 export GRC_ALIASES=true
 
