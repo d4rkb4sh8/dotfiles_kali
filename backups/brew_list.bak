@@ -13,6 +13,7 @@ certifi
 chafa
 cmake
 curl
+curlie
 dbus
 expat
 eza
