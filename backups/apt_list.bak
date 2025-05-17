@@ -139,6 +139,7 @@ brutespray
 bsd-mailx
 bsdextrautils
 bsdutils
+btop
 btscanner
 bubblewrap
 build-essential
@@ -495,6 +496,7 @@ fwbuilder-common
 fwbuilder-doc
 fwupd
 fwupd-amd64-signed
+fzf
 g++
 g++-14
 g++-14-x86-64-linux-gnu
@@ -1802,6 +1804,8 @@ libkdb5-10t64
 libkeyutils1
 libkf5syntaxhighlighting-data
 libkf5syntaxhighlighting5
+libkf6syntaxhighlighting-data
+libkf6syntaxhighlighting6
 libklibc
 libkmlbase1t64
 libkmldom1t64
@@ -2328,6 +2332,7 @@ libpulse0
 libpwquality-common
 libpwquality1
 libpyside2-py3-5.15t64
+libpyside6-py3-6.8
 libpython2-stdlib
 libpython2.7-minimal
 libpython2.7-stdlib
@@ -2487,6 +2492,7 @@ libservlet-api-java
 libsframe1
 libsharpyuv0
 libshiboken2-py3-5.15t64
+libshiboken6-py3-6.8
 libshine3
 libshout3
 libsidplay1v5
@@ -2859,6 +2865,7 @@ libz-mingw-w64
 libz3-4
 libz3-dev
 libzbar0t64
+libze1
 libzimg2
 libzip-dev
 libzip5

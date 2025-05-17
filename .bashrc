@@ -73,6 +73,9 @@ fi
 # VIM mode for bash prompt
 #set -o vi
 
+# Terminal
+export TERM=xterm-256color
+
 # colorize output
 export GRC_ALIASES=true
 
@@ -81,10 +84,10 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-up 
 gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-down "['<Ctrl><Super>Down']"
 
 #path
-export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/games:/usr/local/bin
+export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/local/bin
 
 # preferred text editor
-export EDITOR='nvim'
+export EDITOR="nvim"
 
 #homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -96,7 +99,7 @@ source ~/.local/share/blesh/ble.sh
 #export PAGER=most
 
 # Colorful manpages
-export MANPAGER='nvim +Man!'
+export MANPAGER="nvim +Man!"
 
 #highlight less
 # export LESSOPEN="| /usr/bin/highlight %s --out-format xterm256 --force"
@@ -105,6 +108,10 @@ export MANPAGER='nvim +Man!'
 echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+
+# Carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+source <(carapace _carapace)
 
 # Atuin
 eval "$(atuin init bash)"
