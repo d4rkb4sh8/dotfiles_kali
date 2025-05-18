@@ -287,6 +287,7 @@ dex2jar
 dhcpcd-base
 dhcpig
 dictionaries-common
+diffstat
 diffutils
 dirb
 dirbuster
@@ -534,6 +535,8 @@ gdal-data
 gdal-plugins
 gdb
 gdb-peda
+gdebi
+gdebi-core
 gdisk
 gdm3
 geoclue-2.0
@@ -542,6 +545,7 @@ geoip-database
 geoipupdate
 getallurls
 getsploit
+gettext
 gettext-base
 gh
 ghidra
@@ -582,6 +586,7 @@ gir1.2-handy-1
 gir1.2-harfbuzz-0.0
 gir1.2-ibus-1.0
 gir1.2-javascriptcoregtk-4.1
+gir1.2-keybinder-3.0
 gir1.2-malcontent-0
 gir1.2-mutter-16
 gir1.2-nm-1.0
@@ -846,6 +851,7 @@ installation-report
 instaloader
 intel-media-va-driver
 intel-microcode
+intltool-debian
 intrace
 inviteflood
 iodine
@@ -1005,6 +1011,7 @@ libalgorithm-c3-perl
 libalgorithm-diff-perl
 libalgorithm-diff-xs-perl
 libalgorithm-merge-perl
+libaliased-perl
 libann0
 libantlr-java
 libantlr3-runtime-java
@@ -1080,6 +1087,7 @@ libbcpg-java
 libbcprov-java
 libbde1t64
 libbdplus0
+libberkeleydb-perl
 libbfio1
 libbindex-java
 libbinutils
@@ -1166,6 +1174,7 @@ libcap2-bin
 libcapi20-3t64
 libcapstone-dev
 libcapstone5
+libcapture-tiny-perl
 libcares2
 libcarp-clan-perl
 libcbor0.10
@@ -1227,6 +1236,8 @@ libconfig++11
 libconfig-inifiles-perl
 libconfig-tiny-perl
 libconfig11
+libconst-fast-perl
+libcpanel-json-xs-perl
 libcppunit-1.15-0
 libcppunit-dev
 libcpuinfo0
@@ -1248,8 +1259,13 @@ libcurl3t64-gnutls
 libcurl4t64
 libdaemon0
 libdaq3
+libdata-dpath-perl
 libdata-dump-perl
+libdata-messagepack-perl
 libdata-optlist-perl
+libdata-validate-domain-perl
+libdata-validate-ip-perl
+libdata-validate-uri-perl
 libdate-calc-perl
 libdate-calc-xs-perl
 libdate-manip-perl
@@ -1287,6 +1303,7 @@ libdevel-globaldestruction-perl
 libdevel-lexalias-perl
 libdevel-overloadinfo-perl
 libdevel-partialdump-perl
+libdevel-size-perl
 libdevel-stacktrace-perl
 libdevmapper-event1.02.1
 libdevmapper1.02.1
@@ -1345,6 +1362,7 @@ libeigen3-dev
 libeis1
 libel-api-java
 libelf1t64
+libemail-address-xs-perl
 libenchant-2-2
 libencode-locale-perl
 libepoxy0
@@ -1405,6 +1423,7 @@ libfido2-1
 libfile-basedir-perl
 libfile-desktopentry-perl
 libfile-fcntllock-perl
+libfile-find-rule-perl
 libfile-listing-perl
 libfile-mimeinfo-perl
 libfile-sharedir-perl
@@ -1421,6 +1440,7 @@ libfluidsynth3
 libfmt-dev
 libfmt10
 libfont-afm-perl
+libfont-ttf-perl
 libfontbox-java
 libfontconfig1
 libfontenc1
@@ -1435,6 +1455,7 @@ libfreerdp3-3
 libfreesrp0
 libfreetype6
 libfreexl1
+libfreezethaw-perl
 libfribidi0
 libfsapfs1t64
 libfsext1t64
@@ -1667,10 +1688,12 @@ libhivex0
 libhogweed6t64
 libhtml-form-perl
 libhtml-format-perl
+libhtml-html5-entities-perl
 libhtml-linkextractor-perl
 libhtml-parser-perl
 libhtml-tagset-perl
 libhtml-template-perl
+libhtml-tokeparser-simple-perl
 libhtml-tree-perl
 libhttp-cookies-perl
 libhttp-daemon-perl
@@ -1723,19 +1746,24 @@ libio-all-lwp-perl
 libio-all-perl
 libio-compress-brotli-perl
 libio-html-perl
+libio-interactive-perl
 libio-multiplex-perl
 libio-socket-inet6-perl
 libio-socket-socks-perl
 libio-socket-ssl-perl
+libio-string-perl
 libio-stringy-perl
 libip4tc2
 libip6tc2
+libipc-run3-perl
 libipc-shareable-perl
 libipc-system-simple-perl
 libipt2
 libiptcdata0
 libiscsi7
 libisl23
+libiterator-perl
+libiterator-util-perl
 libitm1
 libiw30t64
 libjack-jackd2-0
@@ -1783,6 +1811,7 @@ libjsch-java
 libjson-c5
 libjson-glib-1.0-0
 libjson-glib-1.0-common
+libjson-maybexs-perl
 libjson-perl
 libjson-xs-perl
 libjsoup-java
@@ -1801,9 +1830,8 @@ libk5crypto3
 libkadm5clnt-mit12
 libkadm5srv-mit12
 libkdb5-10t64
+libkeybinder-3.0-0
 libkeyutils1
-libkf5syntaxhighlighting-data
-libkf5syntaxhighlighting5
 libkf6syntaxhighlighting-data
 libkf6syntaxhighlighting6
 libklibc
@@ -1835,10 +1863,12 @@ liblimesuite23.11-1
 liblinear4
 liblingua-en-inflect-perl
 libliquid1
+liblist-compare-perl
 liblist-moreutils-perl
 liblist-moreutils-xs-perl
 liblist-someutils-perl
 liblist-someutils-xs-perl
+liblist-utilsby-perl
 libllvm18
 libllvm19
 libllvmspirvlib18.1
@@ -1888,6 +1918,8 @@ libmalcontent-0-0
 libmalcontent-ui-1-1
 libmanette-0.2-0
 libmariadb3
+libmarkdown2
+libmath-base85-perl
 libmath-random-isaac-perl
 libmath-random-isaac-xs-perl
 libmaven-archiver-java
@@ -1919,6 +1951,7 @@ libminizip1t64
 libminlog-java
 libmirisdr4
 libmjpegutils-2.1-0t64
+libmldbm-perl
 libmm-glib0
 libmnl0
 libmodplug1
@@ -2075,9 +2108,11 @@ libmonosgen-2.0-1
 libmonosgen-2.0-dev
 libmoo-perl
 libmoose-perl
+libmoox-aliases-perl
 libmosquitto1
 libmotif-common
 libmount1
+libmouse-perl
 libmozjs-128-0
 libmp3lame0
 libmpc3
@@ -2119,9 +2154,11 @@ libnet-cidr-perl
 libnet-dbus-perl
 libnet-dns-perl
 libnet-dns-sec-perl
+libnet-domain-tld-perl
 libnet-http-perl
 libnet-ident-perl
 libnet-ip-perl
+libnet-ipv6addr-perl
 libnet-libidn2-perl
 libnet-netmask-perl
 libnet-pcap-perl
@@ -2135,6 +2172,7 @@ libnet-telnet-perl
 libnet-tftp-perl
 libnet-whois-ip-perl
 libnet1
+libnetaddr-ip-perl
 libnetcdf22
 libnetfilter-conntrack3
 libnetfilter-queue1
@@ -2178,6 +2216,7 @@ libnss3
 libntfs-3g89t64
 libnuma1
 libnumber-bytes-human-perl
+libnumber-compare-perl
 libnvme1t64
 libobjc-14-dev
 libobjc4
@@ -2250,6 +2289,7 @@ libparse-recdescent-perl
 libparse-win32registry-perl
 libparted-fs-resize0t64
 libparted2t64
+libpath-tiny-perl
 libpathplan4
 libpcap-dev
 libpcap0.8-dev
@@ -2268,6 +2308,8 @@ libpe1t64
 libperl-critic-perl
 libperl4-corelibs-perl
 libperl5.40
+libperlio-gzip-perl
+libperlio-utf8-strict-perl
 libpfm4
 libpgm-5.3-0t64
 libphdi1
@@ -2434,6 +2476,7 @@ libreflectasm-java-doc
 libregexp-assemble-perl
 libregexp-common-perl
 libregexp-ipv6-perl
+libregexp-wildcards-perl
 libregf1t64
 libregfi1t64
 librest-1.0-0
@@ -2486,6 +2529,8 @@ libsensors-config
 libsensors5
 libsepol2
 libserd-0-0
+libsereal-decoder-perl
+libsereal-encoder-perl
 libserf-1-1
 libserialport0
 libservlet-api-java
@@ -2528,6 +2573,7 @@ libsombok3
 libsonic0
 libsord-0-0
 libsort-naturally-perl
+libsort-versions-perl
 libsoundtouch1
 libsoup-2.4-1
 libsoup-3.0-0
@@ -2571,6 +2617,7 @@ libstartup-notification0
 libstdc++-14-dev
 libstdc++6
 libstemmer0d
+libstrictures-perl
 libstring-crc32-perl
 libstring-format-perl
 libstring-random-perl
@@ -2588,6 +2635,7 @@ libswscale8
 libsybdb5
 libsyn123-0t64
 libsynctex2
+libsyntax-keyword-try-perl
 libsystemd-dev
 libsystemd-shared
 libsystemd0
@@ -2611,8 +2659,12 @@ libtexlua53-5
 libtext-charwidth-perl
 libtext-csv-perl
 libtext-csv-xs-perl
+libtext-glob-perl
 libtext-iconv-perl
+libtext-levenshteinxs-perl
+libtext-markdown-discount-perl
 libtext-wrapi18n-perl
+libtext-xslate-perl
 libthai-data
 libthai0
 libtheora0
@@ -2622,6 +2674,8 @@ libthrift-0.19.0t64
 libthrift-dev
 libtie-ixhash-perl
 libtiff6
+libtime-duration-perl
+libtime-moment-perl
 libtimedate-perl
 libtinfo6
 libtinysparql-3.0-0
@@ -2631,7 +2685,6 @@ libtk8.6
 libtommath1
 libtotem-plparser-common
 libtotem-plparser18
-libtree-sitter0.22
 libtry-tiny-perl
 libts0t64
 libtsan2
@@ -2661,6 +2714,7 @@ libunbound8
 libunibreak6
 libunicode-linebreak-perl
 libunicode-map-perl
+libunicode-utf8-perl
 libunistring5
 libunsafessl1.0.2
 libunwind8
@@ -2812,9 +2866,14 @@ libxml++2.6-2v5
 libxml-commons-external-java
 libxml-commons-resolver1.1-java
 libxml-dom-perl
+libxml-libxml-perl
+libxml-namespacesupport-perl
 libxml-parser-perl
 libxml-perl
 libxml-regexp-perl
+libxml-sax-base-perl
+libxml-sax-expat-perl
+libxml-sax-perl
 libxml-twig-perl
 libxml-writer-perl
 libxml-xpathengine-perl
@@ -2833,6 +2892,7 @@ libxpp3-java
 libxrandr2
 libxrender1
 libxres1
+libxs-parse-keyword-perl
 libxshmfence1
 libxslt1.1
 libxss1
@@ -2855,6 +2915,7 @@ libxxhash0
 libxz-java
 libyajl2
 libyaml-0-2
+libyaml-libyaml-perl
 libyaml-pp-perl
 libyaml-snake-java
 libyaml-tiny-perl
@@ -2885,6 +2946,7 @@ ligolo-ng-common-binaries
 lime-forensics-dkms
 limesuite-udev
 linkedin2username
+lintian
 linux-base
 linux-exploit-suggester
 linux-headers-6.12.20-amd64
@@ -3154,6 +3216,7 @@ passing-the-hash
 passwd
 patator
 patch
+patchutils
 payloadsallthethings
 pci.ids
 pciutils
@@ -4699,6 +4762,7 @@ wireplumber
 wireshark
 wireshark-common
 witnessme
+wmctrl
 wmi-client
 wordlistraider
 wordlists
