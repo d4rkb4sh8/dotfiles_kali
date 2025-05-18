@@ -259,8 +259,8 @@ export default class QSAP extends Extension {
         }
         MessageView_DateMenu._qsap_media_removed = true;
     }
-    _create_app_mixer(index, type, filter_mode, filters) {
-        if (type === "combined") {
+    _create_app_mixer(index, group, filter_mode, filters) {
+        if (group) {
             this._applications_mixer_combined = new ApplicationsMixerToggle(this.settings, filter_mode, filters);
             this._panel.addItem(this._applications_mixer_combined, 2);
             this._panel._grid.set_child_at_index(this._applications_mixer_combined, index);
