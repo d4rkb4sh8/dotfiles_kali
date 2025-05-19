@@ -121,3 +121,5 @@ eval "$(zoxide init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
