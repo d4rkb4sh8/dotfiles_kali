@@ -61,6 +61,7 @@ bluez-obexd
 bolt
 bsdextrautils
 bsdutils
+btop
 bubblewrap
 build-essential
 bulk-extractor
@@ -210,6 +211,7 @@ faraday-agent-dispatcher
 faraday-cli
 fdisk
 fern-wifi-cracker
+ffmpeg
 ffuf
 fierce
 figlet
@@ -483,6 +485,7 @@ hicolor-icon-theme
 hostname
 hotpatch
 hping3
+htop
 hunspell-en-us
 hwloc
 hydra
@@ -621,6 +624,7 @@ libapt-pkg7.0
 libarchive-zip-perl
 libarchive13t64
 libargon2-1
+libaribb24-0t64
 libarmadillo14
 libarpack2t64
 libasan8
@@ -650,6 +654,7 @@ libavahi-core7
 libavahi-glib1
 libavc1394-0
 libavcodec61
+libavdevice61
 libavfilter10
 libavformat61
 libavif16
@@ -722,6 +727,7 @@ libcarp-clan-perl
 libcbor0.10
 libcc1-0
 libccid
+libcddb2
 libcdio-cdda2t64
 libcdio-paranoia2t64
 libcdio19t64
@@ -831,6 +837,7 @@ libdrm2
 libduktape207
 libdumbnet1
 libdv4t64
+libdvbpsi10
 libdvdnav4
 libdvdread8t64
 libdw1t64
@@ -838,6 +845,7 @@ libdynaloader-functions-perl
 libeac3
 libeatmydata1
 libebackend-1.2-11t64
+libebml5
 libebook-1.2-21t64
 libebook-contacts-1.2-4t64
 libebur128-1
@@ -1148,6 +1156,7 @@ libiterator-perl
 libiterator-util-perl
 libitm1
 libiw30t64
+libixml11t64
 libjack-jackd2-0
 libjansson4
 libjavascriptcoregtk-4.1-0
@@ -1182,6 +1191,7 @@ libjxr0t64
 libk5crypto3
 libkadm5clnt-mit12
 libkadm5srv-mit12
+libkate1
 libkdb5-10t64
 libkeybinder-3.0-0
 libkeyutils1
@@ -1208,6 +1218,7 @@ libldb2
 liblerc4
 liblilv-0-0
 liblinear4
+liblirc-client0t64
 liblist-compare-perl
 liblist-someutils-perl
 liblist-someutils-xs-perl
@@ -1226,6 +1237,7 @@ liblsan0
 liblsof0
 libltc11
 libltdl7
+liblua5.2-0
 liblua5.3-0
 liblua5.4-0
 libluajit-5.1-2
@@ -1239,6 +1251,7 @@ liblz4-dev
 liblzf1
 liblzma5
 liblzo2-2
+libmad0
 libmagic-dev
 libmagic-mgc
 libmagic1t64
@@ -1254,6 +1267,7 @@ libmarkdown2
 libmath-base85-perl
 libmath-random-isaac-perl
 libmath-random-isaac-xs-perl
+libmatroska7
 libmaxminddb0
 libmbedcrypto16
 libmbedtls21
@@ -1388,6 +1402,7 @@ libopengl-dev
 libopengl0
 libopenh264-8
 libopenjp2-7
+libopenmpt-modplug1
 libopenmpt0t64
 libopenni2-0
 libopus0
@@ -1472,7 +1487,9 @@ libproc-processtable-perl
 libproc2-0
 libproj25
 libprotobuf-c1
+libprotobuf-lite32t64
 libprotobuf32t64
+libproxy-tools
 libproxy1v5
 libproxychains4
 libpsl5t64
@@ -1526,6 +1543,7 @@ libqt5webengine5
 libqt5webenginecore5
 libqt5webenginewidgets5
 libqt5widgets5t64
+libqt5x11extras5
 libqt5xml5t64
 libqt6core5compat6
 libqt6core6t64
@@ -1568,6 +1586,7 @@ libreadline8t64
 libregexp-assemble-perl
 libregexp-ipv6-perl
 libregexp-wildcards-perl
+libresid-builder0c2a
 librest-1.0-0
 librhash1
 librist4
@@ -1619,9 +1638,11 @@ libsharpyuv0
 libshine3
 libshout3
 libsidplay1v5
+libsidplay2
 libsigc++-2.0-0v5
 libsigc++-3.0-0
 libsigsegv2
+libsixel1
 libslang2
 libsm-dev
 libsm6
@@ -1630,6 +1651,7 @@ libsmbclient0
 libsmi2t64
 libsnappy1v5
 libsndfile1
+libsndio7.0
 libsnmp-base
 libsnmp40t64
 libsocket6-perl
@@ -1647,6 +1669,7 @@ libsoxr0
 libspa-0.2-bluetooth
 libspa-0.2-modules
 libspandsp2t64
+libspatialaudio0t64
 libspatialite8t64
 libspectre1
 libspeechd-module0
@@ -1764,6 +1787,7 @@ libunicode-utf8-perl
 libunistring5
 libunsafessl1.0.2
 libunwind8
+libupnp17t64
 libupower-glib3
 liburcu8t64
 liburi-perl
@@ -1780,6 +1804,7 @@ libuv1t64
 libv4l-0t64
 libv4lconvert0t64
 libva-drm2
+libva-wayland2
 libva-x11-2
 libva2
 libvariable-magic-perl
@@ -1788,7 +1813,11 @@ libvdpau1
 libvhdi1
 libvidstab1.1
 libvisual-0.4-0
+libvlc-bin
+libvlc5
+libvlccore9
 libvmdk1
+libvncclient1
 libvo-aacenc0
 libvo-amrwbenc0
 libvolume-key1
@@ -1844,6 +1873,7 @@ libxatracker2
 libxau-dev
 libxau6
 libxaw7
+libxcb-composite0
 libxcb-cursor0
 libxcb-damage0
 libxcb-dri2-0
@@ -1910,6 +1940,7 @@ libxmuu1
 libxnnpack0.20241108
 libxnvctrl0
 libxpm4
+libxpresent1
 libxrandr2
 libxrender1
 libxres1
@@ -2030,6 +2061,7 @@ mokutil
 mosquitto
 mount
 mpg123
+mpv
 msfpc
 mtd-utils
 multimac
@@ -2164,6 +2196,7 @@ pocketsphinx-en-us
 pocl-opencl-icd
 polenum
 polkitd
+popcorn-time
 poppler-data
 postgresql
 postgresql-17
@@ -2446,6 +2479,7 @@ python3-mpmath
 python3-msgpack
 python3-msldap
 python3-multidict
+python3-mutagen
 python3-mysqldb
 python3-nacl
 python3-nassl
@@ -2984,6 +3018,19 @@ vim-runtime
 vim-tiny
 virtualbox-7.1
 vlan
+vlc
+vlc-bin
+vlc-data
+vlc-l10n
+vlc-plugin-access-extra
+vlc-plugin-base
+vlc-plugin-notify
+vlc-plugin-qt
+vlc-plugin-samba
+vlc-plugin-skins2
+vlc-plugin-video-output
+vlc-plugin-video-splitter
+vlc-plugin-visualization
 voiphopper
 vpnc
 vpnc-scripts
@@ -3073,6 +3120,7 @@ yaru-theme-sound
 yaru-theme-unity
 yelp
 yelp-xsl
+yt-dlp
 zenity
 zenity-common
 zenmap
