@@ -11,9 +11,8 @@ cairo
 carapace
 certifi
 chafa
-cmake
+cpufetch
 curl
-curlie
 dbus
 expat
 eza
@@ -23,6 +22,7 @@ fftw
 fontconfig
 freetype
 fribidi
+fzf
 gcc
 gdk-pixbuf
 gettext
@@ -30,7 +30,7 @@ giflib
 gitleaks
 glib
 gmp
-go
+gperf
 graphite2
 grc
 harfbuzz
@@ -72,7 +72,9 @@ libxdmcp
 libxext
 libxml2
 libxrender
+libyaml
 little-cms2
+lolcat
 lpeg
 luajit
 luv
@@ -82,7 +84,7 @@ mpdecimal
 mpfr
 ncurses
 neovim
-ollama
+onefetch
 open-mpi
 openexr
 openldap
@@ -96,6 +98,7 @@ pmix
 python@3.13
 readline
 rtmpdump
+ruby
 shared-mime-info
 sqlite
 starship
@@ -109,7 +112,6 @@ utf8cpp
 utf8proc
 util-linux
 uv
-viu
 webp
 xorgproto
 xz
