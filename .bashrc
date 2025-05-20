@@ -84,7 +84,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-up 
 gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-down "['<Ctrl><Super>Down']"
 
 #path
-export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:home/h4ck3r/go/bin:/home/h4ck3r/.local/bin:/usr/bin:/usr/local/bin
+export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:/home/h4ck3r/go/bin:/home/h4ck3r/.local/bin
 
 # preferred text editor
 export EDITOR="nvim"
