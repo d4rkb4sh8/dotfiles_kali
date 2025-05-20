@@ -244,8 +244,8 @@ alias dxcit='docker container exec -it'
 # 14. CTF's
 #-------------------------------------------------------------------------
 #pwn.college
-alias sshpwn='ssh -i $HOME/.keys/pwn.college/key hacker@dojo.pwn.college'
-
+alias sshpwn='ssh -i $HOME/CTFs/pwn.college/key hacker@dojo.pwn.college'
+alias htbvpn='sudo openvpn $HOME/CTFs/htb/academy-regular.ovpn'
 #-------------------------------------------------------------------------
 #ssh connect
 alias ssh1='ssh -i .ssh/ansible debian1@127.0.0.1 -p 3021'
