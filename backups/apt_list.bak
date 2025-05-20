@@ -1,12 +1,14 @@
 7zip
 accountsservice
 acl
+acpica-tools
 adduser
 adw-gtk3-kali
 adwaita-icon-theme
 aircrack-ng
 alsa-topology-conf
 alsa-ucm-conf
+alsa-utils
 amass
 amass-common
 amd64-microcode
@@ -59,6 +61,7 @@ bluez-firmware
 bluez-hcidump
 bluez-obexd
 bolt
+bsd-mailx
 bsdextrautils
 bsdutils
 btop
@@ -104,6 +107,7 @@ cpp
 cpp-14
 cpp-14-x86-64-linux-gnu
 cpp-x86-64-linux-gnu
+cpuid
 cracklib-runtime
 cramfsswap
 creddump7
@@ -145,6 +149,7 @@ default-mysql-server
 desktop-base
 desktop-file-utils
 dhcpcd-base
+dict
 dictionaries-common
 diffstat
 diffutils
@@ -184,6 +189,7 @@ dvisvgm
 e2fsprogs
 easy-rsa
 eatmydata
+edid-decode
 efibootmgr
 eject
 emacsen-common
@@ -201,6 +207,9 @@ evolution-data-server-common
 evolution-ews-core
 exe2hexbat
 exfatprogs
+exim4-base
+exim4-config
+exim4-daemon-light
 exiv2
 expect
 exploitdb
@@ -487,6 +496,8 @@ hotpatch
 hping3
 htop
 hunspell-en-us
+hw-probe
+hwinfo
 hwloc
 hydra
 hyperion
@@ -641,6 +652,7 @@ libatk-wrapper-java-jni
 libatk1.0-0t64
 libatkmm-1.6-1v5
 libatomic1
+libatopology2t64
 libatspi2.0-0t64
 libattr1
 libaudio2
@@ -1080,6 +1092,7 @@ libharfbuzz-subset0
 libharfbuzz0b
 libhashkit2t64
 libhavege2
+libhd21t64
 libhdf4-0-alt
 libhdf5-310
 libhdf5-hl-310
@@ -1229,6 +1242,7 @@ libllvmspirvlib18.1
 liblmdb0
 liblocale-gettext-perl
 liblockfile-bin
+liblockfile1
 liblouis-data
 liblouis20
 liblqr-1-0
@@ -1251,6 +1265,7 @@ liblz4-dev
 liblzf1
 liblzma5
 liblzo2-2
+libmaa4
 libmad0
 libmagic-dev
 libmagic-mgc
@@ -1464,6 +1479,7 @@ libpipewire-0.3-modules
 libpixman-1-0
 libpkcs11-helper1t64
 libplacebo349
+libplayerctl2
 libplist-2.0-4
 libplymouth5
 libpng16-16t64
@@ -1583,6 +1599,7 @@ libraw1394-11
 libraw23t64
 libre2-11
 libreadline8t64
+librecode3
 libregexp-assemble-perl
 libregexp-ipv6-perl
 libregexp-wildcards-perl
@@ -1868,6 +1885,7 @@ libx11-xcb1
 libx264-164
 libx265-215
 libx86-1
+libx86emu3
 libxar1
 libxatracker2
 libxau-dev
@@ -2003,6 +2021,7 @@ llvm-19-linker-tools
 llvm-19-runtime
 llvm-19-tools
 llvm-spirv-18
+lm-sensors
 lmodern
 locales
 login
@@ -2015,6 +2034,7 @@ lsb-release
 lsof
 luit
 lvm2
+lynis
 lzop
 m4
 macchanger
@@ -2042,7 +2062,11 @@ masscan
 mawk
 media-types
 medusa
+memtester
+menu
 mesa-libgallium
+mesa-utils
+mesa-utils-bin
 mesa-va-drivers
 mesa-vdpau-drivers
 mesa-vulkan-drivers
@@ -2064,6 +2088,7 @@ mpg123
 mpv
 msfpc
 mtd-utils
+mullvad-vpn
 multimac
 mupdf-tools
 mutter-common
@@ -2188,6 +2213,7 @@ pipewire-pulse
 pipx
 pixiewps
 pkexec
+playerctl
 plocate
 plymouth
 plymouth-label
@@ -2607,7 +2633,6 @@ python3-reportbug
 python3-repoze.lru
 python3-requests
 python3-requests-file
-python3-requests-ntlm
 python3-retrying
 python3-rfc3339-validator
 python3-rfc3986-validator
@@ -2777,6 +2802,7 @@ readline-common
 realmd
 reaver
 rebind
+recode
 recon-ng
 recordmydesktop
 redis-server
@@ -2785,6 +2811,7 @@ redsocks
 reportbug
 responder
 rfkill
+rkhunter
 rpcbind
 rpcsvc-proto
 rpm
@@ -2988,6 +3015,8 @@ udisks2
 udptunnel
 ufw
 ulauncher
+unhide
+unhide.rb
 unicode-data
 unicorn-magic
 unicornscan
@@ -3009,9 +3038,11 @@ util-linux
 util-linux-extra
 uuid-dev
 va-driver-all
+vainfo
 vboot-kernel-utils
 vboot-utils
 vdpau-driver-all
+vdpauinfo
 vim
 vim-common
 vim-runtime
@@ -3034,6 +3065,7 @@ vlc-plugin-visualization
 voiphopper
 vpnc
 vpnc-scripts
+vulkan-tools
 wafw00f
 wamerican
 wapiti
@@ -3083,6 +3115,7 @@ xdg-utils
 xfonts-base
 xfonts-encodings
 xfonts-utils
+xinput
 xkb-data
 xkbset
 xml-core
