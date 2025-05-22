@@ -640,6 +640,7 @@ libarmadillo14
 libarpack2t64
 libasan8
 libasound2-data
+libasound2-dev
 libasound2t64
 libaspell15
 libass9
@@ -1478,6 +1479,7 @@ libpipewire-0.3-common
 libpipewire-0.3-modules
 libpixman-1-0
 libpkcs11-helper1t64
+libpkgconf3
 libplacebo349
 libplayerctl2
 libplist-2.0-4
@@ -1706,6 +1708,7 @@ libsrtp2-1
 libss2
 libssh-4
 libssh2-1t64
+libssl-dev
 libssl3t64
 libstartup-notification0
 libstdc++-14-dev
@@ -1812,7 +1815,6 @@ liburing2
 liburiparser1
 libusb-1.0-0
 libusbmuxd-2.0-7
-libutempter0
 libutf8proc3
 libuuid-perl
 libuuid1
@@ -2213,6 +2215,9 @@ pipewire-pulse
 pipx
 pixiewps
 pkexec
+pkg-config
+pkgconf
+pkgconf-bin
 playerctl
 plocate
 plymouth
