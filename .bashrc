@@ -95,11 +95,9 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #ble.sh
 source ~/.local/share/blesh/ble.sh
 
-#most - colorful output for man
-#export PAGER=most
-
 # Colorful manpages
 export MANPAGER="nvim +Man!"
+#export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
 #highlight less
 # export LESSOPEN="| /usr/bin/highlight %s --out-format xterm256 --force"
