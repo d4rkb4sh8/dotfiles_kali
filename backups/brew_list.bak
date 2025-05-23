@@ -16,6 +16,7 @@ cpufetch
 curl
 curlie
 dbus
+dysk
 expat
 eza
 faad2
@@ -105,8 +106,8 @@ shared-mime-info
 sqlite
 starship
 taglib
+tealdeer
 tgpt
-tlrc
 tree-sitter
 unibilium
 unzip
