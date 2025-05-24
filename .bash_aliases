@@ -9,7 +9,7 @@ alias make10mb='truncate -s 10m ./10MB.dat' # make10mb:     Creates a file of 10
 # alias cdi='zi'
 alias bat='batcat --color=always'
 alias ff='fastfetch'
-alias ffg='kitten icat -n --place 40x40@0x6 --scale-up --align left $HOME/.config/fastfetch/giphy.gif | fastfetch --logo-width 40 --raw -'
+alias ffg='kitten icat -n --place 40x60@0x4 --scale-up --align left $HOME/.config/fastfetch/giphy.gif | fastfetch --logo-width 35 --raw -'
 alias c='clear'
 alias e='exit'
 alias fzf='fzf --preview "batcat --color=always {}"'
