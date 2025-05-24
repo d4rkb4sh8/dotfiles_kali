@@ -160,18 +160,18 @@
         "last_commit": "f1efd61c6ecd1160b007bca1f90511a346378e64",
         "last_commit_time": "2021-05-03T15:30:01"
     },
-    "com.github.brpaz.ulauncher-faker": {
-        "id": "com.github.brpaz.ulauncher-faker",
-        "url": "https://github.com/brpaz/ulauncher-faker",
-        "updated_at": "2025-05-18T20:46:59.589552",
-        "last_commit": "58832c94acc671a9f603ea7fbf5d4405110bb902",
-        "last_commit_time": "2021-12-12T15:46:10"
-    },
     "com.github.fajtak.ulauncher-weather": {
         "id": "com.github.fajtak.ulauncher-weather",
         "url": "https://github.com/fajtak/ulauncher-weather",
         "updated_at": "2025-05-18T20:47:01.337513",
         "last_commit": "996da704e505776753f6340755d20f03075c2be8",
         "last_commit_time": "2022-04-05T18:23:30"
+    },
+    "com.github.episode6.ulauncher-system-management-direct": {
+        "id": "com.github.episode6.ulauncher-system-management-direct",
+        "url": "https://github.com/episode6/ulauncher-system-management-direct",
+        "updated_at": "2025-05-22T21:26:19.115201",
+        "last_commit": "c6c0febff9eae884e4a8bc97d057480436fb5c9b",
+        "last_commit_time": "2020-07-22T18:41:36"
     }
 }

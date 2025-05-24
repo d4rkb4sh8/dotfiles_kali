@@ -11,6 +11,7 @@ alsa-ucm-conf
 alsa-utils
 amass
 amass-common
+amazon-q
 amd64-microcode
 apache2
 apache2-bin
@@ -361,10 +362,13 @@ gir1.2-nma4-1.0
 gir1.2-notify-0.7
 gir1.2-packagekitglib-1.0
 gir1.2-pango-1.0
+gir1.2-peas-1.0
 gir1.2-polkit-1.0
 gir1.2-rsvg-2.0
 gir1.2-secret-1
 gir1.2-soup-3.0
+gir1.2-totem-1.0
+gir1.2-totemplparser-1.0
 gir1.2-upowerglib-1.0
 gir1.2-vte-2.91
 gir1.2-webkit2-4.1
@@ -448,6 +452,7 @@ gpp-decrypt
 graphviz
 greenbone-feed-sync
 grep
+grilo-plugins-0.3
 grml-keyring
 groff-base
 grub-common
@@ -837,6 +842,7 @@ libdisplay-info2
 libdjvulibre-text
 libdjvulibre21
 libdlt2
+libdmapsharing-4.0-3t64
 libdnnl3.6
 libdotconf0
 libdouble-conversion3
@@ -1021,6 +1027,7 @@ libgnutls30t64
 libgoa-1.0-0b
 libgoa-1.0-common
 libgoa-backend-1.0-2
+libgom-1.0-0t64
 libgomp1
 libgpaste-2
 libgpaste-2-common
@@ -1035,6 +1042,7 @@ libgpm2
 libgprofng0
 libgraphene-1.0-0
 libgraphite2-3
+libgrilo-0.3-0
 libgs-common
 libgs10
 libgs10-common
@@ -1397,6 +1405,7 @@ libnuma1
 libnumber-bytes-human-perl
 libnumber-compare-perl
 libnvme1t64
+liboauth0
 libobjc-14-dev
 libobjc4
 libodbc2
@@ -1466,6 +1475,8 @@ libpcre2-posix3
 libpcre3
 libpcsclite1
 libpdfbox-java
+libpeas-1.0-0
+libpeas-common
 libperl4-corelibs-perl
 libperl5.40
 libperlio-gzip-perl
@@ -1494,12 +1505,15 @@ libpolkit-gobject-1-0
 libpoppler-glib8t64
 libpoppler147
 libpopt0
+libportal-gtk3-1
 libportal-gtk4-1
 libportal1
 libportaudio2
 libportmidi0
 libpostproc58
 libpotrace0
+libppsdocument-4.0-5
+libppsview-4.0-4
 libpq5
 libproc-processtable-perl
 libproc2-0
@@ -1774,6 +1788,7 @@ libtk8.6
 libtommath1
 libtotem-plparser-common
 libtotem-plparser18
+libtotem0
 libtpms0
 libtry-tiny-perl
 libts0t64
@@ -2177,6 +2192,8 @@ p11-kit-modules
 packagekit
 packagekit-tools
 pahole
+papers
+papers-common
 parted
 passing-the-hash
 passwd
@@ -3011,6 +3028,9 @@ tk8.6-blt2.5
 tmux
 tnftp
 toilet-fonts
+totem
+totem-common
+totem-plugins
 tpm-udev
 traceroute
 tracker-extract

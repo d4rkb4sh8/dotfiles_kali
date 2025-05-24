@@ -61,7 +61,10 @@ $if term=rxvt
 $endif
 
 # horizontal scroll and wrapping
-set horizontal-scroll-mode Off
+set horizontal-scroll-mode on
+
+set show-all-if-ambiguous on
+set completion-ignore-case on
 
 # for non RH/Debian xterm, can't hurt for RH/Debian xterm
 # "\eOH": beginning-of-line
