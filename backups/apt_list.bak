@@ -186,6 +186,7 @@ dpkg
 dpkg-dev
 dracut-install
 dsniff
+duf
 dvisvgm
 e2fsprogs
 easy-rsa
@@ -219,6 +220,7 @@ fakeroot
 faraday
 faraday-agent-dispatcher
 faraday-cli
+fd-find
 fdisk
 fern-wifi-cracker
 ffmpeg
@@ -341,7 +343,6 @@ gir1.2-gnomebluetooth-3.0
 gir1.2-gnomedesktop-3.0
 gir1.2-gnomedesktop-4.0
 gir1.2-graphene-1.0
-gir1.2-gst-plugins-bad-1.0
 gir1.2-gst-plugins-base-1.0
 gir1.2-gstreamer-1.0
 gir1.2-gtk-3.0
@@ -464,7 +465,6 @@ gsettings-desktop-schemas
 gss-ntlmssp
 gstreamer1.0-gl
 gstreamer1.0-gtk3
-gstreamer1.0-gtk4
 gstreamer1.0-libav
 gstreamer1.0-pipewire
 gstreamer1.0-plugins-bad
@@ -535,6 +535,7 @@ intel-media-va-driver
 intel-microcode
 intltool-debian
 iodine
+ipcalc
 ipp-usb
 iproute2
 iptables
@@ -2048,6 +2049,7 @@ logsave
 loupe
 lrzsz
 lsb-release
+lshw
 lsof
 luit
 lvm2
@@ -2260,6 +2262,7 @@ powersploit
 ppp
 preview-latex-style
 procps
+procs
 proj-bin
 proj-data
 proxychains4
@@ -2837,6 +2840,7 @@ redsocks
 reportbug
 responder
 rfkill
+ripgrep
 rkhunter
 rpcbind
 rpcsvc-proto
@@ -2940,7 +2944,6 @@ shim-helpers-amd64-signed
 shim-signed
 shim-signed-common
 shim-unsigned
-showtime
 skipfish
 sleuthkit
 smartmontools
