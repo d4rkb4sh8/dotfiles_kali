@@ -55,10 +55,12 @@ libevent
 libffi
 libgit2
 libidn2
+liblinear
 libmpc
 libnghttp2
 libnotify
 libogg
+libpcap
 libpng
 librsvg
 libssh2
@@ -79,6 +81,7 @@ libyaml
 little-cms2
 lolcat
 lpeg
+lua
 luajit
 luv
 lz4
@@ -87,6 +90,7 @@ mpdecimal
 mpfr
 ncurses
 neovim
+nmap
 onefetch
 open-mpi
 openexr
@@ -102,6 +106,7 @@ python@3.13
 readline
 rtmpdump
 ruby
+rustscan
 shared-mime-info
 sqlite
 starship
