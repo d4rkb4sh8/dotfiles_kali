@@ -30,6 +30,7 @@ apt-config-icons
 apt-file
 apt-listchanges
 apt-utils
+arch-test
 arj
 armitage
 arp-scan
@@ -53,6 +54,7 @@ base58
 bash
 bash-completion
 bat
+bc
 beef-xss
 bettercap
 bettercap-caplets
@@ -97,6 +99,7 @@ cadaver
 castxml
 ccrypt
 ccze
+cdebootstrap
 certipy-ad
 cewl
 cgpt
@@ -162,11 +165,14 @@ dconf-cli
 dconf-gsettings-backend
 dconf-service
 dcraw
+dctrl-tools
 debconf
 debconf-i18n
 debian-archive-keyring
+debian-cd
 debian-faq
 debianutils
+debootstrap
 debugedit
 default-jre
 default-jre-headless
@@ -181,6 +187,7 @@ diffutils
 dirb
 dirbuster
 dirmngr
+distro-info
 distro-info-data
 dkms
 dmeventd
@@ -199,6 +206,7 @@ doc-base
 doc-debian
 docbook-xml
 dos2unix
+dose-distcheck
 dosfstools
 dotnet-apphost-pack-6.0
 dotnet-host
@@ -596,6 +604,7 @@ ipython3
 isc-dhcp-common
 isc-dhcp-server
 iso-codes
+isolinux
 isympy-common
 isympy3
 iucode-tool
@@ -806,6 +815,7 @@ libbs2b0
 libbsd0
 libbson-1.0-0t64
 libbtbb1
+libburn4t64
 libbytes-random-secure-perl
 libbytesize-common
 libbytesize1
@@ -927,6 +937,8 @@ libdca0
 libdconf1
 libde265-0
 libdebconfclient0
+libdebian-installer-extra4
+libdebian-installer4
 libdecor-0-0
 libdecor-0-plugin-1-gtk
 libdeflate0
@@ -1036,6 +1048,7 @@ libfile-find-rule-perl
 libfile-listing-perl
 libfile-mimeinfo-perl
 libfile-sharedir-perl
+libfile-slurp-perl
 libfindrtp
 libfl-dev
 libfl2
@@ -1331,6 +1344,8 @@ libipc-system-simple-perl
 libiptcdata0
 libiscsi7
 libisl23
+libisoburn1t64
+libisofs6t64
 libiterator-perl
 libiterator-util-perl
 libitm1
@@ -1363,6 +1378,7 @@ libjson-maybexs-perl
 libjson-perl
 libjson-xs-perl
 libjsoncpp26
+libjte2
 libjudydebian1
 libjxl-gdk-pixbuf
 libjxl0.11
@@ -1567,6 +1583,7 @@ libnsl2
 libnspr4
 libnss-mdns
 libnss-myhostname
+libnss-mymachines
 libnss-systemd
 libnss-winbind
 libnss3
@@ -2253,6 +2270,10 @@ linux-image-amd64
 linux-kbuild-6.12.25
 linux-libc-dev
 linux-sysctl-defaults
+live-boot-doc
+live-build
+live-config-doc
+live-manual-html
 llvm-18
 llvm-18-dev
 llvm-18-linker-tools
@@ -2279,6 +2300,8 @@ lsof
 luit
 lvm2
 lynis
+lynx
+lynx-common
 lzop
 m4
 macchanger
@@ -2337,6 +2360,7 @@ mpg123
 mpv
 msfpc
 mtd-utils
+mtools
 mullvad-vpn
 multimac
 multimon-ng
@@ -2464,6 +2488,7 @@ php8.4-common
 php8.4-mysql
 php8.4-opcache
 php8.4-readline
+pigz
 pinentry-curses
 pinentry-gnome3
 pipal
@@ -2943,6 +2968,7 @@ python3-sh
 python3-shellingham
 python3-shodan
 python3-shtab
+python3-simple-cdd
 python3-simple-rest-client
 python3-simple-websocket
 python3-simplejson
@@ -3113,6 +3139,7 @@ redis-tools
 redsocks
 regripper
 reportbug
+reprepro
 responder
 rfdump
 rfkill
@@ -3233,6 +3260,7 @@ shim-helpers-amd64-signed
 shim-signed
 shim-signed-common
 shim-unsigned
+simple-cdd
 siparmyknife
 sipcrack
 sipp
@@ -3296,11 +3324,13 @@ subversion
 sudo
 swaks
 switcheroo-control
+syslinux-common
 sysstat
 system-config-printer
 system-config-printer-common
 system-config-printer-udev
 systemd
+systemd-container
 systemd-sysv
 systemd-timesyncd
 sysvinit-utils
@@ -3342,6 +3372,7 @@ tk8.6
 tk8.6-blt2.5
 tmux
 tnftp
+tofrodos
 toilet-fonts
 totem
 totem-common
@@ -3386,6 +3417,7 @@ user-session-migration
 util-linux
 util-linux-extra
 uuid-dev
+uuid-runtime
 va-driver-all
 vainfo
 vboot-kernel-utils
@@ -3477,6 +3509,7 @@ xkbset
 xml-core
 xml-twig-tools
 xorg-sgml-doctools
+xorriso
 xserver-common
 xserver-xephyr
 xserver-xorg
