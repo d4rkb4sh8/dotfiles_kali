@@ -2749,6 +2749,7 @@ python3-legacycrypt
 python3-levenshtein
 python3-libnmap
 python3-limits
+python3-linkify-it
 python3-llvmlite
 python3-log-symbols
 python3-louis
@@ -3007,6 +3008,7 @@ python3-tz
 python3-tzlocal
 python3-u-msgpack
 python3-ubjson
+python3-uc-micro
 python3-ufolib2
 python3-uhd
 python3-ujson

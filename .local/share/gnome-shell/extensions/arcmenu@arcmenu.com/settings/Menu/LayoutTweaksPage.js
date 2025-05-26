@@ -313,8 +313,61 @@ class ArcMenuLayoutTweaksPage extends SubPage {
 
     _loadAZTweaks() {
         const tweaksGroup = new Adw.PreferencesGroup();
-        tweaksGroup.add(this._createSearchBarLocationRow());
         this.add(tweaksGroup);
+
+        tweaksGroup.add(this._createSearchBarLocationRow());
+        const mergePanelsSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        mergePanelsSwitch.set_active(this._settings.get_boolean('az-layout-merge-panels'));
+        mergePanelsSwitch.connect('notify::active', widget => {
+            this._settings.set_boolean('az-layout-merge-panels', widget.get_active());
+        });
+        const mergePanelsRow = new Adw.ActionRow({
+            title: _('Merge Top and Bottom Panels'),
+            activatable_widget: mergePanelsSwitch,
+        });
+        mergePanelsRow.add_suffix(mergePanelsSwitch);
+        tweaksGroup.add(mergePanelsRow);
+
+        const defaulViews = new Gtk.StringList();
+        defaulViews.append(_('Pinned Apps'));
+        defaulViews.append(_('Frequent Apps'));
+
+        const defaultViewRow = new Adw.ComboRow({
+            title: _('Default View'),
+            model: defaulViews,
+            selected: this._settings.get_enum('default-menu-view-az'),
+        });
+        defaultViewRow.connect('notify::selected', widget => {
+            this._settings.set_enum('default-menu-view-az', widget.selected);
+            frequentAppsRow.visible = widget.selected === 1;
+        });
+        tweaksGroup.add(defaultViewRow);
+
+        const frequentAppsSpinner = new Gtk.SpinButton({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 1,
+                upper: 40,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0,
+            }),
+            digits: 0,
+            valign: Gtk.Align.CENTER,
+            value: this._settings.get_int('az-layout-max-frequent-apps'),
+        });
+        frequentAppsSpinner.connect('value-changed', widget => {
+            this._settings.set_int('az-layout-max-frequent-apps', widget.get_value());
+        });
+        const frequentAppsRow = new Adw.ActionRow({
+            title: _('Max Frequent Apps'),
+            activatable_widget: frequentAppsSpinner,
+            visible: this._settings.get_enum('default-menu-view-az') === 1,
+        });
+        frequentAppsRow.add_suffix(frequentAppsSpinner);
+        tweaksGroup.add(frequentAppsRow);
 
         const extraShortcutsGroup = new Adw.PreferencesGroup();
         const extraShortcutsRow = this._createExtraShortcutsRow('az-layout-extra-shortcuts');
@@ -823,16 +876,42 @@ class ArcMenuLayoutTweaksPage extends SubPage {
         defaulViews.append(_('Categories List'));
         defaulViews.append(_('Frequent Apps'));
         defaulViews.append(_('All Programs'));
+        defaulViews.append(_('Pinned and Frequent Apps'));
         const defaultViewRow = new Adw.ComboRow({
             title: _('Default View'),
             model: defaulViews,
             selected: this._settings.get_enum('default-menu-view'),
         });
         defaultViewRow.connect('notify::selected', widget => {
+            maxFrequentAppsRow.visible = widget.selected === 4;
             this._settings.set_enum('default-menu-view', widget.selected);
         });
         tweaksGroup.add(defaultViewRow);
 
+        const maxFrequentAppsSpinButton = new Gtk.SpinButton({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 1,
+                upper: 50,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0,
+            }),
+            digits: 0,
+            valign: Gtk.Align.CENTER,
+        });
+        maxFrequentAppsSpinButton.set_value(this._settings.get_int('arcmenu-layout-max-frequent-apps'));
+        maxFrequentAppsSpinButton.connect('value-changed', widget => {
+            this._settings.set_int('arcmenu-layout-max-frequent-apps', widget.get_value());
+        });
+        const maxFrequentAppsRow = new Adw.ActionRow({
+            title: _('Max Frequent Apps'),
+            activatable_widget: maxFrequentAppsSpinButton,
+        });
+        maxFrequentAppsRow.add_suffix(maxFrequentAppsSpinButton);
+        tweaksGroup.add(maxFrequentAppsRow);
+
+        maxFrequentAppsRow.visible = defaultViewRow.selected === 4;
 
         const allAppsButtonActionsList = new Gtk.StringList();
         allAppsButtonActionsList.append(_('Categories List'));

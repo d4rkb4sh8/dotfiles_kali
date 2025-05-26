@@ -118,6 +118,27 @@ export function bindPowerItemVisibility(powerMenuItem) {
     }
 }
 
+/**
+ *
+ * @param {Shell.App} app
+ * @param {Clutter.Event} event
+ */
+export function launchApp(app, event) {
+    const activateOnLaunch = ArcMenuManager.settings.get_boolean('activate-on-launch');
+    const button = event.get_button();
+    const modifiers = event ? event.get_state() : 0;
+    const isMiddleButton = button && button === Clutter.BUTTON_MIDDLE;
+    const isCtrlPressed = (modifiers & Clutter.ModifierType.CONTROL_MASK) !== 0;
+    const shouldOpenNewWindow = app.can_open_new_window() &&
+                                app.state === Shell.AppState.RUNNING &&
+                                (!activateOnLaunch || isCtrlPressed || isMiddleButton);
+
+    if (shouldOpenNewWindow)
+        app.open_new_window(-1);
+    else
+        app.activate();
+}
+
 export class BaseMenuItem extends St.BoxLayout {
     static [GObject.properties] = {
         'active': GObject.ParamSpec.boolean('active', 'active', 'active',
@@ -214,7 +235,8 @@ export class BaseMenuItem extends St.BoxLayout {
 
     _onClicked(action) {
         const isPrimaryOrTouch = action.get_button() === Clutter.BUTTON_PRIMARY || action.get_button() === 0;
-        if (isPrimaryOrTouch) {
+        const isMiddleButton = action.get_button() === Clutter.BUTTON_MIDDLE || action.get_button() === 2;
+        if (isPrimaryOrTouch || isMiddleButton) {
             this.active = false;
             this._menuLayout.grab_key_focus();
             this.remove_style_pseudo_class('active');
@@ -377,8 +399,9 @@ export class BaseMenuItem extends St.BoxLayout {
 
         let state = event.get_state();
 
-        // if user has a modifier down (except capslock and numlock)
+        // if user has a modifier down (except control, capslock and numlock)
         // then don't handle the key press here
+        state &= ~Clutter.ModifierType.CONTROL_MASK;
         state &= ~Clutter.ModifierType.LOCK_MASK;
         state &= ~Clutter.ModifierType.MOD2_MASK;
         state &= Clutter.ModifierType.MODIFIER_MASK;
@@ -1193,7 +1216,8 @@ export class ViewAllAppsButton extends BaseMenuItem {
 
         const defaultMenuView = ArcMenuManager.settings.get_enum('default-menu-view');
         if (defaultMenuView === Constants.DefaultMenuView.PINNED_APPS ||
-            defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)
+            defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS ||
+            defaultMenuView === Constants.DefaultMenuView.PINNED_AND_FREQUENT_APPS)
             this._menuLayout.displayCategories();
         else
             this._menuLayout.displayAllApps();
@@ -1330,7 +1354,7 @@ export class ShortcutMenuItem extends BaseMenuItem {
         }
     }
 
-    activate() {
+    activate(event) {
         switch (this._command) {
         case Constants.ShortcutCommands.LOG_OUT:
         case Constants.ShortcutCommands.LOCK:
@@ -1355,7 +1379,7 @@ export class ShortcutMenuItem extends BaseMenuItem {
             break;
         default: {
             if (this._app)
-                this._app.open_new_window(-1);
+                launchApp(this._app, event);
             else
                 Util.spawnCommandLine(this._command);
         }
@@ -1391,7 +1415,8 @@ export class AvatarMenuItem extends BaseMenuItem {
     }
 
     activate(event) {
-        Util.spawnCommandLine('gnome-control-center user-accounts');
+        const userSettingsCommand = ShellVersion >= 46 ? 'system users' : 'user-accounts';
+        Util.spawnCommandLine(`gnome-control-center ${userSettingsCommand}`);
         this._menuLayout.arcMenu.toggle();
         super.activate(event);
     }
@@ -2383,7 +2408,7 @@ export class PinnedAppsMenuItem extends DraggableMenuItem {
 
     activate(event) {
         if (this._app)
-            this._app.open_new_window(-1);
+            launchApp(this._app, event);
         else if (this._command === Constants.ShortcutCommands.SHOW_APPS)
             Main.overview._overview._controls._toggleAppsPage();
         else
@@ -2558,17 +2583,14 @@ export class ApplicationMenuItem extends BaseMenuItem {
         this.contextMenu.open(BoxPointer.PopupAnimation.FULL);
     }
 
-    activateSearchResult(provider, metaInfo, terms) {
+    activateSearchResult(provider, metaInfo, terms, event) {
         if (provider.activateResult) {
             provider.activateResult(metaInfo.id, terms);
             if (metaInfo.clipboardText)
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, metaInfo.clipboardText);
         } else if (metaInfo.id.endsWith('.desktop')) {
             const app = this._menuLayout.appSys.lookup_app(metaInfo.id);
-            if (app.can_open_new_window())
-                app.open_new_window(-1);
-            else
-                app.activate();
+            launchApp(app, event);
         } else {
             this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
             const systemActions = SystemActions.getDefault();
@@ -2591,7 +2613,7 @@ export class ApplicationMenuItem extends BaseMenuItem {
         if (this.isSearchResult) {
             this.activateSearchResult(this.provider, this.metaInfo, this.resultsView.terms, event);
         } else {
-            this._app.open_new_window(-1);
+            launchApp(this._app, event);
             super.activate(event);
         }
         this._menuLayout.arcMenu.toggle();

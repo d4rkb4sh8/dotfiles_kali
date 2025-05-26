@@ -68,7 +68,9 @@ In 2017, ArcMenu _started_ as a fork of the Zorin menu extension by Zorin OS. As
 
 **@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
-**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee)** | **@[aleayr](https://gitlab.com/aleayr)** | **@[osmancoskun](https://gitlab.com/osmancoskun) !184** | **@[Balló György](https://gitlab.com/City-busz) !189, !215, !226**
+**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee)** | **@[aleayr](https://gitlab.com/aleayr)** | **@[osmancoskun](https://gitlab.com/osmancoskun) !184**
+
+**@[Balló György](https://gitlab.com/City-busz) !189, !215, !226, !241, !242**
 
 -----
 
@@ -90,7 +92,7 @@ In 2017, ArcMenu _started_ as a fork of the Zorin menu extension by Zorin OS. As
 | **Hebrew** | **@[omeritzics](https://gitlab.com/omeritzics)** |
 | **Hungarian** | **@[stevendobay](https://gitlab.com/stevendobay), @[Balázs Meskó](https://gitlab.com/meskobalazs)** |
 | **Italian** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi)** |
-| **Japanese** | **@[Hayao0819](https://gitlab.com/Hayao0819)** |
+| **Japanese** | **@[Hayao0819](https://gitlab.com/Hayao0819), @[Umoxfo](https://gitlab.com/Umoxfo)** |
 | **Korean** | **@[HyeonWol](https://gitlab.com/hyeonwol123)** |
 | **Norwegian** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum)** |
 | **Occitan** | **@[Mejans](https://gitlab.com/Mejans), @[Quentin](https://gitlab.com/quenty_occitania)** |

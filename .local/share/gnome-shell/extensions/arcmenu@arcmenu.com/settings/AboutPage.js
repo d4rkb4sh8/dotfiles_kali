@@ -95,6 +95,7 @@ class ArcMenuAboutPage extends Adw.PreferencesPage {
             use_markup: true,
             xalign: Gtk.Align.START,
             justify: Gtk.Justification.LEFT,
+            wrap: true,
             margin_top: 14,
             margin_bottom: 14,
             margin_start: 14,
@@ -267,7 +268,7 @@ class ArcMenuAboutPage extends Adw.PreferencesPage {
         creditsPage.add(historyGroup);
 
         const historyText = '<span size="small">ArcMenu was first released in 2017 by Andy C. The original ArcMenu project can be found <a href="https://gitlab.com/LinxGem33/Arc-Menu">here</a>.\n\n' +
-                            'In 2017, ArcMenu <i>started</i> as a fork of the Zorin menu extension by <a href="https://zorin.com/os/Zorin">Zorin OS</a>. ' +
+                            'In 2017, ArcMenu started as a fork of the Zorin menu extension by <a href="https://zorin.com/os/Zorin">Zorin OS</a>. ' +
                             "As it's own separate project, ArcMenu rapidly began developing innovative features and quickly diverged " +
                             'away from Zorin menu thanks to the works of <a href="https://gitlab.com/LinxGem33">Andy C</a>, ' +
                             '<a href="https://gitlab.com/AndrewZaech">Andrew Zaech</a>, <a href="https://github.com/lexruee">Alexander Rüedlinger</a>, and other contributors. ' +

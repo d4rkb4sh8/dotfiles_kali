@@ -41,6 +41,10 @@ version='1.5.32'
 [org/freedesktop/tracker/miner/files]
 index-recursive-directories=['&DESKTOP', '&DOCUMENTS', '&MUSIC', '&PICTURES', '&VIDEOS', '&DOWNLOAD', '/home/h4ck3r/Documents/ebooks', '/home/h4ck3r/gitprojects', '/home/h4ck3r/Videos/tutorials', '/home/h4ck3r/VirtualBox VMs', '/home/h4ck3r/dotfiles', '/home/h4ck3r/distro_images']
 
+[org/gnome/Extensions]
+window-height=1051
+window-width=1920
+
 [org/gnome/GPaste]
 growing-lines=true
 images-support=true
@@ -108,11 +112,11 @@ world-clocks=[{'location': <(uint32 2, <('Beijing', 'ZBAA', true, [(0.6969681421
 [org/gnome/clocks/state/window]
 maximized=false
 panel-id='world'
-size=(870, 690)
+size=(948, 1035)
 
 [org/gnome/control-center]
-last-panel='power'
-window-state=(1920, 1051, true)
+last-panel='system'
+window-state=(1920, 1051, false)
 
 [org/gnome/desktop/a11y]
 always-show-universal-access-status=false
@@ -158,6 +162,7 @@ play-sound=true
 [org/gnome/desktop/break-reminders/movement]
 duration-seconds=uint32 300
 interval-seconds=uint32 1800
+play-sound=true
 
 [org/gnome/desktop/calendar]
 show-weekdate=false
@@ -190,7 +195,7 @@ toolkit-accessibility=false
 automount=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher', 'org-gnome-nautilus', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-fileroller', 'org-gnome-settings', 'org-gnome-evolution', 'virtualboxvm', 'virtualbox', 'org-gnome-evolution-alarm-notify', 'kitty', 'com-discordapp-discord', 'org-gnome-shell-extensions', 'mpv']
+application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher', 'org-gnome-nautilus', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-fileroller', 'org-gnome-settings', 'org-gnome-evolution', 'virtualboxvm', 'virtualbox', 'org-gnome-evolution-alarm-notify', 'kitty', 'com-discordapp-discord', 'org-gnome-shell-extensions', 'mpv', 'vlc']
 
 [org/gnome/desktop/notifications/application/com-discordapp-discord]
 application-id='com.discordapp.Discord.desktop'
@@ -248,6 +253,9 @@ application-id='virtualbox.desktop'
 
 [org/gnome/desktop/notifications/application/virtualboxvm]
 application-id='virtualboxvm.desktop'
+
+[org/gnome/desktop/notifications/application/vlc]
+application-id='vlc.desktop'
 
 [org/gnome/desktop/notifications/application/xdg-desktop-portal-gnome]
 application-id='xdg-desktop-portal-gnome.desktop'
@@ -587,7 +595,7 @@ menu-separator-color='rgba(255,255,255,0.1)'
 multi-monitor=true
 pop-folders-data={'Library Home': 'Library Home', 'Utilities': 'Utilities'}
 prefs-visible-page=0
-recently-installed-apps=['org.gnome.clocks.desktop', 'org.gnome.Weather.desktop', 'ulauncher.desktop', 'debian-xterm.desktop', 'debian-uxterm.desktop', 'cutecom.desktop', 'chirp.desktop', 'gnuradio-grc.desktop', 'dk.gqrx.gqrx.desktop', 'org.wireshark.Wireshark.desktop', 're.rizin.cutter.desktop', 'rfdump.desktop', 'kali-mifare-classic-format.desktop', 'kali-mfcuk.desktop', 'kali-hackrf_info.desktop', 'kali-ubertooth-util.desktop', 'kali-bettercap.desktop', 'kali-btscanner.desktop', 'kali-wifi-honey.desktop', 'kali-nfc-mfclassic.desktop', 'kali-heartleech.desktop', 'kali-blueranger.desktop', 'kali-cowpatty.desktop', 'kali-nfc-list.desktop', 'kali-airgeddon.desktop', 'kali-beef-xss-stop.desktop', 'kali-regripper.desktop', 'kali-asleap.desktop', 'kali-ollydbg.desktop', 'kali-mfterm.desktop', 'kali-ettercap.desktop', 'kali-bluelog.desktop', 'kali-beef-xss.desktop', 'kali-mfoc.desktop', 'kali-mdk3.desktop', 'kali-bluesnarfer.desktop', 'guvcview.desktop', 'com.github.themix_project.Oomox.desktop', 'com.ktechpit.whatsie.desktop', 'ranger.desktop', 'com.poweriso.PowerISO.desktop', 'chat.revolt.RevoltDesktop.desktop', 'cmatrix.desktop', 'mpv.desktop', 'io.github.jeffshee.Hidamari.desktop', 'io.gitlab.adhami3310.Impression.desktop', 'start-tor-browser.desktop', 'whatsie_whatsie.desktop', 'csbooks_csbooks.desktop', 'io.github.realmazharhussain.GdmSettings.desktop', 'links2.desktop', 'nl.hjdskes.gcolor3.desktop', 'Popcorn-Time.desktop', 'btop.desktop', 'gdebi.desktop', 'org.gnome.GPaste.Preferences.desktop', 'org.gnome.GPaste.Ui.desktop', 'joplin.desktop', 'org.onlyoffice.desktopeditors.desktop', 'vlc.desktop', 'org.gnome.Evolution.desktop', 'org.qbittorrent.qBittorrent.desktop', 'io.github.hvdwofl.jExifToolGUI.desktop', 'org.gnome.World.PikaBackup.desktop', 'com.github.jeromerobert.pdfarranger.desktop', 'net.sourceforge.Pdfedit.desktop', 'htop.desktop', 'lynis.desktop', 'kali-unhide.desktop', 'kali-rkhunter.desktop', 'org.gnome.SimpleScan.desktop', 'org.gnome.Shotwell.desktop', 'guvcview_guvcview.desktop', 'guvcview_control-panel.desktop', 'org.gnome.Cheese.desktop', 'com.github.ADBeveridge.Raider.desktop', 'io.github.mhogomchungu.media-downloader.desktop', 'amazon-q.desktop', 'org.gnome.Totem.desktop', 'org.gnome.Papers.desktop', 'kali-armitage.desktop', 'org.stegosuite.desktop', 'kali-sctpscan.desktop', 'ettercap-text-only.desktop', 'kali-fang.desktop', 'kali-siparmyknife.desktop', 'kali-sfuzz.desktop', 'kali-truecrack.desktop', 'kali-sipcrack.desktop', 'kali-ccrypt.desktop', 'kali-steghide.desktop', 'kali-ohrwurm.desktop', 'kali-rtpinsertsound.desktop', 'kali-stegsnow.desktop', 'kali-crackle.desktop', 'kali-iaxflood.desktop', 'kali-svreport.desktop', 'kali-enumiax.desktop', 'kali-protos-sip.desktop', 'kali-sipp.desktop', 'kali-rtpbreak.desktop', 'kali-outguess.desktop', 'kali-shellter.desktop', 'kali-svmap.desktop', 'kali-svcrack.desktop', 'kali-rtpflood.desktop', 'kali-inviteflood.desktop', 'kali-afl-fuzz.desktop', 'kali-eapmd5pass.desktop', 'kali-powercat.desktop', 'kali-svcrash.desktop', 'kali-rtpmixsound.desktop', 'kali-svwar.desktop']
+recently-installed-apps=['org.gnome.clocks.desktop', 'org.gnome.Weather.desktop', 'ulauncher.desktop', 'debian-xterm.desktop', 'debian-uxterm.desktop', 'cutecom.desktop', 'chirp.desktop', 'gnuradio-grc.desktop', 'dk.gqrx.gqrx.desktop', 'org.wireshark.Wireshark.desktop', 're.rizin.cutter.desktop', 'rfdump.desktop', 'kali-mifare-classic-format.desktop', 'kali-mfcuk.desktop', 'kali-hackrf_info.desktop', 'kali-ubertooth-util.desktop', 'kali-btscanner.desktop', 'kali-wifi-honey.desktop', 'kali-nfc-mfclassic.desktop', 'kali-heartleech.desktop', 'kali-blueranger.desktop', 'kali-cowpatty.desktop', 'kali-nfc-list.desktop', 'kali-airgeddon.desktop', 'kali-beef-xss-stop.desktop', 'kali-regripper.desktop', 'kali-asleap.desktop', 'kali-ollydbg.desktop', 'kali-mfterm.desktop', 'kali-ettercap.desktop', 'kali-bluelog.desktop', 'kali-beef-xss.desktop', 'kali-mfoc.desktop', 'kali-mdk3.desktop', 'kali-bluesnarfer.desktop', 'guvcview.desktop', 'com.github.themix_project.Oomox.desktop', 'com.ktechpit.whatsie.desktop', 'ranger.desktop', 'com.poweriso.PowerISO.desktop', 'chat.revolt.RevoltDesktop.desktop', 'cmatrix.desktop', 'mpv.desktop', 'io.github.jeffshee.Hidamari.desktop', 'io.gitlab.adhami3310.Impression.desktop', 'whatsie_whatsie.desktop', 'csbooks_csbooks.desktop', 'io.github.realmazharhussain.GdmSettings.desktop', 'links2.desktop', 'nl.hjdskes.gcolor3.desktop', 'Popcorn-Time.desktop', 'btop.desktop', 'gdebi.desktop', 'org.gnome.GPaste.Preferences.desktop', 'org.gnome.GPaste.Ui.desktop', 'joplin.desktop', 'org.onlyoffice.desktopeditors.desktop', 'vlc.desktop', 'org.gnome.Evolution.desktop', 'org.qbittorrent.qBittorrent.desktop', 'io.github.hvdwofl.jExifToolGUI.desktop', 'org.gnome.World.PikaBackup.desktop', 'com.github.jeromerobert.pdfarranger.desktop', 'net.sourceforge.Pdfedit.desktop', 'htop.desktop', 'lynis.desktop', 'kali-unhide.desktop', 'kali-rkhunter.desktop', 'org.gnome.SimpleScan.desktop', 'org.gnome.Shotwell.desktop', 'guvcview_guvcview.desktop', 'guvcview_control-panel.desktop', 'org.gnome.Cheese.desktop', 'com.github.ADBeveridge.Raider.desktop', 'io.github.mhogomchungu.media-downloader.desktop', 'amazon-q.desktop', 'org.gnome.Totem.desktop', 'org.gnome.Papers.desktop', 'kali-armitage.desktop', 'org.stegosuite.desktop', 'kali-sctpscan.desktop', 'ettercap-text-only.desktop', 'kali-fang.desktop', 'kali-siparmyknife.desktop', 'kali-sfuzz.desktop', 'kali-truecrack.desktop', 'kali-sipcrack.desktop', 'kali-ccrypt.desktop', 'kali-steghide.desktop', 'kali-ohrwurm.desktop', 'kali-rtpinsertsound.desktop', 'kali-stegsnow.desktop', 'kali-crackle.desktop', 'kali-iaxflood.desktop', 'kali-svreport.desktop', 'kali-enumiax.desktop', 'kali-protos-sip.desktop', 'kali-sipp.desktop', 'kali-rtpbreak.desktop', 'kali-outguess.desktop', 'kali-shellter.desktop', 'kali-svmap.desktop', 'kali-svcrack.desktop', 'kali-rtpflood.desktop', 'kali-inviteflood.desktop', 'kali-afl-fuzz.desktop', 'kali-eapmd5pass.desktop', 'kali-powercat.desktop', 'kali-svcrash.desktop', 'kali-rtpmixsound.desktop', 'kali-svwar.desktop']
 right-panel-width=200
 search-entry-border-radius=(true, 25)
 search-provider-open-windows=true
@@ -595,7 +603,7 @@ search-provider-recent-files=true
 show-category-sub-menus=true
 show-hidden-recent-files=false
 show-update-notification-v64=false
-update-notifier-project-version=65
+update-notifier-project-version=66
 
 [org/gnome/shell/extensions/bingwallpaper]
 bing-json='[{"startdate":"20250427","fullstartdate":"202504270700","enddate":"20250428","url":"/th?id=OHR.RedwoodGrove_ROW3943985098_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.RedwoodGrove_ROW3943985098","copyright":"Grove of redwoods in Redwood National and State Parks, California, United States (© Bob Pool/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Redwood+National+and+State+Parks&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250427_RedwoodGrove%22&FORM=HPQUIZ","wp":true,"hsh":"87fae1770567cf95d08908251c4dfd53","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250428","fullstartdate":"202504280700","enddate":"20250429","url":"/th?id=OHR.OrangeImpala_ROW4033790900_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.OrangeImpala_ROW4033790900","copyright":"Impala in Moremi Game Reserve, Botswana (© Paul Souders/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Impala+mammal&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250428_OrangeImpala%22&FORM=HPQUIZ","wp":true,"hsh":"8f793f34272e66660b7e342c1fc3708c","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250429","fullstartdate":"202504290700","enddate":"20250430","url":"/th?id=OHR.GardensVillandry_ROW4116943750_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.GardensVillandry_ROW4116943750","copyright":"Formal Château de Villandry, Loire Valley, France (© Mint Images/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Chateau+de+Villandry+France&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250429_GardensVillandry%22&FORM=HPQUIZ","wp":true,"hsh":"7c9f32232b62f64db0e7e1004e291280","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250430","fullstartdate":"202504300700","enddate":"20250501","url":"/th?id=OHR.FozdoIguacu2025_ROW4234187947_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.FozdoIguacu2025_ROW4234187947","copyright":"Iguazu Falls seen from Paraná, Brazil (© agustavop/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Iguazu+Falls&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250430_FozdoIguacu2025%22&FORM=HPQUIZ","wp":true,"hsh":"542d2155575b5a515aed9b9150f0d24a","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250501","fullstartdate":"202505010700","enddate":"20250502","url":"/th?id=OHR.PinkPlumeria_ROW4429508381_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.PinkPlumeria_ROW4429508381","copyright":"Plumeria flowers, Hawaii, United States (© Miranda Jans/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Plumeria&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250501_PinkPlumeria%22&FORM=HPQUIZ","wp":true,"hsh":"6a54e8fc7fb52b4b206dfebe2a9d966c","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250502","fullstartdate":"202505020700","enddate":"20250503","url":"/th?id=OHR.BrazilHeron_ROW0404607593_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.BrazilHeron_ROW0404607593","copyright":"Striated heron on a Victoria water lily, Pantanal, Brazil (© Gerald Corsi/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Striated+heron&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250502_BrazilHeron%22&FORM=HPQUIZ","wp":true,"hsh":"4c95faa45e7c641f39708c40ad9a17ca","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250503","fullstartdate":"202505030700","enddate":"20250504","url":"/th?id=OHR.ArchesGalaxy_ROW0551660527_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.ArchesGalaxy_ROW0551660527","copyright":"The Milky Way framed by Double Arch in Arches National Park, Utah, United States (© Adventure_Photo/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Arches+National+Park&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250503_ArchesGalaxy%22&FORM=HPQUIZ","wp":true,"hsh":"e32226a828e3f9aed4dca93e7f1eec7d","drk":1,"top":1,"bot":1,"hs":[]},{"startdate":"20250504","fullstartdate":"202505040700","enddate":"20250505","url":"/th?id=OHR.SevilleNaboo_ROW0659081905_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp","urlbase":"/th?id=OHR.SevilleNaboo_ROW0659081905","copyright":"Plaza de España, Seville, Spain (© Horia Merla/Getty Images)","copyrightlink":"https://www.bing.com/search?q=Plaza+de+Espana&form=hpcapt","title":"Info","quiz":"/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20250504_SevilleNaboo%22&FORM=HPQUIZ","wp":true,"hsh":"3b4a80e8004f0e13c87951f89178de5c","drk":1,"top":1,"bot":1,"hs":[]}]'
@@ -1248,7 +1256,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 [org/gnome/software]
 check-timestamp=int64 1747055597
 first-run=false
-flatpak-purge-timestamp=int64 1748135576
+flatpak-purge-timestamp=int64 1748221458
 install-timestamp=int64 1741653043
 online-updates-timestamp=int64 1746976000
 update-notification-timestamp=int64 1744895391

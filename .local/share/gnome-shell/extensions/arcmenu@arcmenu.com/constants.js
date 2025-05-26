@@ -41,6 +41,7 @@ export const DefaultMenuView = {
     CATEGORIES_LIST: 1,
     FREQUENT_APPS: 2,
     ALL_PROGRAMS: 3,
+    PINNED_AND_FREQUENT_APPS: 4,
 };
 
 export const SettingsPage = {
@@ -61,6 +62,11 @@ export const SettingsPage = {
     PINNED_APPS: 14,
     DONATE: 15,
     WHATS_NEW: 16,
+};
+
+export const DefaultMenuViewAz = {
+    PINNED_APPS: 0,
+    FREQUENT_APPS: 1,
 };
 
 export const DefaultMenuViewTognee = {

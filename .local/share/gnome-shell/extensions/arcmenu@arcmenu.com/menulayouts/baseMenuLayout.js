@@ -79,6 +79,9 @@ export class BaseMenuLayout extends St.BoxLayout {
         'pinned-apps-icon-size': GObject.ParamSpec.uint(
             'pinned-apps-icon-size', 'pinned-apps-icon-size', 'pinned-apps-icon-size',
             GObject.ParamFlags.READWRITE, 0, GLib.MAXINT32, 0),
+        'can_hide_search': GObject.ParamSpec.boolean(
+            'can_hide_search', 'can_hide_search', 'can_hide_search',
+            GObject.ParamFlags.READWRITE, true),
     };
 
     static {
@@ -134,6 +137,7 @@ export class BaseMenuLayout extends St.BoxLayout {
         this.connect('destroy', () => this._onDestroy());
         this.searchEntry.connectObject('search-changed', this._onSearchEntryChanged.bind(this), this);
         this.searchEntry.connectObject('entry-key-press', this._onSearchEntryKeyPress.bind(this), this);
+        ArcMenuManager.settings.connectObject('changed::search-hidden', () => this._onSearchHiddenChanged(), this);
     }
 
     _connectAppChangedEvents() {
@@ -148,12 +152,19 @@ export class BaseMenuLayout extends St.BoxLayout {
         }, this);
     }
 
+    _onSearchHiddenChanged() {
+        this.searchEntry.visible = !this._shouldHideSearchEntry();
+    }
+
     get menuButton() {
         return this._menuButton;
     }
 
     setDefaultMenuView() {
         this.searchEntry.clearWithoutSearchChangeEvent();
+        if (this._shouldHideSearchEntry())
+            this.searchEntry.hide();
+
         this.searchResults.setTerms([]);
         // Search results have been cleared, set category box active if needed.
         this._setCategoriesBoxInactive(false);
@@ -353,18 +364,19 @@ export class BaseMenuLayout extends St.BoxLayout {
                 if (!appInfo.should_show())
                     continue;
 
-                let item = this.applicationsMap.get(app);
-
                 if (categoryMenuItem instanceof MW.SubCategoryMenuItem) {
                     const subMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, null, true);
                     categoryMenuItem.appList.push(subMenuItem);
                     continue;
-                } else if (!item) {
+                }
+
+                let item = this.applicationsMap.get(app);
+                if (!item) {
                     const isContainedInCategory = true;
                     item = new MW.ApplicationMenuItem(this, app, this.display_type, null, isContainedInCategory);
-                    categoryMenuItem.appList.push(app);
                     this.applicationsMap.set(app, item);
                 }
+                categoryMenuItem.appList.push(app);
 
                 if (showNewAppsIndicator && item.isRecentlyInstalled)
                     categoryMenuItem.setNewAppIndicator(true);
@@ -400,6 +412,7 @@ export class BaseMenuLayout extends St.BoxLayout {
                 return nameA.localeCompare(nameB);
             });
         }
+        categoryMenuItem.visible = categoryMenuItem.appList.length > 0;
     }
 
     setNewAppIndicator() {
@@ -957,10 +970,20 @@ export class BaseMenuLayout extends St.BoxLayout {
             this._activeMenuItem = item;
     }
 
+    _shouldHideSearchEntry() {
+        const searchHidden = ArcMenuManager.settings.get_boolean('search-hidden');
+        return searchHidden && this.can_hide_search;
+    }
+
     _onSearchEntryChanged(searchEntry, searchString) {
         if (searchEntry.isEmpty()) {
             if (this.applicationsBox.contains(this.searchResults))
                 this.applicationsBox.remove_child(this.searchResults);
+
+            if (this._shouldHideSearchEntry()) {
+                this.grab_key_focus();
+                this.searchEntry.hide();
+            }
 
             this.setDefaultMenuView();
         } else {
@@ -973,6 +996,9 @@ export class BaseMenuLayout extends St.BoxLayout {
                 this._clearActorsFromBox();
                 this.applicationsBox.add_child(this.searchResults);
             }
+
+            if (this._shouldHideSearchEntry())
+                this.searchEntry.show();
 
             this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;
 
@@ -1049,17 +1075,6 @@ export class BaseMenuLayout extends St.BoxLayout {
 
         const symbol = event.get_key_symbol();
         const unicode = Clutter.keysym_to_unicode(symbol);
-
-        /*
-        * Pass ctrl key event to searchEntry.
-        * Useful for paste event (ctrl+v),
-        * if searchEntry entry doesn't have key focus
-        */
-        if (this.searchEntry && (symbol === Clutter.KEY_Control_L || symbol === Clutter.KEY_Control_R)) {
-            global.stage.set_key_focus(this.searchEntry.clutter_text);
-            this.searchEntry.clutter_text.event(event, false);
-            return Clutter.EVENT_PROPAGATE;
-        }
 
         switch (symbol) {
         case Clutter.KEY_BackSpace:
