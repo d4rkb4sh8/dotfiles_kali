@@ -84,7 +84,7 @@ alias ttop="top -R -F -s 10 -o rsize"
 #   ---------------------------
 #  7.  NETWORKING
 #   ---------------------------
-
+alias hostadapter='sudo modprobe vboxnetadp' # Virtualbox command to setup host only hostadapter
 alias netCons='lsof -i'                      # netCons:      Show all open TCP/IP sockets
 alias lsock='sudo lsof -i -P'                # lsock:        Display open sockets
 alias lsockU='sudo lsof -nP | grep UDP'      # lsockU:       Display only open UDP sockets
