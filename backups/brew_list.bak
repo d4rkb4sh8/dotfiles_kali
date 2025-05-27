@@ -33,7 +33,6 @@ giflib
 gitleaks
 glib
 gmp
-gperf
 graphite2
 grc
 harfbuzz
@@ -77,9 +76,7 @@ libxdmcp
 libxext
 libxml2
 libxrender
-libyaml
 little-cms2
-lolcat
 lpeg
 lua
 luajit
@@ -105,7 +102,6 @@ pmix
 python@3.13
 readline
 rtmpdump
-ruby
 rustscan
 shared-mime-info
 sqlite
