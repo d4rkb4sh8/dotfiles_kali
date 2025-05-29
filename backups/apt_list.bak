@@ -63,6 +63,7 @@ appstream
 apt
 apt-config-icons
 apt-file
+apt-listbugs
 apt-listchanges
 apt-utils
 arch-test
@@ -2310,6 +2311,7 @@ libpam-modules
 libpam-modules-bin
 libpam-runtime
 libpam-systemd
+libpam-tmpdir
 libpam-winbind
 libpam-wtmpdb
 libpam0g
@@ -3912,6 +3914,7 @@ python3-oscrypto
 python3-outcome
 python3-packageurl
 python3-packaging
+python3-packaging-whl
 python3-paho-mqtt
 python3-pandas
 python3-pandas-lib
@@ -4411,6 +4414,7 @@ ruby-concurrent
 ruby-connection-pool
 ruby-console
 ruby-csv
+ruby-debian
 ruby-dev
 ruby-did-you-mean
 ruby-domain-name
@@ -4423,6 +4427,7 @@ ruby-ffi-compiler
 ruby-fiber-local
 ruby-fxruby
 ruby-get-process-mem
+ruby-gettext
 ruby-glu
 ruby-gssapi
 ruby-gyoku
@@ -4441,6 +4446,7 @@ ruby-jwt
 ruby-levenshtein
 ruby-libv8-node
 ruby-little-plugger
+ruby-locale
 ruby-logging
 ruby-mechanize
 ruby-memoizable
@@ -4488,8 +4494,11 @@ ruby-selenium-webdriver
 ruby-sha3
 ruby-simple-oauth
 ruby-snmp
+ruby-soap4r
 ruby-spider
 ruby-sqlite3
+ruby-sys-proctable
+ruby-text
 ruby-thread-safe
 ruby-timers
 ruby-traces
@@ -4499,11 +4508,13 @@ ruby-typhoeus
 ruby-tzinfo
 ruby-unf
 ruby-unf-ext
+ruby-unicode
 ruby-webrick
 ruby-webrobots
 ruby-websocket
 ruby-winrm
 ruby-winrm-fs
+ruby-xmlparser
 ruby-xmlrpc
 ruby-yajl
 ruby-zhexdump
@@ -4640,6 +4651,7 @@ squashfs-tools
 sqv
 ssdeep
 sse3-support
+ssh
 sshuttle
 ssl-cert
 ssldump

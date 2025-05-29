@@ -1,0 +1,9 @@
+setg RHOSTS 192.168.56.102
+search ssh 4.3
+search ssh
+search openssh
+use 6
+show options
+run
+exit
+search ssh

@@ -20,7 +20,6 @@ set output-meta on
 # do not bell on tab-completion
 # set bell-style none
 # set bell-style visible
-
 # make autocompletion case insensitive and display suggestions
  set completion-ignore-case On
 # set show-all-if-ambiguous On
