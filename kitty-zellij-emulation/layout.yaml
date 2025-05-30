@@ -1,0 +1,7 @@
+layout:
+  - cmd: htop
+    split: right
+  - cmd: vim
+    split: bottom
+  - cmd: bash
+    split: left
