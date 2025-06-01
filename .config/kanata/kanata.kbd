@@ -68,6 +68,17 @@
   dsr (tap-hold $tap-time $hold-time A-f12 A-f12)
   bdl (tap-hold $tap-time $hold-time [ C-bspc)
   fdl (tap-hold $tap-time $hold-time ] S-C-del)
+  wtl (tap-hold $tap-time $hold-time S-M-pgup S-M-pgup)
+  wtr (tap-hold $tap-time $hold-time S-M-pgdn S-M-pgdn)
+  
+
+  rpl (tap-hold $tap-time $hold-time M-left M-left)
+  rpd (tap-hold $tap-time $hold-time M-down M-down)
+  rpu (tap-hold $tap-time $hold-time M-up M-up)
+  rpr (tap-hold $tap-time $hold-time M-rght M-rght)
+
+
+
   mwl (mwheel-left 50 120)
   mwd (mwheel-down 50 120)
   mwu (mwheel-up 50 120)
@@ -81,21 +92,32 @@
   tab  q    w    e    r    t    @yy  @uu  @ii  @oo  p    @bdl @fdl \
   esc  @aa  @ss  @dd  @ff  g    @hh  @jj  @kk  @ll  ;    '    ret
   lsft @zz  @xx  @cc  @vv  b    n    m    @dwb @dwf /    rsft
-  lctl @l2  @la           spc              @ra  @l3  @l4
+  @l2  @l3  @la           spc             @ra  @l4  @l5
 )
 
-;; Navigation layer - left hand on left win/super/cmd key  
+;; Workspaces, Windows, Panes layer - left hand on left Ctrl key  
 (deflayer two 
-  caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts @dsl @dsr
+  caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    @mwl @mwd @mwu @mwr p    @dtb @dte \
-  esc  _    _    _    _    g    left down up   rght bspc del  ret
+  tab  q    w    e    r    t    @wtl @dsl @dsr @wtr p    @dtb @dte \
+  esc  _    _    _    _    g    @rpl @rpd @rpu @rpr bspc del  ret
   lsft _    _    _    _    b    @nn  @mm  @tbd @tfd /    rsft
   _    _    _           spc               _    _    _
 )
 
+
+;; Navigation layer - left hand on left win/super/cmd key               
+(deflayer three                                                           
+  caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _      
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc 
+  tab  q    w    e    r    t    @mwl @mwd @mwu @mwr p    @dtb @dte \    
+  esc  _    _    _    _    g    left down up   rght bspc del  ret       
+  lsft _    _    _    _    b    @nn  @mm  @tbd @tfd /    rsft           
+  _    _    _           spc               _    _    _                   
+)
+
 ;; Symbols layer - right hand on right win/super/cmd key 
-(deflayer three 
+(deflayer four 
   caps f1   f2   f3    f4   f5   f6   f7   f8   f9   f10  f11  lrld
   grv  1    2    3     4    5    6    7    8    9    0    -    =    bspc
   tab  S-1  S-2  S-3   S-4  S-5  _    _    _    _    p    _    _    \
@@ -105,7 +127,7 @@
 )
 
 ;; Brackets layer - right hand on right ctrl key 
-(deflayer four 
+(deflayer five 
   caps f1   f2   f3    f4   f5   f6   f7   f8   f9   f10  f11  f12
   grv  1    2    3     4    5    6    7    8    9    0    -    =    bspc
   tab  S-9  S-0  [     ]    S-\  _    _    _    _    p    _    _    \
