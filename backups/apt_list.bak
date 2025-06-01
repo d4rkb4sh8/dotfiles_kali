@@ -58,6 +58,7 @@ apksigner
 apktool
 apparmor
 apparmor-profiles
+apparmor-utils
 apple-bleee
 appstream
 apt
@@ -3456,6 +3457,7 @@ python3-antlr4
 python3-anyio
 python3-apispec
 python3-apispec-webframeworks
+python3-apparmor
 python3-apt
 python3-arc4
 python3-argcomplete
@@ -3794,6 +3796,7 @@ python3-ldb
 python3-legacy-cgi
 python3-legacycrypt
 python3-levenshtein
+python3-libapparmor
 python3-libarchive-c
 python3-libbde
 python3-libcreg

@@ -536,7 +536,7 @@ last-folder-path='/home/h4ck3r/dotfiles/qb_themes'
 last-folder-path='/home/h4ck3r/keepassxc'
 
 [org/gnome/portal/filechooser/ulauncher]
-last-folder-path='/home/h4ck3r/Downloads'
+last-folder-path='/home/h4ck3r/dotfiles'
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=true
@@ -1103,7 +1103,7 @@ radius-bottomleft=true
 radius-bottomright=true
 radius-topleft=true
 radius-topright=true
-reloadstyle=false
+reloadstyle=true
 removestyle=false
 set-fullscreen=true
 set-notifications=false
