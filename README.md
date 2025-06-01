@@ -1,7 +1,5 @@
 Here's a detailed breakdown of the bootstrap script:
 
-### Markdown Summary
-```markdown
 ## Bootstrap Script Overview
 **Purpose**: Automated system setup for Kali Linux  
 **Key Components**:
@@ -20,21 +18,20 @@ Here's a detailed breakdown of the bootstrap script:
 - Manages 400+ packages across 4 package managers
 - Customizes GRUB/AppArmor/GNOME settings
 - Handles installation failures gracefully
-```
 
-### Detailed Section Breakdown
+---
+## Detailed Section Breakdown
 
 ---
 
-#### **1. Initial Setup & Security**
-```markdown
-### A. System Configuration
+### **1. Initial Setup & Security**
+#### A. System Configuration
 - Sets bash as default shell for user/root
 - Customizes sudo prompt with lock emoji (🔒)
 - Replaces GNOME Terminal with Kitty
 - Adds non-free repositories to APT sources
 
-### B. Security Hardening
+#### B. Security Hardening
 - **Fail2Ban**:
   - Installs and configures for SSH protection
   - Sets backend to systemd
@@ -45,20 +42,20 @@ Here's a detailed breakdown of the bootstrap script:
   - Default deny incoming + allow outgoing
 - **AppArmor**:
   - Enforces all security profiles
-```
+
 
 ---
 
-#### **2. Package Management**
-```markdown
-### A. APT Packages (Main)
+### **2. Package Management**
+
+#### A. APT Packages (Main)
 - Updates/upgrades system
 - Installs core tools (git/stow/curl/cmake)
 - Removes "bloatware" (Audacity/GIMP/LibreOffice)
 - Installs 400+ packages from filtered list
 - Tracks failed installations
 
-### B. Alternative Package Managers
+#### B. Alternative Package Managers
 - **Flatpak**:
   - Adds Flathub repository
   - Installs packages from backup list
@@ -70,38 +67,35 @@ Here's a detailed breakdown of the bootstrap script:
   - Sets shell environment
   - Installs packages with increased file descriptor limit
 
-### C. Failure Tracking
+#### C. Failure Tracking
 - Maintains arrays for failed installations:
   - `failed_apt`
   - `failed_flatpak`
   - `failed_snap`
   - `failed_brew`
-```
-
 ---
 
-#### **3. Dotfiles & Configuration**
-```markdown
-### A. Dotfiles Setup
+### **3. Dotfiles & Configuration**
+
+#### A. Dotfiles Setup
 - Clones dotfiles repository
 - Uses GNU Stow for symlink management
 - Cleans up existing .bashrc
 - Filters APT package list (removes specific apps)
 
-### B. Shell Enhancements
+#### B. Shell Enhancements
 - Installs **ble.sh** (Bash Line Editor):
   - Builds from source
   - Adds to .bashrc initialization
 - Installs **Hack Nerd Font**:
   - Downloads/installs to ~/.local/share/fonts
   - Updates font cache
-```
+
 
 ---
 
-#### **4. UI/UX Customization**
-```markdown
-### A. Terminal & GRUB
+### **4. UI/UX Customization**
+#### A. Terminal & GRUB
 - Sets Kitty as default terminal
 - Installs **Tela Circle** icon theme
 - Customizes GRUB:
@@ -110,47 +104,43 @@ Here's a detailed breakdown of the bootstrap script:
   - Reduces timeout to 2s
   - Disables CPU mitigations (performance)
 
-### B. GNOME Settings
+#### B. GNOME Settings
 - Restores settings from dconf backup:
   - Keyboard shortcuts
   - Desktop preferences
   - Application configurations
-```
 
 ---
 
-#### **5. Hardware & Drivers**
-```markdown
-### A. Input Devices
+### **5. Hardware & Drivers**
+#### A. Input Devices
 - Creates uinput group
 - Adds user to input/uinput groups
 - Sets udev rules for uinput device
 
-### B. Wireless Adapters
+#### B. Wireless Adapters
 - Compiles/installs RTL8812AU driver:
   - Uses DKMS for kernel integration
   - Supports Alfa wireless cards
-```
-
 ---
 
-#### **6. Post-Install & Reporting**
-```markdown
-### A. Validation Checks
+### **6. Post-Install & Reporting**
+#### A. Validation Checks
 - Verifies installation success for:
   - APT packages (dpkg -l)
   - Flatpaks (flatpak list)
   - Snaps (snap list)
   - Brew formulae (brew list)
 
-### B. Summary Report
+#### B. Summary Report
 - Prints failed packages per category
 - Lists excluded packages requiring manual install
 - Shows decorative completion message (figlet + lolcat)
 - Initiates reboot (commented)
-```
 
-### Key Technical Notes
+---
+## Key Technical Notes
+---
 1. **Error Handling**:
    - `set -euo pipefail` for strict error checking
    - IFS modification for safer word splitting
