@@ -75,6 +75,9 @@
   rpd (tap-hold $tap-time $hold-time M-down M-down)
   rpu (tap-hold $tap-time $hold-time M-up M-up)
   rpr (tap-hold $tap-time $hold-time M-rght M-rght)
+  mpp (tap-hold $tap-time $hold-time C-M-/ C-M-/)
+  msf (tap-hold $tap-time $hold-time C-M-. C-M-.)
+  msb (tap-hold $tap-time $hold-time C-M-, C-M-,)
   mwl (mwheel-left 50 120)
   mwd (mwheel-down 50 120)
   mwu (mwheel-up 50 120)
@@ -95,9 +98,9 @@
 (deflayer two 
   caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    @wtl @dsl @dsr @wtr p    @dtb @dte \
-  esc  _    _    _    _    g    @rpl @rpd @rpu @rpr bspc del  ret
-  lsft _    _    _    _    b    @nn  @mm  @tbd @tfd /    rsft
+  tab  q    w    e    r    t    @wtl @dsl @dsr @wtr p    _    _    \
+  esc  _    _    _    _    g    @rpl @rpd @rpu @rpr _    _  ret
+  lsft _    _    _    _    b    @nn  @mm  @msb @msf @mpp rsft
   _    _    _           spc               _    _    _
 )
 
