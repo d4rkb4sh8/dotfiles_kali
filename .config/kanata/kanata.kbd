@@ -54,6 +54,7 @@
   l2 (tap-hold $tap-time $hold-time lmet (layer-toggle two))   
   l3 (tap-hold $tap-time $hold-time rmet (layer-toggle three)) 
   l4 (tap-hold $tap-time $hold-time rctl (layer-toggle four))
+  l5 (tap-hold $tap-time $hold-time rctl (layer-toggle five))
   qtd (tap-hold $tap-time $hold-time C-A-q C-A-q)
   pum (tap-hold $tap-time $hold-time A-f2 A-f2)
   dsb (tap-hold $tap-time $hold-time C-M-down C-M-down) 
@@ -70,15 +71,10 @@
   fdl (tap-hold $tap-time $hold-time ] S-C-del)
   wtl (tap-hold $tap-time $hold-time S-M-pgup S-M-pgup)
   wtr (tap-hold $tap-time $hold-time S-M-pgdn S-M-pgdn)
-  
-
   rpl (tap-hold $tap-time $hold-time M-left M-left)
   rpd (tap-hold $tap-time $hold-time M-down M-down)
   rpu (tap-hold $tap-time $hold-time M-up M-up)
   rpr (tap-hold $tap-time $hold-time M-rght M-rght)
-
-
-
   mwl (mwheel-left 50 120)
   mwd (mwheel-down 50 120)
   mwu (mwheel-up 50 120)
