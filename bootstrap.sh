@@ -1,4 +1,91 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'
+	'
+
+# Initialize tracking arrays
+failed_apt=()
+failed_flatpak=()
+failed_snap=()
+failed_brew=()
+excluded_apt_packages=()
+
+log() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $*"
+}
+
+check_command() {
+  command -v "$1" &>/dev/null || { log "Missing required command: $1"; exit 1; }
+}
+
+require_commands=(git stow curl gawk cmake sudo)
+for cmd in "${require_commands[@]}"; do check_command "$cmd"; done
+
+# Set default shell to bash for user and root
+log "Setting default shell to bash for user and root..."
+sudo chsh -s /bin/bash "$USER"
+sudo chsh -s /bin/bash root
+
+# Improve sudo password prompt
+log "Customizing sudo password prompt..."
+echo 'Defaults passprompt="[sudo] password for %u: 🔒 "' | sudo tee /etc/sudoers.d/00_prompt_lock > /dev/null
+
+# Change default terminal to Kitty
+log "Changing default terminal to Kitty..."
+sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty
+if [ -f /usr/bin/gnome-terminal ]; then
+  sudo mv /usr/bin/gnome-terminal /usr/bin/gnome-terminal.bak
+fi
+echo -e '#!/usr/bin/env bash
+kitty "$@"' | sudo tee /usr/bin/gnome-terminal > /dev/null
+sudo chmod 755 /usr/bin/gnome-terminal
+
+# Configure and enable fail2ban
+log "Setting up fail2ban..."
+sudo apt install -y fail2ban python3-systemd
+sudo cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo sed -i '/\[sshd\]/,/enabled/s/^enabled.*/enabled = true/;/\[sshd\]/,/enabled/s/^backend.*/backend = systemd/' /etc/fail2ban/jail.local
+sudo systemctl enable fail2ban.service
+sudo systemctl start fail2ban.service
+
+# Set up Kanata keyboard remapper
+log "Configuring Kanata..."
+sudo groupadd -f uinput
+sudo usermod -aG input "$USER"
+sudo usermod -aG uinput "$USER"
+echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/99-input.rules > /dev/null
+sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo modprobe uinput
+
+mkdir -p ~/.config/systemd/user
+cat <<EOF > ~/.config/systemd/user/kanata.service
+[Unit]
+Description=Kanata keyboard remapper
+Documentation=https://github.com/jtroo/kanata
+
+[Service]
+Environment=PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:$HOME/.cargo/bin
+Environment=DISPLAY=:0
+Type=simple
+ExecStart=/usr/bin/sh -c 'exec \$(which kanata) --cfg \${HOME}/.config/kanata/kanata.kbd'
+Restart=no
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable kanata.service
+systemctl --user start kanata.service
+
+log "Kanata service started. You may need to reboot or re-login for group changes to take effect."
+
+# Further bootstrap steps would follow here...
+
+# ==== Original Bootstrap Logic ====
+
+#!/usr/bin/env bash
 
 # Exit immediately if a command exits with a non-zero status
 #set -e
