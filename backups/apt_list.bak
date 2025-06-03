@@ -57,8 +57,6 @@ apache2-utils
 apksigner
 apktool
 apparmor
-apparmor-profiles
-apparmor-utils
 apple-bleee
 appstream
 apt
@@ -444,6 +442,9 @@ findutils
 firebird4.0-common
 firebird4.0-common-doc
 firefox-esr
+firejail
+firejail-profiles
+firetools
 firewalk
 firmware-amd-graphics
 firmware-ath9k-htc
@@ -782,6 +783,7 @@ gtk-update-icon-cache
 gtk2-engines-murrine
 gtk2-engines-pixbuf
 gtkhash
+gum
 guymager
 gvfs
 gvfs-backends
@@ -3282,6 +3284,8 @@ packagekit-tools
 pacu
 padbuster
 pahole
+pandoc
+pandoc-data
 papers
 papers-common
 parallel
@@ -3457,7 +3461,6 @@ python3-antlr4
 python3-anyio
 python3-apispec
 python3-apispec-webframeworks
-python3-apparmor
 python3-apt
 python3-arc4
 python3-argcomplete
@@ -3796,7 +3799,6 @@ python3-ldb
 python3-legacy-cgi
 python3-legacycrypt
 python3-levenshtein
-python3-libapparmor
 python3-libarchive-c
 python3-libbde
 python3-libcreg
@@ -3917,7 +3919,6 @@ python3-oscrypto
 python3-outcome
 python3-packageurl
 python3-packaging
-python3-packaging-whl
 python3-paho-mqtt
 python3-pandas
 python3-pandas-lib
@@ -4259,7 +4260,6 @@ python3-websockify
 python3-werkzeug
 python3-wget
 python3-wheel
-python3-wheel-whl
 python3-whois
 python3-winacl
 python3-wordcloud
@@ -4630,6 +4630,7 @@ spectools
 speech-dispatcher
 speech-dispatcher-audio-plugins
 speech-dispatcher-espeak-ng
+speedtest-cli
 sphinx-common
 sphinx-rtd-theme-common
 spiderfoot
