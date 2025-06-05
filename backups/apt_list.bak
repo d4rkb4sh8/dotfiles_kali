@@ -57,6 +57,10 @@ apache2-utils
 apksigner
 apktool
 apparmor
+apparmor-notify
+apparmor-profiles
+apparmor-profiles-extra
+apparmor-utils
 apple-bleee
 appstream
 apt
@@ -3461,6 +3465,7 @@ python3-antlr4
 python3-anyio
 python3-apispec
 python3-apispec-webframeworks
+python3-apparmor
 python3-apt
 python3-arc4
 python3-argcomplete
@@ -3799,6 +3804,7 @@ python3-ldb
 python3-legacy-cgi
 python3-legacycrypt
 python3-levenshtein
+python3-libapparmor
 python3-libarchive-c
 python3-libbde
 python3-libcreg
@@ -3898,6 +3904,7 @@ python3-netmiko
 python3-networkx
 python3-newt
 python3-nmap
+python3-notify2
 python3-nplusone
 python3-ntc-templates
 python3-ntlm-auth
@@ -4215,6 +4222,7 @@ python3-trie
 python3-trio
 python3-trio-websocket
 python3-tsk
+python3-ttkthemes
 python3-twisted
 python3-txaio
 python3-typeguard
@@ -4699,6 +4707,7 @@ tasksel
 tasksel-data
 tcl
 tcl-expect
+tcl-ttkthemes
 tcl8.6
 tcpdump
 tcpflow

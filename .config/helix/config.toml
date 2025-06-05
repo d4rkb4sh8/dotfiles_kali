@@ -1,0 +1,15 @@
+theme = "adwaita-dark"
+
+[editor]
+line-number = "relative"
+cursorline = true
+bufferline = "multiple"
+mouse = true
+color-modes = true
+
+[editor.cursor-shape]
+insert = "bar"
+select = "underline"
+
+[editor.indent-guides]
+render = true

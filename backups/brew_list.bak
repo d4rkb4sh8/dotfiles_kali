@@ -2,11 +2,13 @@ acl
 alsa-lib
 aom
 atuin
+bash-language-server
 berkeley-db@5
 binsider
 binutils
 brotli
 bzip2
+c-ares
 ca-certificates
 cairo
 carapace
@@ -36,6 +38,7 @@ gmp
 graphite2
 grc
 harfbuzz
+helix
 highway
 hwloc
 icu4c@77
@@ -88,6 +91,7 @@ mpfr
 ncurses
 neovim
 nmap
+node
 onefetch
 open-mpi
 openexr
