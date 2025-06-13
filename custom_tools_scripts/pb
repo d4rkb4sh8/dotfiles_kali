@@ -1,0 +1,257 @@
+#!/usr/bin/env bash
+
+# pb - Pure Bash CLI Tool
+# Version: 2.1
+# Author: d4rkb4sh8
+# License: MIT
+
+# Check Bash version (4+ required)
+((BASH_VERSINFO[0] < 4)) && { echo -e "\033[0;31mError: Bash 4+ required\033[0m" >&2; exit 1; }
+
+# Color definitions
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
+# Formatting
+BOLD='\033[1m'
+UNDERLINE='\033[4m'
+
+# Main help function
+show_help() {
+  echo -e "${BOLD}${WHITE}Pure Bash CLI Tool (pb) ${CYAN}v2.1${NC}\n"
+  echo -e "${BOLD}${WHITE}Usage:${NC}"
+  echo -e "  ${CYAN}pb${NC} [${GREEN}command${NC}] [${YELLOW}options${NC}] [${MAGENTA}arguments${NC}]\n"
+  
+  echo -e "${BOLD}${WHITE}Core Commands:${NC}"
+  echo -e "  ${GREEN}string${NC}    String manipulation utilities"
+  echo -e "  ${GREEN}array${NC}     Array operations"
+  echo -e "  ${GREEN}file${NC}      File handling utilities"
+  echo -e "  ${GREEN}math${NC}      Mathematical operations"
+  echo -e "  ${GREEN}color${NC}     Color conversion utilities\n"
+  
+  echo -e "${BOLD}${WHITE}Global Options:${NC}"
+  echo -e "  ${YELLOW}-h, --help${NC}    Show this help message"
+  echo -e "  ${YELLOW}-v, --version${NC} Show version information\n"
+  
+  echo -e "${BOLD}${WHITE}Examples:${NC}"
+  echo -e "  ${CYAN}pb file line-count /etc/passwd${NC}"
+  echo -e "  ${CYAN}pb file head -n 5 ~/.bashrc${NC}"
+  echo -e "  ${CYAN}pb file tail -n 3 ~/.zshrc${NC}"
+}
+
+# Version information
+show_version() {
+  echo -e "${BOLD}${WHITE}pb (Pure Bash CLI) ${CYAN}v2.1${NC}"
+  echo -e "${BLUE}Using features from the Pure Bash Bible${NC}"
+}
+
+# Enhanced argument parsing
+parse_arguments() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help)
+        show_help
+        exit 0
+        ;;
+      -v|--version)
+        show_version
+        exit 0
+        ;;
+      string|array|file|math|color)
+        command="$1"
+        shift
+        parse_subcommand "$command" "$@"
+        exit $?
+        ;;
+      *)
+        echo -e "${RED}Error: Unknown command or option '$1'${NC}"
+        show_help
+        exit 1
+        ;;
+    esac
+    shift
+  done
+}
+
+# Subcommand parser
+parse_subcommand() {
+  local command="$1"
+  shift
+  
+  # Handle help flag before subcommand
+  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    "show_${command}_help"
+    exit 0
+  fi
+
+  case "$command" in
+    file) file_operations "$@" ;;
+    # Other command cases...
+    *)
+      echo -e "${RED}Error: Invalid command${NC}"
+      show_help
+      exit 1
+      ;;
+  esac
+}
+
+# File operations with proper help handling
+file_operations() {
+  local subcommand="$1"
+  shift
+  
+  case "$subcommand" in
+    -h|--help|help)
+      show_file_help
+      exit 0
+      ;;
+    line-count)
+      handle_line_count "$@"
+      ;;
+    head)
+      handle_head "$@"
+      ;;
+    tail)
+      handle_tail "$@"
+      ;;
+    *)
+      echo -e "${RED}Error: Invalid file operation '${subcommand}'${NC}"
+      show_file_help
+      exit 1
+      ;;
+  esac
+}
+
+handle_line_count() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help)
+        echo -e "${BOLD}${WHITE}File Line Count:${NC}"
+        echo -e "  Count lines in a file\n"
+        echo -e "${BOLD}${WHITE}Usage:${NC}"
+        echo -e "  ${CYAN}pb file line-count [${YELLOW}options${NC}] ${MAGENTA}<file>${NC}\n"
+        echo -e "${BOLD}${WHITE}Options:${NC}"
+        echo -e "  ${YELLOW}-h, --help${NC}    Show this help message"
+        exit 0
+        ;;
+      *)
+        local file="$1"
+        if [[ ! -f "$file" ]]; then
+          echo -e "${RED}Error: File '$file' not found${NC}"
+          exit 1
+        fi
+        mapfile -tn 0 lines < "$file"
+        echo -e "${GREEN}Line count:${NC} ${CYAN}${#lines[@]}${NC}"
+        exit 0
+        ;;
+    esac
+    shift
+  done
+
+  echo -e "${RED}Error: Missing file argument${NC}"
+  show_file_help
+  exit 1
+}
+
+handle_head() {
+  local lines=5
+  local file
+  
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help)
+        echo -e "${BOLD}${WHITE}File Head:${NC}"
+        echo -e "  Show first N lines of a file\n"
+        echo -e "${BOLD}${WHITE}Usage:${NC}"
+        echo -e "  ${CYAN}pb file head [${YELLOW}options${NC}] ${MAGENTA}<file>${NC}\n"
+        echo -e "${BOLD}${WHITE}Options:${NC}"
+        echo -e "  ${YELLOW}-n, --lines${NC}   Number of lines to show (default: 5)"
+        echo -e "  ${YELLOW}-h, --help${NC}    Show this help message"
+        exit 0
+        ;;
+      -n|--lines)
+        lines="$2"
+        shift 2
+        ;;
+      *)
+        file="$1"
+        shift
+        ;;
+    esac
+  done
+
+  if [[ ! -f "$file" ]]; then
+    echo -e "${RED}Error: File '$file' not found${NC}"
+    exit 1
+  fi
+
+  mapfile -tn "$lines" content < "$file"
+  echo -e "${GREEN}First ${lines} lines:${NC}"
+  printf '%s\n' "${content[@]}"
+}
+
+handle_tail() {
+  local lines=5
+  local file
+  
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help)
+        echo -e "${BOLD}${WHITE}File Tail:${NC}"
+        echo -e "  Show last N lines of a file\n"
+        echo -e "${BOLD}${WHITE}Usage:${NC}"
+        echo -e "  ${CYAN}pb file tail [${YELLOW}options${NC}] ${MAGENTA}<file>${NC}\n"
+        echo -e "${BOLD}${WHITE}Options:${NC}"
+        echo -e "  ${YELLOW}-n, --lines${NC}   Number of lines to show (default: 5)"
+        echo -e "  ${YELLOW}-h, --help${NC}    Show this help message"
+        exit 0
+        ;;
+      -n|--lines)
+        lines="$2"
+        shift 2
+        ;;
+      *)
+        file="$1"
+        shift
+        ;;
+    esac
+  done
+
+  if [[ ! -f "$file" ]]; then
+    echo -e "${RED}Error: File '$file' not found${NC}"
+    exit 1
+  fi
+
+  mapfile -tn 0 content < "$file"
+  echo -e "${GREEN}Last ${lines} lines:${NC}"
+  printf '%s\n' "${content[@]: -$lines}"
+}
+
+show_file_help() {
+  echo -e "${BOLD}${WHITE}File Operations:${NC}\n"
+  echo -e "${BOLD}${WHITE}Usage:${NC}"
+  echo -e "  ${CYAN}pb file line-count ${MAGENTA}<file>${NC}"
+  echo -e "  ${CYAN}pb file head [${YELLOW}-n NUM${NC}] ${MAGENTA}<file>${NC}"
+  echo -e "  ${CYAN}pb file tail [${YELLOW}-n NUM${NC}] ${MAGENTA}<file>${NC}\n"
+  echo -e "${BOLD}${WHITE}Options:${NC}"
+  echo -e "  ${YELLOW}-h, --help${NC}    Show help for specific command"
+  echo -e "  ${YELLOW}-n, --lines${NC}   Number of lines (for head/tail)\n"
+  echo -e "${BOLD}${WHITE}Examples:${NC}"
+  echo -e "  ${CYAN}pb file line-count /etc/passwd${NC}"
+  echo -e "  ${CYAN}pb file head -n 10 ~/.bashrc${NC}"
+  echo -e "  ${CYAN}pb file tail --lines 5 ~/.zshrc${NC}"
+}
+
+# Main execution
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+parse_arguments "$@"
