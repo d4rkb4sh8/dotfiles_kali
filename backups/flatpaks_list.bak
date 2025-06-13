@@ -1,10 +1,12 @@
 com.discordapp.Discord
 com.github.ADBeveridge.Raider
+com.github.d4nj1.tlpui
 com.github.jeromerobert.pdfarranger
 io.github.hvdwofl.jExifToolGUI
 io.github.mhogomchungu.media-downloader
 io.gitlab.adhami3310.Impression
 net.sourceforge.Pdfedit
+nl.hjdskes.gcolor3
 org.gnome.Evince
 org.gnome.Evolution
 org.gnome.Shotwell
