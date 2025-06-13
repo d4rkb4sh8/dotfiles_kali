@@ -1,0 +1,11 @@
+FunctionCode,FunctionDescription
+8,Inland Port
+7,Fixed Transport Functions (e.g. Oil platform)
+6,"Multimodal Functions (ICDs, etc.)"
+5,Postal Exchange Office
+4,Airport
+3,Road Terminal
+2,Rail Terminal
+1,"Port, as defined in Rec 16"
+0,"Function not known, to be specified"
+B,Border Crossing
