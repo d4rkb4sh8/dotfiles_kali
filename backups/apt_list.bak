@@ -209,6 +209,7 @@ faraday
 faraday-agent-dispatcher
 faraday-cli
 fastfetch
+fd-find
 fdisk
 fern-wifi-cracker
 ffmpeg
@@ -2993,8 +2994,6 @@ tipa
 tk
 tk8.6
 tk8.6-blt2.5
-tlp
-tlp-rdw
 tmux
 tnftp
 toilet-fonts

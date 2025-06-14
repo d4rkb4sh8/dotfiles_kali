@@ -116,7 +116,7 @@ panel-id='world'
 size=(948, 1035)
 
 [org/gnome/control-center]
-last-panel='background'
+last-panel='power'
 window-state=(1717, 939, false)
 
 [org/gnome/desktop/a11y]
@@ -1326,7 +1326,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 [org/gnome/software]
 check-timestamp=int64 1747055597
 first-run=false
-flatpak-purge-timestamp=int64 1749780521
+flatpak-purge-timestamp=int64 1749863785
 install-timestamp=int64 1741653043
 online-updates-timestamp=int64 1746976000
 update-notification-timestamp=int64 1744895391
@@ -1372,7 +1372,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(4, 29)
+window-position=(0, 40)
 window-size=(1231, 902)
 
 [org/yorba/shotwell/preferences/export]
