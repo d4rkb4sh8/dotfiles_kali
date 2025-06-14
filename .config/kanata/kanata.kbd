@@ -136,7 +136,7 @@
   grv  _    _    _    _    _    _    _    _    _    _    _    _    bspc 
   tab  _    _    _    _    _    @mwl @mwd @mwu @mwr p    @dtb @dte _    
   esc  _    _    _    _    _    left down up   rght bspc del  ret       
-  lsft _    _    _    _    _    _    _    @tbd @tfd _    rsft           
+  lsft _    _    _    _    _    @dwb @dwf @tbd @tfd _    rsft           
   _    _    _           spc               _    _    _                   
 )
 
