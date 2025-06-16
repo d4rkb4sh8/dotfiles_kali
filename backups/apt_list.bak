@@ -2929,6 +2929,7 @@ sparta-scripts
 speech-dispatcher
 speech-dispatcher-audio-plugins
 speech-dispatcher-espeak-ng
+speedtest-cli
 sphinx-rtd-theme-common
 spiderfoot
 spike
