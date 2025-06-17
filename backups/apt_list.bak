@@ -22,6 +22,7 @@ apt-file
 apt-listchanges
 apt-utils
 arj
+armitage
 arp-scan
 arping
 asciinema
@@ -2026,6 +2027,7 @@ llvm-19-linker-tools
 llvm-19-runtime
 llvm-19-tools
 llvm-spirv-18
+lm-sensors
 lmodern
 locales
 login
@@ -2141,6 +2143,8 @@ numba-doc
 ocl-icd-libopencl1
 offsec-awae-python2
 onesixtyone
+openjdk-11-jre
+openjdk-11-jre-headless
 openjdk-21-jre
 openjdk-21-jre-headless
 opensc
