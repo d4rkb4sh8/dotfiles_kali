@@ -1,141 +1,65 @@
-# Kanata Keyboard Configuration Documentation
+### Kanata Keyboard Layers Summary
 
-## Summary
-This Kanata configuration creates a highly customized keyboard layout with:
-- **Tap-hold behavior** on most keys (200ms tap/hold time)
-- **5 layers** for specialized functions
-- **Modifier keys** remapped to home row positions
-- **Navigation keys** on home row
-- **Media controls**, **workspace management**, and **symbol layers**
-- **Mouse emulation** on navigation layer
+#### **Layer 1: Main Modifiers (Default)**
+- **Media/System Controls**:  
+  Tap F1-F10 for standard keys; hold for shortcuts:  
+  - `F1`: Quit terminal (`Ctrl+Alt+Q`)  
+  - `F5-F8`: Mute/volume/mic controls (`Alt+F5`-`Alt+F8`)  
+  - `F10`: Lock screen (`Ctrl+Alt+Shift+L`)  
 
-## Configuration Details
+- **Symbols/Numbers**:  
+  Hold number keys for shifted symbols (e.g., `1` → `!`, `-` → `_`).  
 
-```lisp
-(defcfg
-  process-unmapped-keys yes  ; Pass unmapped keys to OS
-  log-layer-changes no       ; Disable layer change logging
-)
+- **Home-Row Modifiers**:  
+  Tap `S/D/F` for letters; hold for modifiers:  
+  - `S`: Meta (Super)  
+  - `D`: Alt  
+  - `F`: Ctrl  
 
-(defvar
-  tap-time 200    ; Tap threshold in ms
-  hold-time 200   ; Hold threshold in ms
-)
-```
+- **Navigation Shortcuts**:  
+  Hold `Y/U/I/O` for: Home, PgDn, PgUp, End.  
 
-## Layer Breakdown
+- **Layer Toggles**:  
+  - Hold `Left Meta` → **Layer 2**  
+  - Hold `Space` → **Layer 3**  
 
-### Layer One (Base Layer)
-The main typing layer with tap-hold mods and navigation:
+---
 
-| Position             | Key     | Behavior                          |
-|----------------------|---------|-----------------------------------|
-| **Top Row**          | `caps`  | Toggle Caps Lock                 |
-|                      | `F1-F12`| Standard function keys           |
-| **Number Row**       | `1-0`   | Standard numbers                 |
-|                      | `-/=`  | Minus/Equal                      |
-|                      | `bspc` | Backspace                        |
-| **Home Row (Left)**  | `a`     | Tap: `a`, Hold: `Shift`          |
-|                      | `s`     | Tap: `s`, Hold: `Super`          |
-|                      | `d`     | Tap: `d`, Hold: `Alt`            |
-|                      | `f`     | Tap: `f`, Hold: `Ctrl`           |
-| **Home Row (Right)** | `h`     | Tap: `h`, Hold: `~`              |
-|                      | `j`     | Tap: `j`, Hold: `Ctrl`           |
-|                      | `k`     | Tap: `k`, Hold: `Alt`            |
-|                      | `l`     | Tap: `l`, Hold: `Super`          |
-| **Nav Cluster**      | `y`     | Tap: `y`, Hold: `Home`           |
-|                      | `u`     | Tap: `u`, Hold: `Page Down`      |
-|                      | `i`     | Tap: `i`, Hold: `Page Up`        |
-|                      | `o`     | Tap: `o`, Hold: `End`            |
-| **Modifiers**        | `lmet`  | Tap: Super, Hold: Layer 2        |
-|                      | `rmet`  | Tap: Super, Hold: Layer 3        |
-|                      | `rctl`  | Tap: Ctrl, Hold: Layer 4/5 toggle|
+#### **Layer 2: Workspaces & Windows (Left Meta Hold)**
+- **Workspace Switching**:  
+  `1-4`: Switch to workspace 1-4 (`Alt+Meta+1`-`4`).  
 
-### Layer Two (Workspace/Window Management)
-Activated by holding left Super key:
+- **Window Management**:  
+  - Move window left/right workspaces: `Shift+Meta+PgUp/PgDn`  
+  - Move workspace left/right: `Meta+Left/Right`  
 
-| Position        | Key     | Function                         |
-|-----------------|---------|----------------------------------|
-| **Top Row**     | `F1`    | Quit app (`Ctrl-Alt-Q`)          |
-|                 | `F2`    | App menu (`Alt-F2`)              |
-|                 | `F3/F4` | Switch desktops                  |
-|                 | `F5-F8` | Volume/mic controls              |
-|                 | `F9`    | Screenshot                       |
-|                 | `F10`   | Lock screen                      |
-| **Navigation**  | `y`     | Move workspace left              |
-|                 | `u`     | Move window left                 |
-|                 | `i`     | Move window right                |
-|                 | `o`     | Move workspace right             |
-| **Media**       | `m`     | Media previous                   |
-|                 | `,`     | Media next                       |
-|                 | `.`     | Play/Pause                       |
-| **Numpad**      | `n`     | `0`                              |
-|                 | `m`     | `$` (Shift+4)                    |
+- **Tile Controls**:  
+  `Ctrl+Meta+,/.` to move/resize tiles.  
 
-### Layer Three (Navigation/Mouse)
-Activated by holding right Super key:
+- **Config Reload**:  
+  `F12`: Reload Kanata config.  
 
-| Position        | Key     | Function                         |
-|-----------------|---------|----------------------------------|
-| **Mouse**       | `y`     | Mouse left                       |
-|                 | `u`     | Mouse down                       |
-|                 | `i`     | Mouse up                         |
-|                 | `o`     | Mouse right                      |
-| **Arrow Keys**  | `h`     | Left arrow                       |
-|                 | `j`     | Down arrow                       |
-|                 | `k`     | Up arrow                         |
-|                 | `l`     | Right arrow                      |
-| **Editing**     | `[`     | Delete to line start (`Ctrl-U`)  |
-|                 | `]`     | Delete to line end (`Ctrl-K`)    |
-|                 | `,`     | Delete word left (`Ctrl-Backspace`)|
-|                 | `.`     | Delete word right (`Ctrl-Delete`)|
+---
 
-### Layer Four (Symbols)
-Activated by holding right Ctrl key:
+#### **Layer 3: Editing & Mouse (Space Hold)**
+- **Text Editing**:  
+  - Delete word: `,` (backward), `.` (forward)  
+  - Delete line: `[` (to start), `]` (to end)  
+  - Arrow keys: `H/J/K/L` ← ↓ ↑ →  
 
-| Position        | Key     | Symbol                           |
-|-----------------|---------|----------------------------------|
-| **Modified**    | `q`     | `!` (Shift+1)                    |
-|                 | `w`     | `@` (Shift+2)                    |
-|                 | `e`     | `#` (Shift+3)                    |
-|                 | `r`     | `$` (Shift+4)                    |
-|                 | `t`     | `%` (Shift+5)                    |
-|                 | `a`     | `^` (Shift+6)                    |
-|                 | `s`     | `&` (Shift+7)                    |
-|                 | `d`     | `*` (Shift+8)                    |
-| **F12 Key**     | `lrld`  | Reload Kanata config             |
+- **Mouse Emulation**:  
+  - Scroll wheel: `W/A/S/D` (left/down/up/right)  
+  - Horizontal scroll: `Q/E` (left/right)  
 
-### Layer Five (Brackets)
-Alternate symbols layer:
+- **Terminal Shortcuts**:  
+  `Ctrl+W` (close tab), `Alt+D` (delete word).  
 
-| Position        | Key     | Symbol                           |
-|-----------------|---------|----------------------------------|
-| **Brackets**    | `q`     | `(` (Shift+9)                    |
-|                 | `w`     | `)` (Shift+0)                    |
-|                 | `e`     | `[`                              |
-|                 | `r`     | `]`                              |
-|                 | `t`     | `\|` (Shift+\\)                  |
-| **Braces**      | `a`     | `{` (Shift+[)                    |
-|                 | `s`     | `}` (Shift+])                    |
-| **Quotes**      | `z`     | `'`                              |
-|                 | `x`     | `"` (Shift+')                    |
+---
 
-## Key Aliases Reference
-```lisp
-;; Modifiers
-al   = a + Shift      ss   = s + Super
-dd   = d + Alt       ff   = f + Ctrl
+### Key Implementation Notes
+- **Tap-Hold**: All modifiers use 200ms tap-hold timing.  
+- **Layer Toggles**: Transient (reverts on key release).  
+- **Wayland**: Virtual input via `uinput`; no low-level interception.  
+- **GNOME Integration**: Media keys, workspace shortcuts, and mouse emulation work natively.  
 
-;; Navigation
-yy   = y + Home      uu   = u + Page Down
-ii   = i + Page Up   oo   = o + End
-
-;; Editing
-aa   = a + Ctrl-A    zz   = z + Ctrl-Z
-xx   = x + Ctrl-X    cc   = c + Ctrl-C
-vv   = v + Ctrl-V
-
-;; Special
-l2   = Super (Layer 2)   l3   = Super (Layer 3)
-l4   = Ctrl (Layer 4)    l5   = Ctrl (Layer 5)
-```
+> No conflicts reported in active use per user feedback. With current custom Gnome settings from user repo
