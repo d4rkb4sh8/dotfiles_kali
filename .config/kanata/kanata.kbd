@@ -22,7 +22,7 @@
 ;; Aliases
 (defalias
   l2 (tap-hold $tap-time $hold-time lmet (layer-toggle two))   
-  l3 (tap-hold $tap-time $hold-time rmet (layer-toggle three)) 
+  l3 (tap-hold $tap-time $hold-time spc (layer-toggle three)) 
   ss (tap-hold $tap-time $hold-time s lmet)
   dd (tap-hold $tap-time $hold-time d lalt)
   ff (tap-hold $tap-time $hold-time f lctl)
@@ -116,7 +116,7 @@
   tab  @qq  @ww  e    @rr  @tt  @yy  @uu  @ii  @oo  p    @so  @sc  @pi
   esc  @aa  @ss  @dd  @ff  g    @hh  @jj  @kk  @ll  @se  @ap  ret
   lsft @zz  @xx  @cc  @vv  b    n    m    @co  @fu  @fs  rsft
-  @l2  @l3  @la           spc             @ra  _    _
+  lctl @l2  @la           @l3             @ra  _    _
 )
 
 ;; Workspaces, Windows, Panes layer - left hand on left Ctrl key  
@@ -126,7 +126,7 @@
   tab  _    _    _    _    _    @wtl @dsl @dsr @wtr @pp  @pt  @nt  \
   esc  _    _    _    _    _    @rpl @rpd @rpu @rpr _    _  ret
   lsft _    _    _    _    _    @w1  @w2  @w3  @w4  _    rsft
-  _    _    _           spc               _    _    _
+  _    _    _           _                 _    _    _
 )
 
 
@@ -137,7 +137,7 @@
   tab  _    _    _    _    _    @mwl @mwd @mwu @mwr p    @dtb @dte _    
   esc  _    _    _    _    _    left down up   rght bspc del  ret       
   lsft _    _    _    _    _    @dwb @dwf @tbd @tfd _    rsft           
-  _    _    _           spc               _    _    _                   
+  _    _    _           _                 _    _    _                   
 )
 
 ;; lrld is a default shortcut to reload the configuration found on layer 2 in place of f12 
