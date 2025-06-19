@@ -1190,7 +1190,7 @@ auto-hide-window=false
 horizontal-size=95
 render-on-current-monitor=true
 render-on-primary-monitor=true
-terminal-id='terminology.desktop'
+terminal-id='ghostty_ghostty.desktop'
 terminal-shortcut=['<Control><Alt>q']
 vertical-size=95
 
