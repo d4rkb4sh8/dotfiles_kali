@@ -111,6 +111,18 @@ echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 # export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 # source <(carapace _carapace)
 
+# Enable vi mode
+# set -o vi
+
+# # Set vi mode key bindings
+# bind '"\e[A": history-search-backward'
+# bind '"\e[B": history-search-forward'
+# bind '"\e[C": forward-char'
+# bind '"\e[D": backward-char'
+
+# # Disable command editing
+# set +o vi-command
+
 # Atuin
 eval "$(atuin init bash)"
 
@@ -119,3 +131,5 @@ eval "$(zoxide init bash)"
 
 #starship prompt - shell prompt
 eval "$(starship init bash)"
+
+
