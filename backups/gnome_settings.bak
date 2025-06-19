@@ -116,7 +116,7 @@ panel-id='world'
 size=(948, 1035)
 
 [org/gnome/control-center]
-last-panel='wellbeing'
+last-panel='bluetooth'
 window-state=(1717, 939, false)
 
 [org/gnome/desktop/a11y]
@@ -1330,9 +1330,9 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 check-timestamp=int64 1747055597
 first-run=false
 flatpak-purge-timestamp=int64 1750293517
-install-timestamp=int64 1741653043
+install-timestamp=int64 1750372430
 online-updates-timestamp=int64 1746976000
-update-notification-timestamp=int64 1744895391
+update-notification-timestamp=int64 1750373617
 
 [org/gnome/system/location]
 enabled=false
