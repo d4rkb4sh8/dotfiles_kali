@@ -33,6 +33,7 @@ aspell
 aspell-en
 aspnetcore-runtime-6.0
 aspnetcore-targeting-pack-6.0
+assetfinder
 at-spi2-common
 at-spi2-core
 atftpd
@@ -394,6 +395,7 @@ gnome-bluetooth-3-common
 gnome-bluetooth-sendto
 gnome-browser-connector
 gnome-calculator
+gnome-clocks
 gnome-control-center
 gnome-control-center-data
 gnome-desktop3-data
@@ -440,6 +442,7 @@ gnome-themes-extra-data
 gnome-tweaks
 gnome-user-docs
 gnome-user-share
+gnome-weather
 gnupg
 gnupg-l10n
 gnupg-utils
