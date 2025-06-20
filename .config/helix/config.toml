@@ -2,7 +2,7 @@ theme = "adwaita-dark"
 #theme = "starlight"
 
 [editor]
-line-number = "relative" 
+# line-number = "relative" 
 cursorline = true
 bufferline = "multiple"
 mouse = true
