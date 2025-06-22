@@ -5,7 +5,6 @@ adduser
 adw-gtk3-kali
 adwaita-icon-theme
 aircrack-ng
-alacritty
 alsa-topology-conf
 alsa-ucm-conf
 amass
@@ -57,6 +56,7 @@ binutils-mingw-w64-i686
 binutils-mingw-w64-x86-64
 binutils-x86-64-linux-gnu
 binwalk
+binwalk3
 bloodhound.py
 blt
 bluez
@@ -86,10 +86,15 @@ chromium
 chromium-common
 chromium-sandbox
 cifs-utils
+clamav
+clamav-base
+clamav-freshclam
 clang
 clang-18
 clang-19
 clang-tools-19
+clangd
+clangd-19
 cmake
 cmake-data
 colord
@@ -99,7 +104,6 @@ command-not-found
 commix
 console-setup
 console-setup-linux
-containerd
 coreboot-utils
 coreutils
 cpio
@@ -111,7 +115,6 @@ cpufetch
 cracklib-runtime
 cramfsswap
 creddump7
-criu
 cron
 cron-daemon-common
 crunch
@@ -174,9 +177,6 @@ dnsrecon
 doc-base
 doc-debian
 docbook-xml
-docker-buildx
-docker-cli
-docker.io
 dos2unix
 dosfstools
 dotnet-apphost-pack-6.0
@@ -390,7 +390,6 @@ glib-networking
 glib-networking-common
 glib-networking-services
 glycin-loaders
-gnome-accessibility-themes
 gnome-bluetooth-3-common
 gnome-bluetooth-sendto
 gnome-browser-connector
@@ -437,7 +436,6 @@ gnome-system-monitor
 gnome-terminal
 gnome-terminal-data
 gnome-text-editor
-gnome-themes-extra
 gnome-themes-extra-data
 gnome-tweaks
 gnome-user-docs
@@ -483,7 +481,6 @@ gstreamer1.0-plugins-good
 gstreamer1.0-plugins-ugly
 gstreamer1.0-x
 gtk-update-icon-cache
-gtk2-engines-murrine
 gtk2-engines-pixbuf
 guvcview
 guymager
@@ -774,6 +771,7 @@ libcgi-pm-perl
 libcgraph6
 libchromaprint1
 libcjson1
+libclamav12
 libclang-common-18-dev
 libclang-common-19-dev
 libclang-cpp18
@@ -802,7 +800,6 @@ libcommons-collections3-java
 libcommons-io-java
 libcommons-logging-java
 libcommons-parent-java
-libcompel1
 libcompress-raw-lzma-perl
 libconfig++11
 libconfig-inifiles-perl
@@ -989,8 +986,6 @@ libfuse2t64
 libfuse3-4
 libfwupd3
 libfyba0t64
-libgail-common
-libgail18t64
 libgav1-1
 libgbm1
 libgc1
@@ -1078,6 +1073,8 @@ libgprofng0
 libgraphene-1.0-0
 libgraphite2-3
 libgrilo-0.3-0
+libgrpc++1.51t64
+libgrpc29t64
 libgs-common
 libgs10
 libgs10-common
@@ -1104,9 +1101,6 @@ libgtk-4-1
 libgtk-4-bin
 libgtk-4-common
 libgtk-4-media-gstreamer
-libgtk2.0-0t64
-libgtk2.0-bin
-libgtk2.0-common
 libgtk3-perl
 libgtkmm-3.0-1t64
 libgtkmm-4.0-0
@@ -1198,8 +1192,6 @@ libinireader0
 libinput-bin
 libinput10
 libinstpatch-1.0-2
-libintl-perl
-libintl-xs-perl
 libio-compress-brotli-perl
 libio-html-perl
 libio-interactive-perl
@@ -1361,7 +1353,6 @@ libmldbm-perl
 libmm-glib0
 libmnl0
 libmodplug1
-libmodule-find-perl
 libmodule-implementation-perl
 libmodule-runtime-perl
 libmongoc-1.0-0t64
@@ -1580,6 +1571,7 @@ libproj25
 libprotobuf-c1
 libprotobuf-lite32t64
 libprotobuf32t64
+libprotoc32t64
 libproxy-tools
 libproxy1v5
 libproxychains4
@@ -1778,7 +1770,6 @@ libsodium23
 libsombok3
 libsonic0
 libsord-0-0
-libsort-naturally-perl
 libsort-versions-perl
 libsoundtouch1
 libsoup-2.4-1
@@ -2169,6 +2160,7 @@ mailcap
 make
 malcontent
 malcontent-gui
+maltego
 man-db
 manpages
 manpages-dev
@@ -2231,7 +2223,6 @@ ncurses-bin
 ncurses-hexedit
 ncurses-term
 ndiff
-needrestart
 net-tools
 netbase
 netcat-traditional
@@ -2706,7 +2697,6 @@ python3-pyasn1-modules
 python3-pyasyncore
 python3-pycares
 python3-pycparser
-python3-pycriu
 python3-pycryptodome
 python3-pycurl
 python3-pydantic
@@ -2722,7 +2712,6 @@ python3-pygments
 python3-pygraphviz
 python3-pyinotify
 python3-pyinstaller
-python3-pyinstaller-hooks-contrib
 python3-pylnk3
 python3-pylsqpack
 python3-pymssql
@@ -2898,6 +2887,7 @@ python3-zc.lockfile
 python3-zipp
 python3-zlib-wrapper
 python3-zombie-imp
+python3-zombie-telnetlib
 python3-zope.deprecation
 python3-zope.event
 python3-zope.interface
@@ -2940,6 +2930,7 @@ redsocks
 reportbug
 responder
 rfkill
+routersploit
 rpcbind
 rpcsvc-proto
 rpm
@@ -3016,7 +3007,6 @@ ruby3.3
 ruby3.3-dev
 ruby3.3-doc
 rubygems-integration
-runc
 runit-helper
 rygel
 sakis3g
@@ -3030,6 +3020,7 @@ samba-libs
 samdump2
 sane-airscan
 sane-utils
+sasquatch
 sbd
 scalpel
 screen
@@ -3128,7 +3119,6 @@ theharvester
 tightvncpasswd
 tightvncserver
 timgm6mb-soundfont
-tini
 tinja
 tinysparql
 tipa
@@ -3295,11 +3285,6 @@ xvfb
 xwayland
 xxd
 xz-utils
-yaru-theme-gnome-shell
-yaru-theme-gtk
-yaru-theme-icon
-yaru-theme-sound
-yaru-theme-unity
 yelp
 yelp-xsl
 yt-dlp
