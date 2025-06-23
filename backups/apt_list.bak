@@ -123,6 +123,7 @@ cryptsetup
 cryptsetup-bin
 cryptsetup-initramfs
 cryptsetup-nuke-password
+cupp
 cups-pk-helper
 curl
 curlftpfs
@@ -390,6 +391,7 @@ glib-networking
 glib-networking-common
 glib-networking-services
 glycin-loaders
+gnome-accessibility-themes
 gnome-bluetooth-3-common
 gnome-bluetooth-sendto
 gnome-browser-connector
@@ -436,6 +438,7 @@ gnome-system-monitor
 gnome-terminal
 gnome-terminal-data
 gnome-text-editor
+gnome-themes-extra
 gnome-themes-extra-data
 gnome-tweaks
 gnome-user-docs
@@ -481,6 +484,7 @@ gstreamer1.0-plugins-good
 gstreamer1.0-plugins-ugly
 gstreamer1.0-x
 gtk-update-icon-cache
+gtk2-engines-murrine
 gtk2-engines-pixbuf
 guvcview
 guymager
@@ -986,6 +990,8 @@ libfuse2t64
 libfuse3-4
 libfwupd3
 libfyba0t64
+libgail-common
+libgail18t64
 libgav1-1
 libgbm1
 libgc1
@@ -1101,6 +1107,9 @@ libgtk-4-1
 libgtk-4-bin
 libgtk-4-common
 libgtk-4-media-gstreamer
+libgtk2.0-0t64
+libgtk2.0-bin
+libgtk2.0-common
 libgtk3-perl
 libgtkmm-3.0-1t64
 libgtkmm-4.0-0
@@ -3285,6 +3294,11 @@ xvfb
 xwayland
 xxd
 xz-utils
+yaru-theme-gnome-shell
+yaru-theme-gtk
+yaru-theme-icon
+yaru-theme-sound
+yaru-theme-unity
 yelp
 yelp-xsl
 yt-dlp

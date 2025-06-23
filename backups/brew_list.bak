@@ -20,6 +20,7 @@ fftw
 fontconfig
 freetype
 fribidi
+fzf
 gcc
 gdk-pixbuf
 giflib
@@ -48,10 +49,12 @@ libedit
 libevent
 libffi
 libidn2
+liblinear
 libmpc
 libnghttp2
 libnotify
 libogg
+libpcap
 libpng
 librsvg
 libssh2
@@ -69,12 +72,15 @@ libxext
 libxml2
 libxrender
 little-cms2
+lua
 lz4
 lzo
 mpdecimal
 mpfr
+navi
 ncurses
 neofetch
+nmap
 node
 onefetch
 open-mpi
@@ -92,6 +98,7 @@ readline
 ripgrep
 rtmpdump
 ruff
+rustscan
 shared-mime-info
 sqlite
 taglib
