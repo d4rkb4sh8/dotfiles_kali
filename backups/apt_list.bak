@@ -76,6 +76,7 @@ busybox
 bzip2
 ca-certificates
 ca-certificates-java
+cabextract
 cadaver
 certipy-ad
 cewl
@@ -191,6 +192,7 @@ dpkg
 dpkg-dev
 dracut-install
 dsniff
+dtrx
 dvisvgm
 e2fsprogs
 easy-rsa
@@ -613,6 +615,7 @@ lbd
 ldap-utils
 legion
 less
+lhasa
 lib32gcc-s1
 lib32stdc++6
 liba52-0.7.4
@@ -1287,6 +1290,7 @@ libldap-common
 libldap2
 libldb2
 liblerc4
+liblhasa0
 liblibreoffice-java
 liblilv-0-0
 liblinear4
@@ -1916,6 +1920,7 @@ libuno-sal3t64
 libuno-salhelpergcc3-3t64
 libunoloader-java
 libunsafessl1.0.2
+libunshield0
 libunwind8
 libupnp17t64
 libupower-glib3
@@ -2156,6 +2161,7 @@ logrotate
 logsave
 lolcat
 loupe
+lrzip
 lrzsz
 lsb-release
 lsof
@@ -3160,6 +3166,7 @@ unix-privesc-check
 unixodbc-common
 uno-libs-private
 unrar
+unshield
 unzip
 update-inetd
 upower
