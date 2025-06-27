@@ -36,19 +36,19 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-  #alias ls='ls --color=auto'
-  #alias dir='dir --color=auto'
-  #alias vdir='vdir --color=auto'
+# if [ -x /usr/bin/dircolors ]; then
+#   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+#   #alias ls='ls --color=auto'
+#   #alias dir='dir --color=auto'
+#   #alias vdir='vdir --color=auto'
 
-  #alias grep='grep --color=auto'
-  #alias fgrep='fgrep --color=auto'
-  #alias egrep='egrep --color=auto'
-fi
+#   #alias grep='grep --color=auto'
+#   #alias fgrep='fgrep --color=auto'
+#   #alias egrep='egrep --color=auto'
+# fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -74,7 +74,7 @@ fi
 #set -o vi
 
 # Terminal
-export TERM=xterm-256color
+# export TERM=xterm-256color
 
 # colorize output
 export GRC_ALIASES=true
@@ -87,7 +87,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-dow
 export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:/home/h4ck3r/go/bin:/home/h4ck3r/.local/bin
 
 # preferred text editor
-export EDITOR="nvim"
+export EDITOR="hx"
 
 #homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -96,8 +96,16 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 source ~/.local/share/blesh/ble.sh
 
 # Colorful manpages
-export MANPAGER="nvim +Man!"
-#export MANPAGER="less -R --use-color -Dd+r -Du+b"
+# Add to your shell config (e.g., ~/.bashrc, ~/.zshrc)
+# Less Colors for Man Pages
+export LESS_TERMCAP_mb=$'\e[01;31m'       # begin blinking
+export LESS_TERMCAP_md=$'\e[01;38;5;74m'  # begin bold
+export LESS_TERMCAP_me=$'\e[0m'           # end mode
+export LESS_TERMCAP_se=$'\e[0m'           # end standout-mode
+export LESS_TERMCAP_so=$'\e[38;5;246m'    # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\e[0m'           # end underline
+export LESS_TERMCAP_us=$'\e[04;38;5;146m' # begin underline
+
 
 #highlight less
 # export LESSOPEN="| /usr/bin/highlight %s --out-format xterm256 --force"

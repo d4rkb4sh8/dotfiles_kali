@@ -101,6 +101,7 @@ cmake
 cmake-data
 colord
 colord-data
+colordiff
 comerr-dev
 command-not-found
 commix
