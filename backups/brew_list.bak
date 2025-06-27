@@ -38,6 +38,7 @@ imath
 isl
 jpeg-turbo
 jpeg-xl
+jq
 jql
 kanata
 kew
@@ -82,6 +83,7 @@ ncurses
 nmap
 node
 onefetch
+oniguruma
 open-mpi
 openexr
 openldap

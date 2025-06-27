@@ -299,6 +299,8 @@ alias gtfobl='gtfoblookup gtfobins list'
 
 # aliases for grc(1)
 
+alias gon='grc --colour=on '
+
 GRC="/home/linuxbrew/.linuxbrew/bin/grc"
 if tty -s && [ -n "$TERM" ] && [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
   alias colourify="$GRC -es"
