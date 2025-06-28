@@ -64,7 +64,6 @@ alias grep='grep --color=always'
 #   memHogsTop, memHogsPs:  Find memory hogs
 #   -----------------------------------------------------
 alias memHogsTop='top -l 1 -o rsize | head -20'
-alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
 
 #   cpuHogs:  Find CPU hogs
 #   -----------------------------------------------------

@@ -1061,6 +1061,7 @@ libges-1.0-0
 libgexiv2-2
 libgfortran5
 libgif7
+libgirara-gtk3-4
 libgirepository-1.0-1
 libgit2-1.9
 libgjs0g
@@ -3347,6 +3348,8 @@ xz-utils
 yelp
 yelp-xsl
 yt-dlp
+zathura
+zathura-pdf-poppler
 zenity
 zenity-common
 zenmap
