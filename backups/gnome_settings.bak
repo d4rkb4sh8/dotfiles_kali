@@ -162,8 +162,8 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_005.jpg'
-picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_005.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_024.jpg'
+picture-uri-dark='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_024.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -188,7 +188,7 @@ sources=[('xkb', 'gb'), ('xkb', 'us')]
 xkb-options=@as []
 
 [org/gnome/desktop/interface]
-accent-color='purple'
+accent-color='blue'
 clock-format='24h'
 clock-show-weekday=true
 color-scheme='prefer-dark'
@@ -200,7 +200,7 @@ font-antialiasing='grayscale'
 font-hinting='slight'
 font-name='Hack Nerd Font 11'
 gtk-theme='Adwaita-dark'
-icon-theme='Tela-circle-dark'
+icon-theme='Adwaita'
 locate-pointer=false
 monospace-font-name='Hack Nerd Font Bold 10'
 show-battery-percentage=true
@@ -211,7 +211,7 @@ toolkit-accessibility=false
 automount=true
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher', 'org-gnome-nautilus', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-fileroller', 'org-gnome-settings', 'org-gnome-evolution', 'virtualboxvm', 'virtualbox', 'org-gnome-evolution-alarm-notify', 'kitty', 'com-discordapp-discord', 'org-gnome-shell-extensions', 'mpv', 'vlc', 'com-mattjakeman-extensionmanager', 'org-mozilla-firefox', 'joplin', 'ghostty-ghostty', 'mullvad-vpn', 'whatsie-whatsie', 'org-onlyoffice-desktopeditors', 'org-gnome-tweaks', 'gnome-wellbeing-panel']
+application-children=['gnome-power-panel', 'firefox-esr', 'org-gnome-extensions', 'ulauncher', 'org-gnome-nautilus', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-fileroller', 'org-gnome-settings', 'org-gnome-evolution', 'virtualboxvm', 'virtualbox', 'org-gnome-evolution-alarm-notify', 'kitty', 'com-discordapp-discord', 'org-gnome-shell-extensions', 'mpv', 'vlc', 'com-mattjakeman-extensionmanager', 'org-mozilla-firefox', 'joplin', 'ghostty-ghostty', 'mullvad-vpn', 'whatsie-whatsie', 'org-onlyoffice-desktopeditors', 'org-gnome-tweaks', 'gnome-wellbeing-panel', 'io-gitlab-adhami3310-impression']
 
 [org/gnome/desktop/notifications/application/com-discordapp-discord]
 application-id='com.discordapp.Discord.desktop'
@@ -233,6 +233,9 @@ application-id='gnome-power-panel.desktop'
 
 [org/gnome/desktop/notifications/application/gnome-wellbeing-panel]
 application-id='gnome-wellbeing-panel.desktop'
+
+[org/gnome/desktop/notifications/application/io-gitlab-adhami3310-impression]
+application-id='io.gitlab.adhami3310.Impression.desktop'
 
 [org/gnome/desktop/notifications/application/joplin]
 application-id='joplin.desktop'
@@ -329,7 +332,7 @@ daily-limit-enabled=false
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_005.jpg'
+picture-uri='file:///home/h4ck3r/.local/share/backgrounds/2025-06-13-09-09-33-wallpaper_024.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -564,6 +567,9 @@ last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 [org/gnome/portal/filechooser/io.github.vikdevelop.SaveDesktop]
 last-folder-path='/home/h4ck3r/dotfiles/save_desktop'
 
+[org/gnome/portal/filechooser/io.gitlab.adhami3310.Impression]
+last-folder-path='/home/h4ck3r/Downloads'
+
 [org/gnome/portal/filechooser/net.cozic.joplin_desktop]
 last-folder-path='/home/h4ck3r/gitprojects/hacktricks/src'
 
@@ -687,7 +693,7 @@ sigma=30
 style-dialogs=1
 
 [org/gnome/shell/extensions/blur-my-shell/applications]
-blacklist=['ulauncher']
+blacklist=['Ulauncher']
 blur=true
 brightness=0.26000000000000001
 customize=false
@@ -703,7 +709,7 @@ pipeline='pipeline_default'
 [org/gnome/shell/extensions/blur-my-shell/dash-to-dock]
 blur=false
 brightness=0.59999999999999998
-override-background=true
+override-background=false
 pipeline='pipeline_default'
 sigma=30
 static-blur=true
@@ -726,7 +732,7 @@ style-components=3
 blur=false
 brightness=0.80000000000000004
 customize=false
-override-background=true
+override-background=false
 pipeline='pipeline_default'
 sigma=30
 static-blur=true
@@ -929,7 +935,7 @@ autotheme-refresh=true
 balpha=0.38
 bartype='Trilands'
 bcolor=['0.765', '0.608', '0.765']
-bg-change=false
+bg-change=true
 bgalpha=0.0
 bgalpha-wmax=0.52000000000000002
 bgalpha2=0.0
@@ -1165,7 +1171,7 @@ set-bottom-margin=false
 set-fullscreen=true
 set-notif-position=true
 set-notifications=false
-set-overview=true
+set-overview=false
 set-yarutheme=true
 shadow=false
 shalpha=0.0
@@ -1179,7 +1185,7 @@ smbgoverride=true
 success-color=['0.15', '0.635', '0.41']
 traffic-light=true
 trigger-autotheme=false
-trigger-reload=true
+trigger-reload=false
 view-hint=15
 vpad=1.3
 vw-color=['0.431', '0.216', '0.647']
@@ -1341,7 +1347,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 [org/gnome/software]
 check-timestamp=int64 1747055597
 first-run=false
-flatpak-purge-timestamp=int64 1750989316
+flatpak-purge-timestamp=int64 1751332851
 install-timestamp=int64 1750372430
 online-updates-timestamp=int64 1746976000
 update-notification-timestamp=int64 1750373617
@@ -1387,7 +1393,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(128, 90)
+window-position=(0, 29)
 window-size=(1665, 902)
 
 [org/yorba/shotwell/preferences/export]

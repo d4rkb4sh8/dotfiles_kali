@@ -1,5 +1,7 @@
 # THEMES 
-theme = xcodedarkhc
+# theme = xcodedarkhc
+
+theme = Adwaita Dark
 
 # CURSORS AND SHADERS
 #custom-shader = ./shaders/cursor_blaze.glsl
