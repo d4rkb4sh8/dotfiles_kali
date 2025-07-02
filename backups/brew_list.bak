@@ -13,9 +13,12 @@ ca-certificates
 cairo
 carapace
 certifi
+cffi
 chafa
+cryptography
 curl
 dbus
+entr
 expat
 faad2
 fftw
@@ -27,6 +30,7 @@ gcc
 gdk-pixbuf
 giflib
 gitleaks
+glances
 glib
 gmp
 graphite2
@@ -61,6 +65,7 @@ libogg
 libpcap
 libpng
 librsvg
+libsodium
 libssh2
 libtiff
 libunistring
@@ -97,6 +102,7 @@ pango
 pcre2
 pixman
 pmix
+pycparser
 python@3.13
 readline
 ripgrep
@@ -104,10 +110,12 @@ rtmpdump
 ruff
 rustscan
 shared-mime-info
+six
 sqlite
 taglib
 tealdeer
 tgpt
+thefuck
 typescript
 typescript-language-server
 unzip
@@ -122,5 +130,6 @@ yaml-language-server
 yazi
 yt-dlp
 zellij
+zeromq
 zlib
 zstd

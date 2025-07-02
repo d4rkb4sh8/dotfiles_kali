@@ -121,6 +121,9 @@ echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 # # Disable command editing
 # set +o vi-command
 
+# command line tool thef@#k
+eval "$(thefuck --alias)"
+
 # Rust
 . "$HOME/.cargo/env"
 
