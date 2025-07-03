@@ -126,7 +126,7 @@ panel-id='world'
 size=(948, 1035)
 
 [org/gnome/control-center]
-last-panel='wellbeing'
+last-panel='sound'
 window-state=(1717, 939, true)
 
 [org/gnome/desktop/a11y]
@@ -571,7 +571,7 @@ last-folder-path='/home/h4ck3r/Pictures/wallpapers'
 last-folder-path='/home/h4ck3r/dotfiles/save_desktop'
 
 [org/gnome/portal/filechooser/io.gitlab.adhami3310.Impression]
-last-folder-path='/home/h4ck3r/Downloads'
+last-folder-path='/home/h4ck3r/distro_images'
 
 [org/gnome/portal/filechooser/net.cozic.joplin_desktop]
 last-folder-path='/home/h4ck3r/gitprojects/hacktricks/src'
@@ -1350,7 +1350,7 @@ locations=[<(uint32 2, <('Beijing', 'ZBAA', true, [(0.69696814214530467, 2.02952
 [org/gnome/software]
 check-timestamp=int64 1747055597
 first-run=false
-flatpak-purge-timestamp=int64 1751423907
+flatpak-purge-timestamp=int64 1751548891
 install-timestamp=int64 1750372430
 online-updates-timestamp=int64 1746976000
 update-notification-timestamp=int64 1750373617
@@ -1396,7 +1396,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(26, 23)
+window-position=(0, 32)
 window-size=(1665, 902)
 
 [org/yorba/shotwell/preferences/export]
