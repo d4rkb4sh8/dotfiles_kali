@@ -177,6 +177,10 @@ alias lta='eza -a --tree --level=2 --icons'
 # color ip command
 alias ip='ip -c'
 
+# record your screen asciinema
+alias trec='asciinema rec '
+alias tplay='asciinema play '
+
 # ai  assistant
 # alias aid='ollama run deepseek-coder-v2'
 # alias aidr1='ollama run deepseek-r1:1.5b'
