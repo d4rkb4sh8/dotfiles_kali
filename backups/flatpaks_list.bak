@@ -11,6 +11,7 @@ org.gnome.Evolution
 org.gnome.Shotwell
 org.gnome.SimpleScan
 org.gnome.World.PikaBackup
+org.gnome.design.Palette
 org.onlyoffice.desktopeditors
 org.qbittorrent.qBittorrent
 org.zaproxy.ZAP
