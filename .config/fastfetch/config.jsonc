@@ -91,6 +91,11 @@
       "keyColor": "magenta",
       "type": "memory"
     },
+    {
+      "key": "Pkgs         ",
+      "keyColor": "blue",
+      "type": "pkgs"
+    },
     "break",
     {
       "type": "custom",
