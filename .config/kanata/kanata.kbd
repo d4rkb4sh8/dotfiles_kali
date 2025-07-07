@@ -130,7 +130,7 @@
 )
 
 
-;; Editing - text and terminal editing layer - left hand on left win/super/cmd key               
+;; Editing - text and terminal editing layer - spacebar held               
 (deflayer three                                                           
   caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _      
   grv  _    _    _    _    _    _    _    _    _    _    _    _    bspc 

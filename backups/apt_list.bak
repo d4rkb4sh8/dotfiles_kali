@@ -26,6 +26,7 @@ base-files
 base-passwd
 bash
 bash-completion
+bat
 bc
 bind9-dnsutils
 bind9-host
@@ -121,6 +122,7 @@ dpkg
 dpkg-dev
 dracut-install
 e2fsprogs
+easy-rsa
 efibootmgr
 eject
 emacsen-common
@@ -146,6 +148,7 @@ fail2ban
 fakeroot
 fastfetch
 fdisk
+ffmpeg
 figlet
 file
 file-roller
@@ -175,6 +178,7 @@ fonts-dejavu-core
 fonts-dejavu-extra
 fonts-dejavu-mono
 fonts-droid-fallback
+fonts-freefont-ttf
 fonts-lato
 fonts-liberation
 fonts-liberation-sans-narrow
@@ -197,6 +201,7 @@ gcc-14
 gcc-14-base
 gcc-14-x86-64-linux-gnu
 gcc-x86-64-linux-gnu
+gcolor3
 gcr
 gcr4
 gdebi
@@ -471,6 +476,7 @@ libapt-pkg7.0
 libarchive-zip-perl
 libarchive13t64
 libargon2-1
+libaribb24-0t64
 libasan8
 libasound2-data
 libasound2t64
@@ -498,6 +504,7 @@ libavahi-glib1
 libavc1394-0
 libavcodec59
 libavcodec61
+libavdevice61
 libavfilter10
 libavformat61
 libavif-gdk-pixbuf
@@ -511,7 +518,6 @@ libayatana-indicator3-7
 libb-hooks-endofscope-perl
 libb-hooks-op-check-perl
 libb2-1
-libb64-0d
 libbdplus0
 libberkeleydb-perl
 libbinutils
@@ -562,6 +568,8 @@ libcap2-bin
 libcapture-tiny-perl
 libcbor0.10
 libcc1-0
+libccid
+libcddb2
 libcdio-cdda2t64
 libcdio-paranoia2t64
 libcdio19t64
@@ -657,11 +665,14 @@ libdrm-radeon1
 libdrm2
 libduktape207
 libdv4t64
+libdvbpsi10
 libdvdnav4
 libdvdread8t64
 libdw1t64
 libdynaloader-functions-perl
+libeac3
 libebackend-1.2-11t64
+libebml5
 libebook-1.2-21t64
 libebook-contacts-1.2-4t64
 libebur128-1
@@ -767,6 +778,7 @@ libgexiv2-2
 libgfortran5
 libgif7
 libgirepository-1.0-1
+libgit2-1.9
 libgjs0g
 libgl1
 libgl1-mesa-dri
@@ -885,6 +897,7 @@ libhttp-daemon-perl
 libhttp-date-perl
 libhttp-message-perl
 libhttp-negotiate-perl
+libhttp-parser2.9
 libhunspell-1.7-0
 libhwasan0
 libhwy1t64
@@ -926,6 +939,7 @@ libiterator-perl
 libiterator-util-perl
 libitm1
 libiw30t64
+libixml11t64
 libjack-jackd2-0
 libjansson4
 libjavascriptcoregtk-4.1-0
@@ -953,6 +967,7 @@ libjxl0.7
 libjxr-tools
 libjxr0t64
 libk5crypto3
+libkate1
 libkeybinder-3.0-0
 libkeyutils1
 libklibc
@@ -993,6 +1008,7 @@ liblsan0
 liblsof0
 libltc11
 libltdl7
+liblua5.2-0
 liblua5.4-0
 liblvm2cmd2.03
 liblwp-mediatypes-perl
@@ -1002,6 +1018,7 @@ liblz4-1
 liblzf1
 liblzma5
 liblzo2-2
+libmad0
 libmagic-mgc
 libmagic1
 libmagic1t64
@@ -1014,8 +1031,11 @@ libmalcontent-ui-1-1
 libmanette-0.2-0
 libmarkdown2
 libmath-base85-perl
+libmatroska7
 libmaxminddb0
 libmbedcrypto16
+libmbedtls21
+libmbedx509-7
 libmbim-glib4
 libmbim-proxy
 libmbim-utils
@@ -1023,7 +1043,6 @@ libmd0
 libmd4c0
 libmediaart-2.0-0
 libmfx1
-libminiupnpc18
 libmjpegutils-2.1-0t64
 libmldbm-perl
 libmm-glib0
@@ -1050,10 +1069,10 @@ libmtdev1t64
 libmtp-common
 libmtp-runtime
 libmtp9t64
+libmujs3
 libmutter-16-0
 libmysofa1
 libnamespace-clean-perl
-libnatpmp1t64
 libnautilus-extension4
 libncurses6
 libncursesw6
@@ -1114,6 +1133,7 @@ libopenfec1
 libopengl0
 libopenh264-8
 libopenjp2-7
+libopenmpt-modplug1
 libopenmpt0t64
 libopenni2-0
 libopus0
@@ -1164,6 +1184,7 @@ libpipewire-0.3-0t64
 libpipewire-0.3-common
 libpipewire-0.3-modules
 libpixman-1-0
+libpkcs11-helper1t64
 libpkgconf3
 libplacebo349
 libplist-2.0-4
@@ -1183,7 +1204,9 @@ libpostproc58
 libproc-processtable-perl
 libproc2-0
 libprotobuf-c1
+libprotobuf-lite32t64
 libprotobuf32t64
+libproxy-tools
 libproxy1-plugin-gsettings
 libproxy1-plugin-networkmanager
 libproxy1-plugin-webkit
@@ -1206,6 +1229,13 @@ libqmi-utils
 libqpdf30
 libqrencode4
 libqrtr-glib0
+libqt5core5t64
+libqt5dbus5t64
+libqt5gui5t64
+libqt5network5t64
+libqt5svg5
+libqt5widgets5t64
+libqt5x11extras5
 libqt6core6t64
 libqt6dbus6
 libqt6gui6
@@ -1238,6 +1268,7 @@ libre2-11
 libreadline8t64
 libregexp-ipv6-perl
 libregexp-wildcards-perl
+libresid-builder0c2a
 librest-1.0-0
 librhash1
 librhythmbox-core10
@@ -1283,9 +1314,11 @@ libshout3
 libshumate-1.0-1
 libshumate-common
 libsidplay1v5
+libsidplay2
 libsigc++-2.0-0v5
 libsigc++-3.0-0
 libsigsegv2
+libsixel1
 libslang2
 libsm6
 libsmartcols1
@@ -1309,6 +1342,7 @@ libsoxr0
 libspa-0.2-bluetooth
 libspa-0.2-modules
 libspandsp2t64
+libspatialaudio0t64
 libspectre1
 libspeechd-module0
 libspeechd2
@@ -1374,6 +1408,7 @@ libtinfo6
 libtinysparql-3.0-0
 libtirpc-common
 libtirpc3t64
+libtorrent-rasterbar2.0t64
 libtotem-plparser-common
 libtotem-plparser18
 libtotem0
@@ -1407,6 +1442,7 @@ libunity-protocol-private0
 libunity-scopes-json-def-desktop
 libunity9
 libunwind8
+libupnp17t64
 libupower-glib3
 liburcu8t64
 liburi-perl
@@ -1418,6 +1454,7 @@ libuv1t64
 libv4l-0t64
 libv4lconvert0t64
 libva-drm2
+libva-wayland2
 libva-x11-2
 libva2
 libvariable-magic-perl
@@ -1425,6 +1462,10 @@ libvdpau-va-gl1
 libvdpau1
 libvidstab1.1
 libvisual-0.4-0
+libvlc-bin
+libvlc5
+libvlccore9
+libvncclient1
 libvo-aacenc0
 libvo-amrwbenc0
 libvolume-key1
@@ -1472,6 +1513,7 @@ libx265-215
 libxatracker2
 libxau6
 libxaw7
+libxcb-composite0
 libxcb-cursor0
 libxcb-damage0
 libxcb-dri2-0
@@ -1490,6 +1532,7 @@ libxcb-shm0
 libxcb-sync1
 libxcb-util1
 libxcb-xfixes0
+libxcb-xinerama0
 libxcb-xinput0
 libxcb-xkb1
 libxcb-xv0
@@ -1525,6 +1568,7 @@ libxmu6
 libxmuu1
 libxnnpack0.20241108
 libxpm4
+libxpresent1
 libxrandr2
 libxrender1
 libxres1
@@ -1603,6 +1647,7 @@ mobile-broadband-provider-info
 modemmanager
 mokutil
 mount
+mpv
 mullvad-vpn
 mutter-common
 mutter-common-bin
@@ -1627,9 +1672,12 @@ nm-connection-editor
 ntfs-3g
 obfuscate
 ocl-icd-libopencl1
+opensc
+opensc-pkcs11
 openssh-client
 openssl
 openssl-provider-legacy
+openvpn
 orca
 os-prober
 osinfo-db
@@ -1645,6 +1693,7 @@ patch
 patchutils
 pci.ids
 pciutils
+pcscd
 perl
 perl-base
 perl-modules-5.40
@@ -1722,6 +1771,7 @@ python3-markupsafe
 python3-mdurl
 python3-minimal
 python3-more-itertools
+python3-mutagen
 python3-numpy
 python3-numpy-dev
 python3-oauthlib
@@ -1729,6 +1779,7 @@ python3-pexpect
 python3-pkg-resources
 python3-ptyprocess
 python3-pyasyncore
+python3-pycryptodome
 python3-pygments
 python3-pyinotify
 python3-pyparsing
@@ -1752,16 +1803,19 @@ python3-uc-micro
 python3-urllib3
 python3-wadllib
 python3-websocket
+python3-websockets
 python3-xdg
 python3-zipp
 python3.11-minimal
 python3.13
 python3.13-minimal
+qbittorrent
 qt6-gtk-platformtheme
 qt6-qpa-plugins
 qt6-svg-plugins
 qt6-translations-l10n
 qt6-wayland
+qttranslations5-l10n
 rake
 readline-common
 realmd
@@ -1786,6 +1840,7 @@ ruby-webrick
 ruby-xmlrpc
 ruby3.3
 rubygems-integration
+runit-helper
 rygel
 rygel-playbin
 rygel-tracker
@@ -1846,8 +1901,6 @@ traceroute
 tracker
 tracker-extract
 tracker-miner-fs
-transmission-common
-transmission-gtk
 tzdata
 ucf
 udev
@@ -1872,6 +1925,19 @@ vdpau-driver-all
 vim-common
 vim-tiny
 virtualbox-7.1
+vlc
+vlc-bin
+vlc-data
+vlc-l10n
+vlc-plugin-access-extra
+vlc-plugin-base
+vlc-plugin-notify
+vlc-plugin-qt
+vlc-plugin-samba
+vlc-plugin-skins2
+vlc-plugin-video-output
+vlc-plugin-video-splitter
+vlc-plugin-visualization
 wamerican
 webp-pixbuf-loader
 wget
@@ -1933,6 +1999,7 @@ xwayland
 xz-utils
 yelp
 yelp-xsl
+yt-dlp
 zenity
 zenity-common
 zip

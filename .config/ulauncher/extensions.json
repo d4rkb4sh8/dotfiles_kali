@@ -97,13 +97,6 @@
         "last_commit": "d5ef71e2711487326e856a1c40486005199890cb",
         "last_commit_time": "2025-01-08T06:48:20"
     },
-    "com.github.rayvega96.ulauncher-amazon-search": {
-        "id": "com.github.rayvega96.ulauncher-amazon-search",
-        "url": "https://github.com/rayvega96/ulauncher-amazon-search",
-        "updated_at": "2025-07-06T00:12:02.801734",
-        "last_commit": "045551d899cf42bc99c85670bdf8e299e128275b",
-        "last_commit_time": "2022-12-03T17:14:47"
-    },
     "com.github.ulauncher.ulauncher-hash": {
         "id": "com.github.ulauncher.ulauncher-hash",
         "url": "https://github.com/Ulauncher/ulauncher-hash",
@@ -117,13 +110,6 @@
         "updated_at": "2025-07-06T00:12:06.207277",
         "last_commit": "2e5904451bf89dfa155280dfb6fa3d45ed4cab4c",
         "last_commit_time": "2023-07-29T11:06:30"
-    },
-    "com.github.tchar.ulauncher-albert-calculate-anything": {
-        "id": "com.github.tchar.ulauncher-albert-calculate-anything",
-        "url": "https://github.com/tchar/ulauncher-albert-calculate-anything",
-        "updated_at": "2025-07-06T00:12:09.673251",
-        "last_commit": "037965a44e6f6f496e7ad71ec1651b9edfcde32d",
-        "last_commit_time": "2024-05-29T21:57:26"
     },
     "com.github.sebw.ulauncher-tplink-home-manager": {
         "id": "com.github.sebw.ulauncher-tplink-home-manager",
