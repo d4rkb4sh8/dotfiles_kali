@@ -1,220 +1,141 @@
 #!/usr/bin/env bash
 
-# Color definitions
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-BLUE=$(tput setaf 4)
-MAGENTA=$(tput setaf 5)
-CYAN=$(tput setaf 6)
-BOLD=$(tput bold)
-RESET=$(tput sgr0)
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No color
 
 show_help() {
-    echo "${BOLD}${GREEN}pksearch - Multi-source package search tool${RESET}"
-    echo "${BOLD}Usage:${RESET} pksearch [package_name]"
-    echo
-    echo "${BOLD}Description:${RESET}"
-    echo "  Checks package availability in APT, Homebrew, Flatpak, Snap, and Cargo repositories"
-    echo "  Compares versions and shows the source with the latest version"
-    echo
-    echo "${BOLD}Options:${RESET}"
-    echo "  -h, --help    Show this help message"
-    echo
-    echo "${BOLD}Color Legend:${RESET}"
-    echo "  ${GREEN}Latest version${RESET}  ${YELLOW}Older version${RESET}  ${RED}Not found${RESET}"
-    echo
-    echo "${BOLD}Examples:${RESET}"
-    echo "  pksearch neovim"
-    echo "  pksearch htop"
-    exit 0
+    echo -e "${CYAN}Package Search & Compare Tool${NC}"
+    echo -e "${CYAN}Usage:${NC} $0 [options] <package-name>"
+    echo -e ""
+    echo -e "${YELLOW}Options:${NC}"
+    echo -e "  ${GREEN}-s${NC}        Search for package in all package managers"
+    echo -e "  ${GREEN}-i${NC}        List installed status only"
+    echo -e "  ${GREEN}-h${NC}        Show this help message"
+    echo -e ""
+    echo -e "${CYAN}Example:${NC} $0 -s wget"
 }
-
-# Check for help flag
-if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help
-fi
-
-# Validate input
-if [ $# -eq 0 ]; then
-    echo "${RED}${BOLD}Error: Package name required${RESET}"
-    show_help
-    exit 1
-fi
-
-PACKAGE="$1"
-declare -A versions
-declare -A statuses
-LATEST_VERSION=""
 
 check_apt() {
-    echo -n "${BLUE}Checking APT... ${RESET}"
-    if ! command -v apt-cache &> /dev/null; then
-        echo "${YELLOW}APT not available${RESET}"
-        return
-    fi
-    
-    local policy=$(apt-cache policy "$PACKAGE" 2>/dev/null)
-    if [[ "$policy" == *"Unable to locate package"* ]]; then
-        echo "${RED}Not found${RESET}"
-        return
-    fi
-    
-    local installed=$(grep -oP 'Installed: \K.*' <<< "$policy")
-    local candidate=$(grep -oP 'Candidate: \K.*' <<< "$policy")
-    
-    if [ -n "$candidate" ]; then
-        versions["apt"]="$candidate"
-        statuses["apt"]="available"
-        echo "${GREEN}$candidate${RESET}"
+    pkg="$1"
+    if apt-cache show "$pkg" &>/dev/null; then
+        if dpkg -s "$pkg" &>/dev/null; then
+            version=$(dpkg -s "$pkg" | grep '^Version:' | awk '{print $2}')
+            echo -e "${GREEN}APT:${NC} $pkg (${CYAN}$version${NC})"
+        else
+            version=$(apt-cache show "$pkg" | grep -m1 '^Version:' | awk '{print $2}')
+            echo -e "${YELLOW}APT:${NC} $pkg (${version}) ${RED}[Not Installed]${NC}"
+        fi
     else
-        echo "${RED}Not found${RESET}"
+        echo -e "${RED}APT:${NC} $pkg [Not Found]"
     fi
 }
 
-check_homebrew() {
-    echo -n "${MAGENTA}Checking Homebrew... ${RESET}"
-    if ! command -v brew &> /dev/null; then
-        echo "${YELLOW}Homebrew not available${RESET}"
+check_brew() {
+    pkg="$1"
+    if ! command -v brew >/dev/null 2>&1; then
+        echo -e "${RED}Homebrew:${NC} brew command not found"
         return
     fi
-    
-    # Improved Homebrew check that handles both formulae and casks
-    local version=$(brew info "$PACKAGE" 2>/dev/null | \
-        grep -E -i '^(stable|version):' | \
-        awk '{print $2}' | \
-        head -n1 | \
-        tr -d ',')
-    
-    # Alternative JSON-based method if the above doesn't work
-    if [[ -z "$version" ]]; then
-        version=$(brew info --json "$PACKAGE" 2>/dev/null | \
-            grep -o '"stable":"[^"]*' | \
-            cut -d'"' -f4 | \
-            head -n1)
-    fi
-    
-    if [ -n "$version" ]; then
-        versions["homebrew"]="$version"
-        statuses["homebrew"]="available"
-        echo "${GREEN}$version${RESET}"
+
+    if brew info --json "$pkg" &>/dev/null; then
+        version=$(brew info --json "$pkg" | jq -r '.[0].versions.stable')
+        if brew list --formula | grep -qx "$pkg"; then
+            echo -e "${GREEN}Homebrew:${NC} $pkg (${CYAN}$version${NC})"
+        else
+            echo -e "${YELLOW}Homebrew:${NC} $pkg (${version}) ${RED}[Not Installed]${NC}"
+        fi
     else
-        echo "${RED}Not found${RESET}"
+        echo -e "${RED}Homebrew:${NC} $pkg [Not Found]"
     fi
 }
 
 check_flatpak() {
-    echo -n "${CYAN}Checking Flatpak... ${RESET}"
-    if ! command -v flatpak &> /dev/null; then
-        echo "${YELLOW}Flatpak not available${RESET}"
-        return
-    fi
-    
-    local result=$(flatpak search "$PACKAGE" --columns=application,version 2>/dev/null | grep -i "$PACKAGE" | head -1)
-    if [ -z "$result" ]; then
-        echo "${RED}Not found${RESET}"
-        return
-    fi
-    
-    local version=$(awk '{print $NF}' <<< "$result")
-    if [ -n "$version" ]; then
-        versions["flatpak"]="$version"
-        statuses["flatpak"]="available"
-        echo "${GREEN}$version${RESET}"
+    pkg="$1"
+    list=$(flatpak search "$pkg" --columns=application 2>/dev/null | grep -w "$pkg" | head -n1)
+    if [ -n "$list" ]; then
+        if flatpak info "$pkg" &>/dev/null; then
+            version=$(flatpak info "$pkg" | grep -E '^Version:' | awk '{print $2}')
+            echo -e "${GREEN}Flatpak:${NC} $pkg (${CYAN}$version${NC})"
+        else
+            echo -e "${YELLOW}Flatpak:${NC} $pkg ${RED}[Not Installed]${NC}"
+        fi
     else
-        echo "${RED}Not found${RESET}"
+        echo -e "${RED}Flatpak:${NC} $pkg [Not Found]"
     fi
 }
 
 check_snap() {
-    echo -n "${YELLOW}Checking Snap... ${RESET}"
-    if ! command -v snap &> /dev/null; then
-        echo "${YELLOW}Snap not available${RESET}"
-        return
-    fi
-    
-    local info=$(snap info "$PACKAGE" 2>/dev/null)
-    if [ -z "$info" ]; then
-        echo "${RED}Not found${RESET}"
-        return
-    fi
-    
-    local version=$(grep -oP 'latest/stable: \K[\d.]+' <<< "$info")
-    if [ -n "$version" ]; then
-        versions["snap"]="$version"
-        statuses["snap"]="available"
-        echo "${GREEN}$version${RESET}"
-    else
-        echo "${RED}Not found${RESET}"
-    fi
-}
-
-check_cargo() {
-    echo -n "${GREEN}Checking Cargo... ${RESET}"
-    if ! command -v cargo &> /dev/null; then
-        echo "${YELLOW}Cargo not available${RESET}"
-        return
-    fi
-    
-    local result=$(cargo search "$PACKAGE" --limit=1 2>/dev/null)
-    if [[ "$result" == *"No crate matches"* ]]; then
-        echo "${RED}Not found${RESET}"
-        return
-    fi
-    
-    local version=$(grep -oP '^'"$PACKAGE"' = "\K[\d.]+' <<< "$result")
-    if [ -n "$version" ]; then
-        versions["cargo"]="$version"
-        statuses["cargo"]="available"
-        echo "${GREEN}$version${RESET}"
-    else
-        echo "${RED}Not found${RESET}"
-    fi
-}
-
-find_latest_version() {
-    LATEST_VERSION=$(for v in "${versions[@]}"; do echo "$v"; done | sort -V -r | head -n1)
-}
-
-show_comparison() {
-    echo
-    echo "${BOLD}${MAGENTA}Version Comparison:${RESET}"
-    
-    # Sort sources alphabetically
-    local sources=($(echo "${!versions[@]}" | tr ' ' '\n' | sort))
-    
-    for source in "${sources[@]}"; do
-        local version="${versions[$source]}"
-        if [ "$version" == "$LATEST_VERSION" ]; then
-            printf "${GREEN}%-10s: %-10s ${BOLD}(LATEST)${RESET}\n" "$source" "$version"
+    pkg="$1"
+    if snap info "$pkg" &>/dev/null; then
+        version=$(snap info "$pkg" | awk '/^latest/{print $2; exit}')
+        if snap list "$pkg" &>/dev/null; then
+            installed_ver=$(snap list "$pkg" | awk -v p="$pkg" '$1 == p {print $2}')
+            echo -e "${GREEN}Snap:${NC} $pkg (${CYAN}$installed_ver${NC})"
         else
-            printf "${YELLOW}%-10s: %-10s (Older)${RESET}\n" "$source" "$version"
+            echo -e "${YELLOW}Snap:${NC} $pkg (${version}) ${RED}[Not Installed]${NC}"
         fi
-    done
-    
-    if [ -z "$LATEST_VERSION" ]; then
-        echo "${RED}No versions found for $PACKAGE${RESET}"
     else
-        echo
-        echo "${BOLD}Latest version found in: ${GREEN}$(for s in "${sources[@]}"; do 
-            [ "${versions[$s]}" == "$LATEST_VERSION" ] && echo -n "$s "; 
-        done)${RESET}"
+        echo -e "${RED}Snap:${NC} $pkg [Not Found]"
     fi
 }
 
 main() {
-    echo
-    echo "${BOLD}Searching for ${CYAN}$PACKAGE${RESET}${BOLD} in package repositories...${RESET}"
-    echo "--------------------------------------------------------"
-    
-    check_apt
-    check_homebrew
-    check_flatpak
-    check_snap
-    check_cargo
-    
-    find_latest_version
-    show_comparison
+    SEARCH=0
+    INSTALLED=0
+
+    while getopts ":hsi" opt; do
+        case $opt in
+            h)
+                show_help
+                exit 0
+                ;;
+            s)
+                SEARCH=1
+                ;;
+            i)
+                INSTALLED=1
+                ;;
+            \?)
+                echo -e "${RED}Invalid option: -$OPTARG${NC}" >&2
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ -z "$1" ]; then
+        echo -e "${RED}Error: No package name provided.${NC}"
+        show_help
+        exit 1
+    fi
+
+    pkg="$1"
+
+    echo -e "${CYAN}Checking package:${NC} ${YELLOW}$pkg${NC}"
+    echo -e "------------------------------"
+
+    if [[ $SEARCH -eq 1 ]]; then
+        check_apt "$pkg"
+        check_brew "$pkg"
+        check_flatpak "$pkg"
+        check_snap "$pkg"
+    elif [[ $INSTALLED -eq 1 ]]; then
+        dpkg -s "$pkg" &>/dev/null && check_apt "$pkg"
+        brew list --formula | grep -qx "$pkg" && check_brew "$pkg"
+        flatpak info "$pkg" &>/dev/null && check_flatpak "$pkg"
+        snap list "$pkg" &>/dev/null && check_snap "$pkg"
+    else
+        # Default behavior: do full check like -s
+        check_apt "$pkg"
+        check_brew "$pkg"
+        check_flatpak "$pkg"
+        check_snap "$pkg"
+    fi
 }
 
-main
+main "$@"
