@@ -1,0 +1,220 @@
+#!/usr/bin/env bash
+
+# Color definitions
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+show_help() {
+    echo "${BOLD}${GREEN}pksearch - Multi-source package search tool${RESET}"
+    echo "${BOLD}Usage:${RESET} pksearch [package_name]"
+    echo
+    echo "${BOLD}Description:${RESET}"
+    echo "  Checks package availability in APT, Homebrew, Flatpak, Snap, and Cargo repositories"
+    echo "  Compares versions and shows the source with the latest version"
+    echo
+    echo "${BOLD}Options:${RESET}"
+    echo "  -h, --help    Show this help message"
+    echo
+    echo "${BOLD}Color Legend:${RESET}"
+    echo "  ${GREEN}Latest version${RESET}  ${YELLOW}Older version${RESET}  ${RED}Not found${RESET}"
+    echo
+    echo "${BOLD}Examples:${RESET}"
+    echo "  pksearch neovim"
+    echo "  pksearch htop"
+    exit 0
+}
+
+# Check for help flag
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help
+fi
+
+# Validate input
+if [ $# -eq 0 ]; then
+    echo "${RED}${BOLD}Error: Package name required${RESET}"
+    show_help
+    exit 1
+fi
+
+PACKAGE="$1"
+declare -A versions
+declare -A statuses
+LATEST_VERSION=""
+
+check_apt() {
+    echo -n "${BLUE}Checking APT... ${RESET}"
+    if ! command -v apt-cache &> /dev/null; then
+        echo "${YELLOW}APT not available${RESET}"
+        return
+    fi
+    
+    local policy=$(apt-cache policy "$PACKAGE" 2>/dev/null)
+    if [[ "$policy" == *"Unable to locate package"* ]]; then
+        echo "${RED}Not found${RESET}"
+        return
+    fi
+    
+    local installed=$(grep -oP 'Installed: \K.*' <<< "$policy")
+    local candidate=$(grep -oP 'Candidate: \K.*' <<< "$policy")
+    
+    if [ -n "$candidate" ]; then
+        versions["apt"]="$candidate"
+        statuses["apt"]="available"
+        echo "${GREEN}$candidate${RESET}"
+    else
+        echo "${RED}Not found${RESET}"
+    fi
+}
+
+check_homebrew() {
+    echo -n "${MAGENTA}Checking Homebrew... ${RESET}"
+    if ! command -v brew &> /dev/null; then
+        echo "${YELLOW}Homebrew not available${RESET}"
+        return
+    fi
+    
+    # Improved Homebrew check that handles both formulae and casks
+    local version=$(brew info "$PACKAGE" 2>/dev/null | \
+        grep -E -i '^(stable|version):' | \
+        awk '{print $2}' | \
+        head -n1 | \
+        tr -d ',')
+    
+    # Alternative JSON-based method if the above doesn't work
+    if [[ -z "$version" ]]; then
+        version=$(brew info --json "$PACKAGE" 2>/dev/null | \
+            grep -o '"stable":"[^"]*' | \
+            cut -d'"' -f4 | \
+            head -n1)
+    fi
+    
+    if [ -n "$version" ]; then
+        versions["homebrew"]="$version"
+        statuses["homebrew"]="available"
+        echo "${GREEN}$version${RESET}"
+    else
+        echo "${RED}Not found${RESET}"
+    fi
+}
+
+check_flatpak() {
+    echo -n "${CYAN}Checking Flatpak... ${RESET}"
+    if ! command -v flatpak &> /dev/null; then
+        echo "${YELLOW}Flatpak not available${RESET}"
+        return
+    fi
+    
+    local result=$(flatpak search "$PACKAGE" --columns=application,version 2>/dev/null | grep -i "$PACKAGE" | head -1)
+    if [ -z "$result" ]; then
+        echo "${RED}Not found${RESET}"
+        return
+    fi
+    
+    local version=$(awk '{print $NF}' <<< "$result")
+    if [ -n "$version" ]; then
+        versions["flatpak"]="$version"
+        statuses["flatpak"]="available"
+        echo "${GREEN}$version${RESET}"
+    else
+        echo "${RED}Not found${RESET}"
+    fi
+}
+
+check_snap() {
+    echo -n "${YELLOW}Checking Snap... ${RESET}"
+    if ! command -v snap &> /dev/null; then
+        echo "${YELLOW}Snap not available${RESET}"
+        return
+    fi
+    
+    local info=$(snap info "$PACKAGE" 2>/dev/null)
+    if [ -z "$info" ]; then
+        echo "${RED}Not found${RESET}"
+        return
+    fi
+    
+    local version=$(grep -oP 'latest/stable: \K[\d.]+' <<< "$info")
+    if [ -n "$version" ]; then
+        versions["snap"]="$version"
+        statuses["snap"]="available"
+        echo "${GREEN}$version${RESET}"
+    else
+        echo "${RED}Not found${RESET}"
+    fi
+}
+
+check_cargo() {
+    echo -n "${GREEN}Checking Cargo... ${RESET}"
+    if ! command -v cargo &> /dev/null; then
+        echo "${YELLOW}Cargo not available${RESET}"
+        return
+    fi
+    
+    local result=$(cargo search "$PACKAGE" --limit=1 2>/dev/null)
+    if [[ "$result" == *"No crate matches"* ]]; then
+        echo "${RED}Not found${RESET}"
+        return
+    fi
+    
+    local version=$(grep -oP '^'"$PACKAGE"' = "\K[\d.]+' <<< "$result")
+    if [ -n "$version" ]; then
+        versions["cargo"]="$version"
+        statuses["cargo"]="available"
+        echo "${GREEN}$version${RESET}"
+    else
+        echo "${RED}Not found${RESET}"
+    fi
+}
+
+find_latest_version() {
+    LATEST_VERSION=$(for v in "${versions[@]}"; do echo "$v"; done | sort -V -r | head -n1)
+}
+
+show_comparison() {
+    echo
+    echo "${BOLD}${MAGENTA}Version Comparison:${RESET}"
+    
+    # Sort sources alphabetically
+    local sources=($(echo "${!versions[@]}" | tr ' ' '\n' | sort))
+    
+    for source in "${sources[@]}"; do
+        local version="${versions[$source]}"
+        if [ "$version" == "$LATEST_VERSION" ]; then
+            printf "${GREEN}%-10s: %-10s ${BOLD}(LATEST)${RESET}\n" "$source" "$version"
+        else
+            printf "${YELLOW}%-10s: %-10s (Older)${RESET}\n" "$source" "$version"
+        fi
+    done
+    
+    if [ -z "$LATEST_VERSION" ]; then
+        echo "${RED}No versions found for $PACKAGE${RESET}"
+    else
+        echo
+        echo "${BOLD}Latest version found in: ${GREEN}$(for s in "${sources[@]}"; do 
+            [ "${versions[$s]}" == "$LATEST_VERSION" ] && echo -n "$s "; 
+        done)${RESET}"
+    fi
+}
+
+main() {
+    echo
+    echo "${BOLD}Searching for ${CYAN}$PACKAGE${RESET}${BOLD} in package repositories...${RESET}"
+    echo "--------------------------------------------------------"
+    
+    check_apt
+    check_homebrew
+    check_flatpak
+    check_snap
+    check_cargo
+    
+    find_latest_version
+    show_comparison
+}
+
+main
