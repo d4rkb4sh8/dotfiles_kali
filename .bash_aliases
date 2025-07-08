@@ -350,5 +350,6 @@ if tty -s && [ -n "$TERM" ] && [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
   alias getsebool='colourify getsebool'
   alias ifconfig='colourify ifconfig'
   alias nmap='colourify nmap'
+  alias curl='colourify curl'
   alias sockstat='colourify sockstat'
 fi
