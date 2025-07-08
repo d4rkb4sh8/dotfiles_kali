@@ -13,6 +13,7 @@ chafa
 curl
 dbus
 dust
+entr
 expat
 eza
 faad2
